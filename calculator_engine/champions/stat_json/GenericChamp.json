@@ -1,0 +1,25 @@
+{
+  "stats":
+  {
+    "hp": {
+      "base": 560,
+      "growth": 99
+    },
+    "mana": {
+      "base": 480,
+      "growth": 23.5
+    },
+    "armor": {
+      "base": 19,
+      "growth": 5.2
+    },
+    "ad": {
+      "base": 54,
+      "growth": 3.3
+    },
+    "mr": {
+      "base": 30,
+      "growth": 1.3
+    }
+  }
+}
