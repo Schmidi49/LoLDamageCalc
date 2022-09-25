@@ -11,9 +11,10 @@
 #include <string>
 
 #include <json.hpp>
+#include <engine_signal_system.hpp>
 
 namespace LDC::champion {
-    class Stat{
+    class ChampionBaseStat{
     public:
         double at_level(int lvl) const {return m_base + (lvl - 1) * m_growth;};
         double get_base() const {return m_base;};
@@ -27,54 +28,57 @@ namespace LDC::champion {
         double m_growth;
     };
 
-    class Stats{
+    template <typename T>class Stats{
     public:
         Stats() = default;
-        ~Stats() = default;
+        ~Stats() {
+            for(auto it : m_stats)
+                delete it.second;
+        }
 
         auto find(const std::string& id){return m_stats.find(id);};
-        Stat* at(const std::string& id){return m_stats.at(id);};
+        T* at(const std::string& id){return m_stats.at(id);};
 
         auto begin(){return m_stats.begin();};
         auto end(){return m_stats.end();};
 
     private:
-        std::map<std::string, Stat*> m_stats{
-            {"hp", new Stat()},
-            {"mana", new Stat()},
-            {"armor", new Stat()},
-            {"ad", new Stat()},
-            {"mr", new Stat()}
+        std::map<std::string, T*> m_stats{
+            {"hp", new T()},
+            {"mana", new T()},
+            {"armor", new T()},
+            {"ad", new T()},
+            {"mr", new T()}
         };
 
     public:
-        Stat* hp = m_stats.at("hp");
-        Stat* mana= m_stats.at("mana");
-        Stat* armor = m_stats.at("armor");
-        Stat* ad = m_stats.at("ad");
-        Stat* mr = m_stats.at("mr");
+        ChampionBaseStat* hp = m_stats.at("hp");
+        ChampionBaseStat* mana= m_stats.at("mana");
+        ChampionBaseStat* armor = m_stats.at("armor");
+        ChampionBaseStat* ad = m_stats.at("ad");
+        ChampionBaseStat* mr = m_stats.at("mr");
     };
-
-
 
     class Base_Champion {
     public:
-        explicit Base_Champion(const std::string &name);
-        Base_Champion(const std::string &name, const int &lvl);
+        Base_Champion(engine_signal_system* ess, const std::string &name, const int &lvl = 1);
 
-        ~Base_Champion() = default;
+        ~Base_Champion();
 
-        double test(){return m_base_stats->hp->at_level(2);};
+        //TODO rm test
+        double test(int lvl){return m_base_stats->hp->at_level(lvl);};
 
-
-    private:
-        Stats* getStats();
 
     private:
+        Stats<ChampionBaseStat>* getChampionBasesStats();
+
+    protected:
         std::string m_name;
         int m_level;
 
-        Stats* m_base_stats;
+        Stats<ChampionBaseStat>* m_base_stats;
+
+        engine_signal_system* m_ess;
     };
 }
 

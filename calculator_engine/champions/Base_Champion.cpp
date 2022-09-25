@@ -18,20 +18,27 @@ using json = nlohmann::json;
 constexpr char json_dir[] = "/calculator_engine/champions/stat_json/";
 
 namespace LDC::champion {
-    Base_Champion::Base_Champion(const std::string &name) {
-        Base_Champion(name, 1);
-    }
-
-    Base_Champion::Base_Champion(const std::string &name, const int &lvl) {
+    Base_Champion::Base_Champion(engine_signal_system* ess, const std::string &name, const int &lvl) {
         m_name = name;
         m_level = lvl;
 
-        m_base_stats = getStats();
+        m_base_stats = getChampionBasesStats();
+
+        if(ess)
+            m_ess = ess;
+        else
+            throw std::invalid_argument("Pointer towards engine signal system is invalid");
     }
 
-    Stats* Base_Champion::getStats() {
+
+    Base_Champion::~Base_Champion() {
+        delete m_base_stats;
+        m_ess = nullptr;
+    }
+
+    Stats<ChampionBaseStat>* Base_Champion::getChampionBasesStats() {
         const std::string jsonFile = std::string(REPO_DIR) + std::string(json_dir) + m_name + ".json";
-        Stats* importedStats{new Stats()};
+        Stats<ChampionBaseStat>* importedStats{new Stats<ChampionBaseStat>()};
 
         std::ifstream f(jsonFile);
         if(f.good()){
@@ -55,7 +62,4 @@ namespace LDC::champion {
 
         return importedStats;
     }
-
-
-
 }

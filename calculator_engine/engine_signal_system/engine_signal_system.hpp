@@ -11,20 +11,24 @@
 #include <boost/signals2.hpp>
 
 namespace LDC{
+    template <typename funcsig>
+    using signal = boost::signals2::signal<funcsig>;
+
+    struct champ_actives{
+        signal<void(const bool &crit)> auto_attack;
+
+        signal<void(const bool &crit, const bool &enhanced, const int &instance)> passive;
+
+        signal<void(const bool &crit, const bool &enhanced, const int &instance)> spell_q;
+        signal<void(const bool &crit, const bool &enhanced, const int &instance)> spell_w;
+        signal<void(const bool &crit, const bool &enhanced, const int &instance)> spell_e;
+        signal<void(const bool &crit, const bool &enhanced, const int &instance)> spell_r;
+    };
+
     class engine_signal_system{
-    private:
-        template <typename funcsig>
-        using signal = boost::signals2::signal<funcsig>;
-
     public:
-        signal<void(const bool &crit)> actio_auto_attack;
-
-        signal<void(const bool &crit, const bool &enhancement, const int &index)> actio_passive;
-
-        signal<void(const bool &crit, const bool &enhancement, const int &index)> actio_spell_q;
-        signal<void(const bool &crit, const bool &enhancement, const int &index)> actio_spell_w;
-        signal<void(const bool &crit, const bool &enhancement, const int &index)> actio_spell_e;
-        signal<void(const bool &crit, const bool &enhancement, const int &index)> actio_spell_r;
+        champ_actives attacker;
+        champ_actives defender;
     };
 }
 
