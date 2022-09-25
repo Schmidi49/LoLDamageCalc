@@ -9,6 +9,7 @@
 #define LOLDAMAGECALC_BASE_CHAMPION_H
 
 #include <string>
+#include <iostream>
 
 #include <json.hpp>
 #include <engine_signal_system.hpp>
@@ -24,20 +25,26 @@ namespace LDC::champion {
         void set_growth(double growth){m_growth = growth;};
 
     private:
-        double m_base;
-        double m_growth;
+        double m_base{0.0};
+        double m_growth{0.0};
     };
 
     template <typename T>class Stats{
     public:
         Stats() = default;
         ~Stats() {
-            for(auto it : m_stats)
+            for(auto &it : m_stats) {
+                //TODO fix loop running out of iterators
+                std::cout << "rip" << std::endl;
+                std::cout << it.first << std::endl;
                 delete it.second;
+                it.second = nullptr;
+            }
         }
 
         auto find(const std::string& id){return m_stats.find(id);};
         T* at(const std::string& id){return m_stats.at(id);};
+        void set(const std::string& id, T* newT){delete m_stats[id]; m_stats[id] = newT;};
 
         auto begin(){return m_stats.begin();};
         auto end(){return m_stats.end();};
@@ -52,11 +59,11 @@ namespace LDC::champion {
         };
 
     public:
-        ChampionBaseStat* hp = m_stats.at("hp");
-        ChampionBaseStat* mana= m_stats.at("mana");
-        ChampionBaseStat* armor = m_stats.at("armor");
-        ChampionBaseStat* ad = m_stats.at("ad");
-        ChampionBaseStat* mr = m_stats.at("mr");
+        T* hp() {return m_stats.at("hp");};
+        T* mana() {return m_stats.at("mana");};
+        T* armor () {return m_stats.at("armor");};
+        T* ad () {return m_stats.at("ad");};
+        T* mr () {return m_stats.at("mr");};
     };
 
     class Base_Champion {
@@ -66,7 +73,7 @@ namespace LDC::champion {
         ~Base_Champion();
 
         //TODO rm test
-        double test(int lvl){return m_base_stats->hp->at_level(lvl);};
+        double test(int lvl){return m_base_stats->hp()->at_level(lvl);};
 
 
     private:
@@ -77,6 +84,7 @@ namespace LDC::champion {
         int m_level;
 
         Stats<ChampionBaseStat>* m_base_stats;
+        Stats<double>* m_current_stats;
 
         engine_signal_system* m_ess;
     };

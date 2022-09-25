@@ -11,24 +11,32 @@
 #include <boost/signals2.hpp>
 
 namespace LDC{
-    template <typename funcsig>
-    using signal = boost::signals2::signal<funcsig>;
-
-    struct champ_actives{
-        signal<void(const bool &crit)> auto_attack;
-
-        signal<void(const bool &crit, const bool &enhanced, const int &instance)> passive;
-
-        signal<void(const bool &crit, const bool &enhanced, const int &instance)> spell_q;
-        signal<void(const bool &crit, const bool &enhanced, const int &instance)> spell_w;
-        signal<void(const bool &crit, const bool &enhanced, const int &instance)> spell_e;
-        signal<void(const bool &crit, const bool &enhanced, const int &instance)> spell_r;
-    };
-
     class engine_signal_system{
+    private:
+        template <typename funcsig>
+        using signal = boost::signals2::signal<funcsig>;
+
+        struct champ_active_struct{
+            signal<void(const bool &crit)> auto_attack;
+
+            signal<void(const bool &crit, const bool &enhanced, const int &instance)> passive;
+
+            signal<void(const bool &crit, const bool &enhanced, const int &instance)> spell_q;
+            signal<void(const bool &crit, const bool &enhanced, const int &instance)> spell_w;
+            signal<void(const bool &crit, const bool &enhanced, const int &instance)> spell_e;
+            signal<void(const bool &crit, const bool &enhanced, const int &instance)> spell_r;
+        };
+
+        struct attacker_struct : public champ_active_struct{
+            signal<void()> apply_onhit;
+        };
+
+        struct defender_struct : public champ_active_struct{
+
+        };
     public:
-        champ_actives attacker;
-        champ_actives defender;
+        attacker_struct attacker;
+        defender_struct defender;
     };
 }
 

@@ -22,6 +22,6 @@ int main(int argc, char* argv[]){
     ess.attacker.auto_attack(false);
     ess.attacker.spell_q(true, false, 0);
     ess.attacker.spell_w(false, true, 0);
-    ess.attacker.spell_w(false, true, 76);
-    ess.attacker.spell_w(false, false, 0);
+    ess.attacker.spell_e(false, true, 76);
+    ess.attacker.spell_r(false, false, 0);
 }

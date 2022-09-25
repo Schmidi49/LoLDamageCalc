@@ -3,3 +3,6 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_subdirectory(champions)
 add_subdirectory(engine_signal_system)
+
+add_library (environment environment.cpp)
+target_include_directories (environment PUBLIC ${CMAKE_CURRENT_LIST_DIR})

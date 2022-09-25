@@ -44,25 +44,25 @@ namespace LDC::champion{
     }
 
     void Attacker_Champion::execute_spell_q(const bool &crit, const bool &enhanced, const int &instance) {
-        std::cout << "Passive: " << (crit ? "did crit, " : "did not crit, ") ;
+        std::cout << "Q: " << (crit ? "did crit, " : "did not crit, ") ;
         std::cout << (enhanced ? "is enhanced, " : "is not enhanced, ");
         std::cout << "Instance: " << instance << std::endl;
     }
 
     void Attacker_Champion::execute_spell_w(const bool &crit, const bool &enhanced, const int &instance) {
-        std::cout << "Passive: " << (crit ? "did crit, " : "did not crit, ") ;
+        std::cout << "W: " << (crit ? "did crit, " : "did not crit, ") ;
         std::cout << (enhanced ? "is enhanced, " : "is not enhanced, ");
         std::cout << "Instance: " << instance << std::endl;
     }
 
     void Attacker_Champion::execute_spell_e(const bool &crit, const bool &enhanced, const int &instance) {
-        std::cout << "Passive: " << (crit ? "did crit, " : "did not crit, ") ;
+        std::cout << "E: " << (crit ? "did crit, " : "did not crit, ") ;
         std::cout << (enhanced ? "is enhanced, " : "is not enhanced, ");
         std::cout << "Instance: " << instance << std::endl;
     }
 
     void Attacker_Champion::execute_spell_r(const bool &crit, const bool &enhanced, const int &instance) {
-        std::cout << "Passive: " << (crit ? "did crit, " : "did not crit, ") ;
+        std::cout << "R: " << (crit ? "did crit, " : "did not crit, ") ;
         std::cout << (enhanced ? "is enhanced, " : "is not enhanced, ");
         std::cout << "Instance: " << instance << std::endl;
     }

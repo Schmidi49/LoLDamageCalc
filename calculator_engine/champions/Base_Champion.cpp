@@ -33,28 +33,34 @@ namespace LDC::champion {
 
     Base_Champion::~Base_Champion() {
         delete m_base_stats;
+        delete m_current_stats;
         m_ess = nullptr;
     }
 
     Stats<ChampionBaseStat>* Base_Champion::getChampionBasesStats() {
+        using t = nlohmann::json_abi_v3_11_2::detail::value_t;
         const std::string jsonFile = std::string(REPO_DIR) + std::string(json_dir) + m_name + ".json";
         Stats<ChampionBaseStat>* importedStats{new Stats<ChampionBaseStat>()};
+
 
         std::ifstream f(jsonFile);
         if(f.good()){
             json data = json::parse(f);
-            for(auto & it : *importedStats){
-                const auto& newBase = data["stats"][it.first]["base"];
-                const auto& newGrowth = data["stats"][it.first]["growth"];
-                if(newBase != nullptr && newGrowth != nullptr) {
-                    it.second->set_base(newBase);
-                    it.second->set_growth(newGrowth);
-                    continue;
-                }
-                if(newBase == nullptr)
-                    std::cerr << "Data From json invalid: [\"stats\"][" << it.first << "][\"base\"]" << std::endl;
-                if(newGrowth == nullptr)
-                    std::cerr << "Data From json invalid: [\"stats\"][" << it.first << "][\"growth\"]" << std::endl;
+
+            for(json::iterator it = data["stats"].begin(); it != data["stats"].end(); ++it){
+                ChampionBaseStat* tempStat{new ChampionBaseStat};
+                const auto& newBase = data["stats"][it.key()]["base"];
+                const auto& newGrowth = data["stats"][it.key()]["growth"];
+
+                if (newBase == t::null || (newBase.type() != t::number_unsigned && newBase.type() != t::number_float))
+                    std::cerr << "Data From json invalid: [\"stats\"][" << it.key() << "][\"base\"]" << std::endl;
+                else
+                    tempStat->set_base(newBase);
+                if (newGrowth == t::null || (newGrowth.type() != t::number_unsigned && newGrowth.type() != t::number_float))
+                    std::cerr << "Data From json invalid: [\"stats\"][" << it.key() << "][\"growth\"]" << std::endl;
+                else
+                    tempStat->set_growth(newGrowth);
+                importedStats->set(it.key(), tempStat);
             }
         }else{
             std::cerr << "json File:\"" << jsonFile << "\" bad" << std::endl;
