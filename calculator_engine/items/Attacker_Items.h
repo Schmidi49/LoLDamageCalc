@@ -8,7 +8,7 @@
 #ifndef LOLDAMAGECALC_ATTACKER_ITEMS_H
 #define LOLDAMAGECALC_ATTACKER_ITEMS_H
 
-namespace LDC::champion {
+namespace LDC::champions {
     class Attacker_Items {
 
     };

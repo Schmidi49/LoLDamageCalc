@@ -10,56 +10,14 @@
 
 #include <string>
 
-#include <json.hpp>
+#include <Stats.hpp>
 #include <engine_signal_system.hpp>
 
-namespace LDC::champion {
-    class ChampionBaseStat{
-    public:
-        double at_level(int lvl) const {return m_base + (lvl - 1) * m_growth;};
-        double get_base() const {return m_base;};
-        double get_growth() const {return m_growth;};
+#include <json.hpp>
 
-        void set_base(double base){m_base = base;};
-        void set_growth(double growth){m_growth = growth;};
 
-    private:
-        double m_base{0.0};
-        double m_growth{0.0};
-    };
-
-    template <typename T>class Stats{
-    public:
-        Stats() = default;
-        ~Stats() {
-            for(auto it : m_stats) {
-                delete it.second; it.second = nullptr;}
-        }
-
-        auto find(const std::string& id){return m_stats.find(id);};
-        T* at(const std::string& id){return m_stats.at(id);};
-        void set(const std::string& id, T* newT){delete m_stats[id]; m_stats[id] = newT;};
-        void clear(){for(auto it : m_stats) {delete it.second;it.second = new T;}};
-
-        auto begin(){return m_stats.begin();};
-        auto end(){return m_stats.end();};
-
-    private:
-        std::map<std::string, T*> m_stats{
-            {"hp", new T()},
-            {"mana", new T()},
-            {"armor", new T()},
-            {"ad", new T()},
-            {"mr", new T()}
-        };
-
-    public:
-        T* hp() {return m_stats.at("hp");};
-        T* mana() {return m_stats.at("mana");};
-        T* armor () {return m_stats.at("armor");};
-        T* ad () {return m_stats.at("ad");};
-        T* mr () {return m_stats.at("mr");};
-    };
+namespace LDC::champions {
+    using json_types = nlohmann::json_abi_v3_11_2::detail::value_t;
 
     class Base_Champion {
     public:
@@ -74,14 +32,19 @@ namespace LDC::champion {
 
 
     private:
-        Stats<ChampionBaseStat>* getChampionBasesStats();
+        void getChampionBasesStats();
+    protected:
+        virtual void getChampionSpecifics() {};
 
     protected:
         std::string m_name;
         int m_level;
 
-        Stats<ChampionBaseStat>* m_base_stats;
-        Stats<double>* m_current_stats;
+        bool m_read_json_good{false};
+
+        Stats<ChampionBaseStat>* m_base_stats{new Stats<ChampionBaseStat>};
+        Stats<double>* m_current_stats{new Stats<double>};
+        bool attack_speed_cap{true};
 
         engine_signal_system* m_ess;
     };

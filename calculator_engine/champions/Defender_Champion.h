@@ -11,7 +11,7 @@
 #include <Base_Champion.h>
 #include <Attacker_Champion.h>
 
-namespace LDC::champion {
+namespace LDC::champions {
     class Defender_Champion : public Base_Champion{
     public:
         Defender_Champion(engine_signal_system* ess, const std::string &name, const int &lvl = 1);

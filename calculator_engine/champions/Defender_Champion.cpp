@@ -9,7 +9,7 @@
 
 #include "Defender_Champion.h"
 
-namespace LDC::champion {
+namespace LDC::champions {
 
     Defender_Champion::Defender_Champion(engine_signal_system *ess, const std::string &name, const int &lvl) :
         Base_Champion(ess, name, lvl){

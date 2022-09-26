@@ -12,7 +12,7 @@
 #include <Defender_Champion.h>
 
 
-namespace LDC::champion {
+namespace LDC::champions {
     class Attacker_Champion : public Base_Champion  {
     public:
         Attacker_Champion(engine_signal_system* ess, const std::string &name, const int &lvl = 1);

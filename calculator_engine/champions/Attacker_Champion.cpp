@@ -11,7 +11,7 @@
 #include "Attacker_Champion.h"
 
 
-namespace LDC::champion{
+namespace LDC::champions{
     Attacker_Champion::Attacker_Champion(engine_signal_system* ess, const std::string &name, const int &lvl) :
         Base_Champion(ess, name, lvl){
         m_ess->attacker.auto_attack.connect(std::bind(&Attacker_Champion::execute_auto_attack, this, std::placeholders::_1));
@@ -67,7 +67,5 @@ namespace LDC::champion{
         std::cout << (enhanced ? "is enhanced, " : "is not enhanced, ");
         std::cout << "Instance: " << instance << std::endl;
     }
-
-
 }
 
