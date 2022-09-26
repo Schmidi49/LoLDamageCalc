@@ -32,9 +32,13 @@ namespace LDC::champion {
 
 
     Base_Champion::~Base_Champion() {
-        delete m_base_stats;
-        delete m_current_stats;
         m_ess = nullptr;
+    }
+
+    Stats<double> *Base_Champion::get_current_stats() {
+        for(const auto& it : *m_current_stats)
+            m_current_stats->set(it.first, new double(m_base_stats->at(it.first)->at_level(m_level)));
+        return m_current_stats;
     }
 
     Stats<ChampionBaseStat>* Base_Champion::getChampionBasesStats() {

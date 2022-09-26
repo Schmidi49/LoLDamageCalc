@@ -26,7 +26,7 @@ namespace LDC::champion{
         m_Defender = nullptr;
     }
 
-    void Attacker_Champion::set_Defender(Defender_Champion* defender) {
+    void Attacker_Champion::set_Defender(Base_Champion* defender) {
         if(defender)
             m_Defender = defender;
         else
@@ -35,6 +35,7 @@ namespace LDC::champion{
 
     void Attacker_Champion::execute_auto_attack(const bool & crit) {
         std::cout << "Auto attack: " << (crit ? "did crit" : "did not crit") << std::endl;
+        m_ess->attacker.apply_onhit();
     }
 
     void Attacker_Champion::execute_passive(const bool &crit, const bool &enhanced, const int &instance) {

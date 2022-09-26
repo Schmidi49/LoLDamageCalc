@@ -18,7 +18,7 @@ namespace LDC::champion {
         Attacker_Champion(engine_signal_system* ess, const std::string &name, const int &lvl = 1);
         ~Attacker_Champion();
 
-        void set_Defender(Defender_Champion* defender);
+        void set_Defender(Base_Champion* defender);
 
     protected:
         virtual void execute_auto_attack(const bool &crit);
@@ -29,7 +29,7 @@ namespace LDC::champion {
         virtual void execute_spell_r(const bool &crit, const bool &enhanced, const int &instance);
 
     protected:
-        Defender_Champion* m_Defender{nullptr};
+        Base_Champion* m_Defender{nullptr};
     };
 }
 

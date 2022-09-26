@@ -9,7 +9,6 @@
 #define LOLDAMAGECALC_BASE_CHAMPION_H
 
 #include <string>
-#include <iostream>
 
 #include <json.hpp>
 #include <engine_signal_system.hpp>
@@ -33,18 +32,14 @@ namespace LDC::champion {
     public:
         Stats() = default;
         ~Stats() {
-            for(auto &it : m_stats) {
-                //TODO fix loop running out of iterators
-                std::cout << "rip" << std::endl;
-                std::cout << it.first << std::endl;
-                delete it.second;
-                it.second = nullptr;
-            }
+            for(auto it : m_stats) {
+                delete it.second; it.second = nullptr;}
         }
 
         auto find(const std::string& id){return m_stats.find(id);};
         T* at(const std::string& id){return m_stats.at(id);};
         void set(const std::string& id, T* newT){delete m_stats[id]; m_stats[id] = newT;};
+        void clear(){for(auto it : m_stats) {delete it.second;it.second = new T;}};
 
         auto begin(){return m_stats.begin();};
         auto end(){return m_stats.end();};
@@ -71,6 +66,8 @@ namespace LDC::champion {
         Base_Champion(engine_signal_system* ess, const std::string &name, const int &lvl = 1);
 
         ~Base_Champion();
+
+        Stats<double>* get_current_stats();
 
         //TODO rm test
         double test(int lvl){return m_base_stats->hp()->at_level(lvl);};
