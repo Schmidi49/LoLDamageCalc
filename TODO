@@ -1,0 +1,9 @@
+[o] Include Champion parameters (uses_mana, adaptive type, ranged)
+[o] Create a generic Spell class
+[o] change spells to be std::function for abstraction
+[o] advance Defender(missing HP, deal Damage etc)
+[o] advance envoirment (Damage, return Damage, other stats)
+[o] Finish Jinx-Attacker
+[o] Finish Jinx Defender
+[o] Add Rammus (as examle Defender Champion)
+[o] rewrite testtool to be genric with user inputs test tool
