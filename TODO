@@ -7,3 +7,4 @@
 [o] Finish Jinx Defender
 [o] Add Rammus (as examle Defender Champion)
 [o] rewrite testtool to be genric with user inputs test tool
+[o] doxygen docu for all header, optional for bigger function comments
