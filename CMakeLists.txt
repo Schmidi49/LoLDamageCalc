@@ -19,9 +19,7 @@ endif()
 # Boost
 #if necessary, define Boost_INCLUDE_DIR and Boost_LIBRARY_DIR
 find_package(Boost 1.80.0)
-if(Boost_FOUND)
-    include_directories(${Boost_INCLUDE_DIRS})
-else()
+if(!Boost_FOUND)
     message(SEND_ERROR "Could not find vital package Boost")
     message(STATUS "Boost_INCLUDE_DIR: " ${Boost_INCLUDE_DIR})
     message(STATUS "Boost_LIBRARY_DIR: " ${Boost_LIBRARY_DIR})
