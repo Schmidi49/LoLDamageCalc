@@ -11,6 +11,12 @@
 #include <map>
 
 namespace LDC::champions{
+    enum DamageType{
+        physical,
+        magic,
+        truedmg
+    };
+
     class ChampionBaseStat{
     public:
         double at_level(int lvl) const {return m_base + m_growth * (lvl - 1) * (0.7025 + 0.0175 * (lvl - 1));};

@@ -44,7 +44,12 @@ namespace LDC::champions {
 
         Stats<ChampionBaseStat>* m_base_stats{new Stats<ChampionBaseStat>};
         Stats<double>* m_current_stats{new Stats<double>};
-        bool attack_speed_cap{true};
+
+        bool m_uses_mana{false};
+        DamageType m_adaptive_type{physical};
+        bool m_ranged_champion{false};
+
+        bool m_attack_speed_cap{true};
 
         engine_signal_system* m_ess;
     };

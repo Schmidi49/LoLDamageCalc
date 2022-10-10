@@ -1,4 +1,4 @@
-[o] Include Champion parameters (uses_mana, adaptive type, ranged)
+[x] Include Champion parameters (uses_mana, adaptive type, ranged)
 [o] Create a generic Spell class
 [o] change spells to be std::function for abstraction
 [o] advance Defender(missing HP, deal Damage etc)
