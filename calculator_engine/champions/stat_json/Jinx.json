@@ -33,6 +33,7 @@
     "ms": 1.75
   },
   "spell_q":{
+    "max_lvl": 5,
     "cost": 20,
     "cd": 0.9,
     "as": [0.15,0.275,0.40,0.525,0.65],
@@ -40,6 +41,7 @@
     "as_modify" : -0.1
   },
   "spell_w": {
+    "max_lvl": 5,
     "damage_type": "physical",
     "cost": [50, 60, 70, 80, 90],
     "cd": [8, 7, 6, 5, 4],
@@ -47,6 +49,7 @@
     "ad_scale": 1.6
   },
   "spell_e": {
+    "max_lvl": 5,
     "damage_type": "magic",
     "cost": 90,
     "cd": [24, 20.5, 17, 13.5, 10],
@@ -54,12 +57,13 @@
     "ap_scale": 1
   },
   "spell_r": {
+    "max_lvl": 3,
     "damage_type": "physical",
     "cost": 100,
     "cd": [75, 65, 55],
     "range": [10, 100],
     "base_damage": [250, 400, 550],
     "ad_scale": 1.5,
-    "misshp_damage": [0.25, 0.3, 0.35]
+    "mis_hp_damage": [0.25, 0.3, 0.35]
   }
 }

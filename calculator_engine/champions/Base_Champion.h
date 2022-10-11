@@ -12,6 +12,7 @@
 
 #include <Stats.hpp>
 #include <engine_signal_system.hpp>
+#include <environment.h>
 
 #include <json.hpp>
 
