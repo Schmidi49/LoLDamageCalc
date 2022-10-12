@@ -29,10 +29,14 @@ namespace LDC::champions {
 
         bool set_lvl(const int& lvl);
 
+        double calculate_damage(const bool &crit, const bool &enhanced, const int &instance);
+
+        double execute_spell(const bool &crit, const bool &enhanced, const int &instance);
+
     private:
         bool read_json(const nlohmann::json& setup_json);
-        void try_read(const nlohmann::json& setup_json, const std::string& attribute, std::list<int>* raw_data);
-        void try_read(const nlohmann::json& setup_json, const std::string& attribute, std::list<double>* raw_data);
+        bool read_stat(const nlohmann::json& setup_json, const std::string& attribute, std::list<int>* raw_data);
+        bool read_stat(const nlohmann::json& setup_json, const std::string& attribute, std::list<double>* raw_data);
 
     private:
         engine_signal_system* m_ess{nullptr};

@@ -88,52 +88,60 @@ namespace LDC::champions {
         else
             std::cout << "applys_onhit not specified, default false" << std::endl;
 
-        try_read(setup_json, "ad_scale", &m_raw_ad);
-        try_read(setup_json, "ap_scale", &m_raw_ap);
-        try_read(setup_json, "base_damage", &m_raw_base_dmg);
-        try_read(setup_json, "cost", &m_raw_spell_cost);
-        try_read(setup_json, "cd", &m_raw_cd);
-        try_read(setup_json, "max_hp_damage", &m_raw_max_health);
-        try_read(setup_json, "mis_hp_damage", &m_raw_mis_health);
-        try_read(setup_json, "cur_hp_damage", &m_raw_cur_health);
-
-
-        return false;
+        return
+        read_stat(setup_json, "ad_scale", &m_raw_ad) &&
+        read_stat(setup_json, "ap_scale", &m_raw_ap) &&
+        read_stat(setup_json, "base_damage", &m_raw_base_dmg) &&
+        read_stat(setup_json, "cost", &m_raw_spell_cost) &&
+        read_stat(setup_json, "cd", &m_raw_cd) &&
+        read_stat(setup_json, "max_hp_damage", &m_raw_max_health) &&
+        read_stat(setup_json, "mis_hp_damage", &m_raw_mis_health) &&
+        read_stat(setup_json, "cur_hp_damage", &m_raw_cur_health);
     }
 
-    void Generic_Damage_Spell::try_read(const nlohmann::json &setup_json, const std::string &attribute,
+    bool Generic_Damage_Spell::read_stat(const nlohmann::json &setup_json, const std::string &attribute,
                                         std::list<int> *raw_data) {
         if(setup_json[attribute].is_null())
             std::cout << "not specified: " << attribute << std::endl;
         else if(setup_json[attribute].is_number_integer())
             raw_data = new std::list<int>{setup_json[attribute]};
         else if(setup_json[attribute].type() == json_types::array){
-            if(setup_json[attribute].empty())
-                std::cout << attribute << " was empty" << std::endl;
+            if(setup_json[attribute].empty()) {
+                std::cerr << attribute << " was empty" << std::endl;
+                return false;
+            }
             else if(setup_json[attribute].size() == 1)
                 raw_data = new std::list<int>{setup_json[attribute][0]};
             else if(setup_json[attribute].size() == m_max_lvl)
                 raw_data = new std::list<int>{setup_json[attribute]};
-            else
+            else {
                 std::cerr << attribute << " has the wrong size" << std::endl;
+                return false;
+            }
         }
+        return true;
     }
 
-    void Generic_Damage_Spell::try_read(const nlohmann::json &setup_json, const std::string &attribute,
+    bool Generic_Damage_Spell::read_stat(const nlohmann::json &setup_json, const std::string &attribute,
                                         std::list<double> *raw_data) {
         if(setup_json[attribute].is_null())
             std::cout << "not specified: " << attribute << std::endl;
         else if(setup_json[attribute].is_number_integer() || setup_json[attribute].is_number_float())
             raw_data = new std::list<double>{setup_json[attribute]};
         else if(setup_json[attribute].type() == json_types::array){
-            if(setup_json[attribute].empty())
-                std::cout << attribute << " was empty" << std::endl;
+            if(setup_json[attribute].empty()) {
+                std::cerr << attribute << " was empty" << std::endl;
+                return false;
+            }
             else if(setup_json[attribute].size() == 1)
                 raw_data = new std::list<double>{setup_json[attribute][0]};
             else if(setup_json[attribute].size() == m_max_lvl)
                 raw_data = new std::list<double>{setup_json[attribute]};
-            else
+            else {
                 std::cerr << attribute << " has the wrong size" << std::endl;
+                return false;
+            }
         }
+        return true;
     }
 }
