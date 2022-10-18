@@ -1,7 +1,8 @@
 [x] Include Champion parameters (uses_mana, adaptive type, ranged)
 [x] change spells to be std::function for abstraction
-[o] Create a generic Spell class
+[x] Create a generic Spell class
 [o] advance Defender(missing HP, deal Damage etc)
+[o] implement generic spell: do calc damage and execute spell
 [o] advance envoirment (Damage, return Damage, other stats)
 [o] Finish Jinx-Attacker
 [o] Finish Jinx Defender

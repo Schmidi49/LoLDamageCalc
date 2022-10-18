@@ -7,14 +7,14 @@
 
 #include <iostream>
 
-#include <Attacker_Champion.h>
+#include <Jinx.h>
 #include <engine_signal_system.hpp>
 
 int main(int argc, char* argv[]){
     std::cout << "Hello Test" << std::endl;
     LDC::engine_signal_system ess;
 
-    LDC::champions::Attacker_Champion a(&ess, "GenericChamp");
+    LDC::champions::Attacker_Jinx a(&ess, "Jinx");
     std::cout << "Champion created" << std::endl;
     std::cout << "Champion HP at level 2: " << a.test(2) << std::endl;
 

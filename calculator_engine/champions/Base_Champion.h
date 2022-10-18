@@ -34,12 +34,11 @@ namespace LDC::champions {
 
     private:
         void getChampionBasesStats();
-    protected:
-        virtual void getChampionSpecifics() {};
 
     protected:
         std::string m_name;
         int m_level;
+        nlohmann::json m_champion_data;
 
         bool m_read_json_good{false};
 
@@ -54,6 +53,10 @@ namespace LDC::champions {
 
         engine_signal_system* m_ess;
     };
+
+    class Attacker_Champion;
+
+    class Defender_Champion;
 }
 
 

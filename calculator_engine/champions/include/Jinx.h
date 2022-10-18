@@ -10,6 +10,7 @@
 
 #include <Attacker_Champion.h>
 #include <Defender_Champion.h>
+#include <Generic_Damage_Spell.h>
 
 namespace LDC::champions{
     class Attacker_Jinx : public Attacker_Champion{
@@ -17,13 +18,14 @@ namespace LDC::champions{
         Attacker_Jinx(engine_signal_system* ess, const std::string &name, const int &lvl = 1);
         ~Attacker_Jinx();
 
-    private:
-        void getChampionSpecifics() override;
-
         //TODO q does not trigger spellblade
 
     private:
         bool m_q_stance{false};
+
+        Generic_Damage_Spell* m_jinx_spell_w{nullptr};
+        Generic_Damage_Spell* m_jinx_spell_e{nullptr};
+        Generic_Damage_Spell* m_jinx_spell_r{nullptr};
     };
 }
 

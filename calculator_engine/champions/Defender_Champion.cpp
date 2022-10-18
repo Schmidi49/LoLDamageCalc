@@ -55,7 +55,7 @@ namespace LDC::champions {
         m_Attacker = nullptr;
     }
 
-    void Defender_Champion::set_Attacker(Base_Champion *attacker) {
+    void Defender_Champion::set_Attacker(Attacker_Champion *attacker) {
         if(attacker)
             m_Attacker = attacker;
         else

@@ -12,7 +12,8 @@
 #include <json.hpp>
 #include <list>
 
-#include <Defender_Champion.h>
+#include <Base_Champion.h>
+#include <Attacker_Champion.h>
 #include <engine_signal_system.hpp>
 #include <environment.h>
 
@@ -20,7 +21,7 @@ namespace LDC::champions {
     class Generic_Damage_Spell {
     public:
         Generic_Damage_Spell(const std::string& spell_name, const nlohmann::json& setup_json,
-                             Defender_Champion* defender, engine_signal_system* ess);
+                             Attacker_Champion* attacker, Defender_Champion* defender, engine_signal_system* ess);
         ~Generic_Damage_Spell();
 
         void set_Defender(Defender_Champion* defender){m_defender = defender;};
@@ -31,7 +32,7 @@ namespace LDC::champions {
 
         double calculate_damage(const bool &crit, const bool &enhanced, const int &instance);
 
-        double execute_spell(const bool &crit, const bool &enhanced, const int &instance);
+        void execute_spell(const bool &crit, const bool &enhanced, const int &instance);
 
     private:
         bool read_json(const nlohmann::json& setup_json);
@@ -41,6 +42,7 @@ namespace LDC::champions {
     private:
         engine_signal_system* m_ess{nullptr};
         Defender_Champion* m_defender{nullptr};
+        Attacker_Champion* m_attacker{nullptr};
         std::string m_spell_name;
 
         unsigned int m_max_lvl{5};
@@ -59,14 +61,14 @@ namespace LDC::champions {
         double m_cur_mis_health{0};
         double m_cur_cur_health{0};
 
-        std::list<double> m_raw_ad{0};
-        std::list<double> m_raw_ap{0};
-        std::list<int> m_raw_base_dmg{0};
-        std::list<int> m_raw_spell_cost{0};
-        std::list<double> m_raw_cd{0};
-        std::list<double> m_raw_max_health{0};
-        std::list<double> m_raw_mis_health{0};
-        std::list<double> m_raw_cur_health{0};
+        std::list<double> m_raw_ad{};
+        std::list<double> m_raw_ap{};
+        std::list<int> m_raw_base_dmg{};
+        std::list<int> m_raw_spell_cost{};
+        std::list<double> m_raw_cd{};
+        std::list<double> m_raw_max_health{};
+        std::list<double> m_raw_mis_health{};
+        std::list<double> m_raw_cur_health{};
     };
 }
 

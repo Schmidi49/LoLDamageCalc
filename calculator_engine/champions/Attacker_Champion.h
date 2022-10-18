@@ -18,7 +18,8 @@ namespace LDC::champions {
         Attacker_Champion(engine_signal_system* ess, const std::string &name, const int &lvl = 1);
         ~Attacker_Champion();
 
-        void set_Defender(Base_Champion* defender);
+        //TODO set flag for set pointer
+        void set_Defender(Defender_Champion* defender);
 
     private:
         virtual void execute_auto_attack(const bool &crit);
@@ -39,7 +40,7 @@ namespace LDC::champions {
 
 
     protected:
-        Base_Champion* m_Defender{nullptr};
+        Defender_Champion* m_Defender{nullptr};
     };
 }
 

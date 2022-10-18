@@ -10,7 +10,7 @@ target_link_libraries(champions PUBLIC environment)
 
 target_include_directories (champions PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(champions PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(CHAMP_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 message(${CHAMP_SRC_DIR})
 

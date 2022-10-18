@@ -55,27 +55,27 @@ namespace LDC::champions {
         const std::string jsonFile = std::string(REPO_DIR) + std::string(json_dir) + m_name + ".json";
         std::ifstream f(jsonFile);
         if(f.good()){
-            json data = json::parse(f);
+            m_champion_data = json::parse(f);
 
-            for(json::iterator it = data["stats"].begin(); it != data["stats"].end(); ++it){
+            for(json::iterator it = m_champion_data["stats"].begin(); it != m_champion_data["stats"].end(); ++it){
                 ChampionBaseStat* tempStat{new ChampionBaseStat};
-                const auto& newBase = data["stats"][it.key()]["base"];
-                const auto& newGrowth = data["stats"][it.key()]["growth"];
+                const auto& newBase = m_champion_data["stats"][it.key()]["base"];
+                const auto& newGrowth = m_champion_data["stats"][it.key()]["growth"];
 
-                if (newBase == json_types::null || (newBase.type() != json_types::number_unsigned && newBase.type() != json_types::number_float))
+                if (newBase.is_null() || (!newBase.is_number_unsigned() && !newBase.is_number_float()))
                     std::cerr << "Data From json invalid: [\"stats\"][" << it.key() << "][\"base\"]" << std::endl;
                 else
                     tempStat->set_base(newBase);
-                if (newGrowth == json_types::null || (newGrowth.type() != json_types::number_unsigned && newGrowth.type() != json_types::number_float))
+                if (newGrowth.is_null() || (!newGrowth.is_number_unsigned() && !newGrowth.is_number_float()))
                     std::cerr << "Data From json invalid: [\"stats\"][" << it.key() << "][\"growth\"]" << std::endl;
                 else
                     tempStat->set_growth(newGrowth);
 
                 if(it.key() == "as"){
-                    const auto& asRatio = data["stats"][it.key()]["ratio"];
-                    if (newGrowth == json_types::null)
+                    const auto& asRatio = m_champion_data["stats"][it.key()]["ratio"];
+                    if (asRatio.is_null())
                         m_base_stats->as_ratio = tempStat->get_growth();
-                    else if (newGrowth.type() != json_types::number_unsigned && newGrowth.type() != json_types::number_float)
+                    else if (!asRatio.is_number_unsigned() && !asRatio.is_number_float())
                         std::cerr << "Data From json invalid: [\"stats\"][" << it.key() << "][\"growth\"]" << std::endl;
                     else
                         m_base_stats->as_ratio = asRatio;
@@ -85,33 +85,32 @@ namespace LDC::champions {
                 m_read_json_good = true;
             }
 
-            if(data["adaptive_type"] == json_types::null)
+            if(m_champion_data["adaptive_type"].is_null())
                 std::cerr << "no adaptive type specified, using physical instead" << std::endl;
-            else if(data["adaptive_type"].type() != json_types::string)
+            else if(!m_champion_data["adaptive_type"].is_string())
                 std::cerr << "adaptive type is not a string" << std::endl;
-            else if(data["adaptive_type"] == "physical")
+            else if(m_champion_data["adaptive_type"] == "physical")
                 m_adaptive_type =physical;
-            else if(data["adaptive_type"] == "magic")
+            else if(m_champion_data["adaptive_type"] == "magic")
                 m_adaptive_type = magic;
             else
                 std::cerr << "incorrect adaptive type specified" << std::endl;
 
-            if(data["resource_mana"] == json_types::null)
+            if(m_champion_data["resource_mana"].is_null())
                 std::cerr << "no resource mana indicator specified, assuming champion does use mana" << std::endl;
-            else if(data["resource_mana"].type() != json_types::boolean)
+            else if(!m_champion_data["resource_mana"].is_boolean())
                 std::cerr << "resource mana indicator is not a boolean" << std::endl;
             else
-                m_uses_mana = data["resource_mana"];
+                m_uses_mana = m_champion_data["resource_mana"];
 
-            if(data["ranged"] == json_types::null)
+            if(m_champion_data["ranged"].is_null())
                 std::cerr << "no ranged indicator specified, assuming champion does use mana" << std::endl;
-            else if(data["ranged"].type() != json_types::boolean)
+            else if(!m_champion_data["ranged"].is_boolean())
                 std::cerr << "resource ranged is not a boolean" << std::endl;
             else
-                m_ranged_champion = data["ranged"];
+                m_ranged_champion = m_champion_data["ranged"];
         }else{
             std::cerr << "json File:\"" << jsonFile << "\" bad" << std::endl;
         }
-        
     }
 }
