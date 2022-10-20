@@ -18,6 +18,8 @@ namespace LDC::champions {
         m_ess = ess;
 
         read_json(setup_json);
+
+        set_lvl(0);
     }
 
     Generic_Damage_Spell::~Generic_Damage_Spell() {
@@ -53,11 +55,15 @@ namespace LDC::champions {
             std::cerr << "damage type was not a string" << std::endl;
             return false;
         }
-        m_dmg_type = to_DamageType(setup_json["damage_type"]);
-        if(m_dmg_type == DamageType::undefined){
-            std::cerr << "undefined Damage Type" << std::endl;
+        try{
+            m_dmg_type = to_DamageType(setup_json["damage_type"]);
+        }
+        catch (std::invalid_argument& e){
+            std::cerr << e.what() << std::endl;
             return false;
         }
+
+
 
         //read max level, if not specified default value 5 is used
         if(setup_json.contains("max_lvl")){
@@ -78,6 +84,16 @@ namespace LDC::champions {
         }
         else
             std::cout << "can_crit not specified, default false" << std::endl;
+
+        //read can crit, if not specified default value false is used
+        if(setup_json.contains("aoe")){
+            if(setup_json["aoe"].is_boolean())
+                m_aoe = setup_json["aoe"];
+            else
+                std::cerr << "aoe is not a boolean" << std::endl;
+        }
+        else
+            std::cout << "aoe not specified, default false" << std::endl;
 
         //read apply onhit, if not specified default value false is used
         if(setup_json.contains("applys_onhit")){

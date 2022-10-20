@@ -13,25 +13,28 @@
 
 namespace LDC {
     enum DamageType{
-        undefined,
         physical,
         magic,
-        truedmg
+        trueDmg
     };
 
-    std::string to_string(DamageType dt);
+    std::string to_string(const DamageType& dt);
 
     DamageType to_DamageType(const std::string& str);
 
-
-    class damage{
-    public:
-        int physical;
-        int magic;
-        int trueDmg;
+    struct Damage{
+        double physical{0.0};
+        double magic{0.0};
+        double trueDmg{0.0};
     };
 
-    class environment {
+    std::string to_string(const Damage &dmg);
+
+    struct DamageAtributes{
+        bool basicAttack{false};
+    };
+
+    class Environment {
 
     };
 
@@ -40,6 +43,12 @@ namespace LDC {
 inline std::ostream &  operator<<(std::ostream &os, const LDC::DamageType& dt)
 {
     os << LDC::to_string(dt);
+    return os;
+}
+
+inline std::ostream &  operator<<(std::ostream &os, const LDC::Damage& dmg)
+{
+    os << LDC::to_string(dmg);
     return os;
 }
 

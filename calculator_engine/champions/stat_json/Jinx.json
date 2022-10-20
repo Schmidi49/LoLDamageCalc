@@ -59,6 +59,7 @@
   "spell_r": {
     "max_lvl": 3,
     "damage_type": "physical",
+    "aoe": true,
     "cost": 100,
     "cd": [75, 65, 55],
     "range": [10, 100],

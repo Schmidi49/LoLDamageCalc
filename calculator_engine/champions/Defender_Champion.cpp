@@ -13,6 +13,8 @@ namespace LDC::champions {
 
     Defender_Champion::Defender_Champion(engine_signal_system *ess, const std::string &name, const int &lvl) :
         Base_Champion(ess, name, lvl){
+        m_ess->attacker.deal_damage.connect(std::bind(&Defender_Champion::slot_take_damage, this, std::placeholders::_1));
+
         func_auto_attack = [this](const bool &crit){
             std::cout << "Auto attack: " << (crit ? "did crit" : "did not crit") << std::endl;
             m_ess->attacker.apply_onhit();
@@ -84,5 +86,15 @@ namespace LDC::champions {
 
     void Defender_Champion::execute_spell_r(const bool &crit, const bool &enhanced, const int &instance) {
         func_spell_r(crit, enhanced, instance);
+    }
+
+    void Defender_Champion::slot_take_damage(const Damage &dmg) {
+        std::cout << "Damage taken: " << dmg << std::endl;
+        //do stuff ex: dmg reduction
+        m_missing_health += dmg.physical + dmg.magic + dmg.trueDmg;
+        if(m_missing_health > *m_current_stats->hp()){
+            m_missing_health = *m_current_stats->hp();
+            m_ess->defender.death();
+        }
     }
 }

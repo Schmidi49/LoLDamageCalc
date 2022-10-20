@@ -48,9 +48,10 @@ namespace LDC::champions {
         unsigned int m_max_lvl{5};
         unsigned int m_cur_lvl{1};
 
-        DamageType m_dmg_type{DamageType::undefined};
+        DamageType m_dmg_type{DamageType::magic};
         bool m_can_crit{false};
         bool m_applys_onhit{false};
+        bool m_aoe{false};
 
         double m_cur_ad{0};
         double m_cur_ap{0};

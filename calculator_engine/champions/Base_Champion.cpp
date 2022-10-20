@@ -22,7 +22,8 @@ namespace LDC::champions {
         m_name = name;
         m_level = lvl;
 
-        getChampionBasesStats();
+        read_champion_base_stats();
+        calc_current_stats();
 
         if(ess)
             m_ess = ess;
@@ -35,7 +36,7 @@ namespace LDC::champions {
         m_ess = nullptr;
     }
 
-    Stats<double> *Base_Champion::get_current_stats() {
+    Stats<double> *Base_Champion::calc_current_stats() {
         //IMOPRTANT!!!!! care for attackspeed, its base+(bonus*ratio)
         for(const auto& it : *m_current_stats) {
             if(it.first != "as")
@@ -51,7 +52,7 @@ namespace LDC::champions {
         return m_current_stats;
     }
 
-    void Base_Champion::getChampionBasesStats() {
+    void Base_Champion::read_champion_base_stats() {
         const std::string jsonFile = std::string(REPO_DIR) + std::string(json_dir) + m_name + ".json";
         std::ifstream f(jsonFile);
         if(f.good()){

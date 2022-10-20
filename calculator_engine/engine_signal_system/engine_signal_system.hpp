@@ -9,6 +9,7 @@
 #define LOLDAMAGECALC_ENGINE_SIGNAL_SYSTEM_H
 
 #include <boost/signals2.hpp>
+#include <environment.h>
 
 namespace LDC{
     class engine_signal_system{
@@ -29,10 +30,11 @@ namespace LDC{
 
         struct attacker_struct : public champ_active_struct{
             signal<void()> apply_onhit;
+            signal<void(const LDC::Damage& dmg, const LDC::DamageAtributes& atrb)> deal_damage;
         };
 
         struct defender_struct : public champ_active_struct{
-
+            signal<void()> death;
         };
     public:
         attacker_struct attacker;

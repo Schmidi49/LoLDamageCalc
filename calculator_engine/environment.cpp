@@ -10,20 +10,14 @@
 namespace LDC {
     std::string to_string(DamageType dt){
         switch (dt){
-            case undefined:
-                return "undefined";
-                break;
             case physical:
                 return "physical";
                 break;
             case magic:
                 return "magic";
                 break;
-            case truedmg:
-                return "truedmg";
-                break;
-            default:
-                return "undefined";
+            case trueDmg:
+                return "trueDmg";
                 break;
         }
     }
@@ -33,10 +27,15 @@ namespace LDC {
             return physical;
         else if(str == "magic")
             return magic;
-        else if(str == "truedmg")
-            return truedmg;
+        else if(str == "trueDmg")
+            return trueDmg;
         else
-            return undefined;
+            throw std::invalid_argument("invalid Damage Type");
     }
 
+    std::string to_string(const Damage& dmg) {
+        return "physical:" + std::to_string(dmg.physical) +
+               ",magic:" + std::to_string(dmg.magic) +
+               ",true:" + std::to_string(dmg.trueDmg);
+    }
 } // LDC

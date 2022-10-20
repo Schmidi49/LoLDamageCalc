@@ -1,11 +1,13 @@
 [x] Include Champion parameters (uses_mana, adaptive type, ranged)
 [x] change spells to be std::function for abstraction
 [x] Create a generic Spell class
-[o] advance Defender(missing HP, deal Damage etc)
+[x] advance Defender(missing HP)
 [o] implement generic spell: do calc damage and execute spell
-[o] advance envoirment (Damage, return Damage, other stats)
+[o] add Damage attributes
+[o] add Damage reduction
+[o] advance environment (Damage, return Damage, other stats)
 [o] Finish Jinx-Attacker
 [o] Finish Jinx Defender
-[o] Add Rammus (as examle Defender Champion)
+[o] Add Rammus (as example Defender Champion)
 [o] rewrite testtool to be genric with user inputs test tool
 [o] doxygen docu for all header, optional for bigger function comments

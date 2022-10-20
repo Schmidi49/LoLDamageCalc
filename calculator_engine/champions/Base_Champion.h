@@ -26,14 +26,19 @@ namespace LDC::champions {
 
         ~Base_Champion();
 
-        Stats<double>* get_current_stats();
+        Stats<double>* get_current_stats(){return m_current_stats;};
 
         //TODO rm test
         double test(int lvl){return m_base_stats->hp()->at_level(lvl);};
 
 
     private:
-        void getChampionBasesStats();
+        void read_champion_base_stats();
+
+    protected:
+        bool set_lvl(const int&lvl);
+
+        Stats<double>* calc_current_stats();
 
     protected:
         std::string m_name;
