@@ -50,6 +50,7 @@ namespace LDC::champions{
                 {"mana", new T()},
                 {"armor", new T()},
                 {"ad", new T()},
+                {"ap", new T()},
                 {"as", new T()},
                 {"mr", new T()}
         };
@@ -59,6 +60,7 @@ namespace LDC::champions{
         T* mana() {return m_stats.at("mana");};
         T* armor () {return m_stats.at("armor");};
         T* ad () {return m_stats.at("ad");};
+        T* ap () {return m_stats.at("ap");};
         T* as () {return m_stats.at("as");};
         T* mr () {return m_stats.at("mr");};
         double as_ratio{1.0};

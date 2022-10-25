@@ -22,7 +22,20 @@ namespace LDC {
 
     DamageType to_DamageType(const std::string& str);
 
-    struct Damage{
+    class Damage{
+    public:
+        Damage() = default;
+        Damage(const double& p, const double& m, const double& t);
+
+        double get(const DamageType& dt) const;
+
+        void set(const DamageType& dt, const double& dmg);
+
+        Damage & operator+=(Damage const & dmg);
+        Damage & operator+=(Damage && dmg);
+        Damage operator+(Damage const & dmg);
+        Damage operator+(Damage && dmg);
+    public:
         double physical{0.0};
         double magic{0.0};
         double trueDmg{0.0};

@@ -30,7 +30,8 @@ namespace LDC::champions {
 
         bool set_lvl(const int& lvl);
 
-        double calculate_damage(const bool &crit, const bool &enhanced, const int &instance);
+        //pre mitigation!!!!!!
+        Damage calculate_damage(const bool &crit, const bool &enhanced, const int &instance);
 
         void execute_spell(const bool &crit, const bool &enhanced, const int &instance);
 
@@ -53,14 +54,14 @@ namespace LDC::champions {
         bool m_applys_onhit{false};
         bool m_aoe{false};
 
-        double m_cur_ad{0};
-        double m_cur_ap{0};
+        double m_cur_ad{0.0};
+        double m_cur_ap{0.0};
         int m_cur_base_dmg{0};
         int m_cur_spell_cost{0};
-        double m_cur_cd{0};
-        double m_cur_max_health{0};
-        double m_cur_mis_health{0};
-        double m_cur_cur_health{0};
+        double m_cur_cd{0.0};
+        double m_cur_max_health{0.0};
+        double m_cur_mis_health{0.0};
+        double m_cur_cur_health{0.0};
 
         std::list<double> m_raw_ad{};
         std::list<double> m_raw_ap{};

@@ -15,8 +15,11 @@ int main(int argc, char* argv[]){
     LDC::engine_signal_system ess;
 
     LDC::champions::Attacker_Jinx a(&ess, "Jinx");
-    std::cout << "Champion created" << std::endl;
-    std::cout << "Champion HP at level 2: " << a.test(2) << std::endl;
+    std::cout << "Jinx created" << std::endl;
+    std::cout << "Jinx HP at level 2: " << a.test(2) << std::endl;
+
+    LDC::champions::Defender_Champion(&ess, "GenericChamp");
+    std::cout << "Defender created" << std::endl;
 
     std::cout << "Doing spells/attacks: " << std::endl;
     ess.attacker.auto_attack(true);

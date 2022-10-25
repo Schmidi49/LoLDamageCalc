@@ -2,7 +2,8 @@
 [x] change spells to be std::function for abstraction
 [x] Create a generic Spell class
 [x] advance Defender(missing HP)
-[o] implement generic spell: do calc damage and execute spell
+[x] implement generic spell: do calc damage and execute spell
+[o] add set level functions for champion and spell levels
 [o] add Damage attributes
 [o] add Damage reduction
 [o] advance environment (Damage, return Damage, other stats)
@@ -11,3 +12,4 @@
 [o] Add Rammus (as example Defender Champion)
 [o] rewrite testtool to be genric with user inputs test tool
 [o] doxygen docu for all header, optional for bigger function comments
+[0] code cleanup (go over clang warnings)

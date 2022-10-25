@@ -36,11 +36,12 @@ namespace LDC::champions {
         std::function<void(const bool &crit, const bool &enhanced, const int &instance)> func_spell_e;
         std::function<void(const bool &crit, const bool &enhanced, const int &instance)> func_spell_r;
 
-    protected:
+    public:
         double get_max_health(){return *m_current_stats->hp();};
         double get_mis_health(){return m_missing_health;};
         double get_cur_health(){return (*m_current_stats->hp() - m_missing_health);};
 
+    protected:
         virtual void slot_take_damage(const LDC::Damage& dmg);
 
     protected:

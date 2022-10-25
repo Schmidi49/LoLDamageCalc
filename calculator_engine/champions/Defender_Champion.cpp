@@ -17,7 +17,6 @@ namespace LDC::champions {
 
         func_auto_attack = [this](const bool &crit){
             std::cout << "Auto attack: " << (crit ? "did crit" : "did not crit") << std::endl;
-            m_ess->attacker.apply_onhit();
         };
         func_passive = [](const bool &crit, const bool &enhanced, const int &instance){
             std::cout << "Passive: " << (crit ? "did crit, " : "did not crit, ") ;

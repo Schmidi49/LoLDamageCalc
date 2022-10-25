@@ -194,7 +194,34 @@ namespace LDC::champions {
         return true;
     }
 
+    Damage Generic_Damage_Spell::calculate_damage(const bool &crit, const bool &enhanced, const int &instance) {
+        Damage dmg;
+        double own_damage = m_cur_base_dmg;
+        const auto& stats_attacker = m_attacker->get_current_stats();
+        own_damage += m_cur_ad * *stats_attacker->ad();
+        own_damage += m_cur_ap * *stats_attacker->ap();
+
+        if(m_cur_cur_health != 0.0 )
+            own_damage += m_cur_cur_health * m_defender->get_cur_health();
+        if(m_cur_mis_health != 0.0 )
+            own_damage += m_cur_mis_health * m_defender->get_mis_health();
+        if(m_cur_max_health != 0.0 )
+            own_damage += m_cur_max_health * m_defender->get_max_health();
+
+        //TODO crit multiplier/rate yet to be implemented, mode of operation!!
+        if(m_can_crit)
+            own_damage *= 1.75;
+        dmg.set(m_dmg_type, own_damage);
+
+        if(m_applys_onhit)
+            dmg += *m_ess->attacker.get_onhit();
+
+        return dmg;
+    }
+
     void Generic_Damage_Spell::execute_spell(const bool &crit, const bool &enhanced, const int &instance) {
         std::cout << "spell pressed: " << m_spell_name << std::endl;
+        //TODO spellcost, cd, evtl healing etc
+        m_ess->attacker.deal_damage(calculate_damage(crit, enhanced, instance), LDC::DamageAtributes());
     }
 }

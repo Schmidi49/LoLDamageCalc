@@ -29,7 +29,7 @@ namespace LDC{
         };
 
         struct attacker_struct : public champ_active_struct{
-            signal<void()> apply_onhit;
+            signal<Damage()> get_onhit;
             signal<void(const LDC::Damage& dmg, const LDC::DamageAtributes& atrb)> deal_damage;
         };
 
@@ -40,6 +40,25 @@ namespace LDC{
         attacker_struct attacker;
         defender_struct defender;
     };
+
+    //TODO test
+    template<typename T>
+    struct add_onhits{
+        typedef T result_type;
+
+        template<typename InputIterator>
+        T operator()(InputIterator first, InputIterator last) const
+        {
+            if(first == last ) return T();
+            T sum = *first++;
+            while (first != last) {
+                sum += first++;
+            }
+
+            return sum;
+        }
+    };
 }
+
 
 #endif //LOLDAMAGECALC_ENGINE_SIGNAL_SYSTEM_H
