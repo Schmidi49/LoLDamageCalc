@@ -14,11 +14,15 @@ int main(int argc, char* argv[]){
     std::cout << "Hello Test" << std::endl;
     LDC::engine_signal_system ess;
 
-    LDC::champions::Attacker_Jinx a(&ess, "Jinx");
+    LDC::champions::Attacker_Jinx jinx(&ess, "Jinx");
     std::cout << "Jinx created" << std::endl;
-    std::cout << "Jinx HP at level 2: " << a.test(2) << std::endl;
+    std::cout << "set champ lvl: " << jinx.set_lvl(5) << std::endl;
+    std::cout << "set w lvl: "<< std::endl;
+    jinx.set_spell_lvl_w(3);
+    std::cout << "set e lvl: "<< std::endl;
+    jinx.set_spell_lvl_e(0);
 
-    LDC::champions::Defender_Champion(&ess, "GenericChamp");
+    LDC::champions::Defender_Champion b(&ess, "GenericChamp");
     std::cout << "Defender created" << std::endl;
 
     std::cout << "Doing spells/attacks: " << std::endl;

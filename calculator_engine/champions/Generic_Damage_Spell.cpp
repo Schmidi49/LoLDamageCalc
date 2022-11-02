@@ -17,7 +17,9 @@ namespace LDC::champions {
         m_defender = defender;
         m_ess = ess;
 
-        read_json(setup_json);
+        if(!read_json(setup_json)){
+            throw std::runtime_error("reading json data failed critically!");
+        }
 
         set_lvl(0);
     }
@@ -31,12 +33,73 @@ namespace LDC::champions {
         if(lvl == 0){
             m_cur_lvl = 0;
 
-            //TODO stuff
+            m_cur_ad=0.0;
+            m_cur_ap=0.;
+            m_cur_base_dmg=0;
+            m_cur_spell_cost=0;
+            m_cur_cd=0.0;
+            m_cur_max_health=0.0;
+            m_cur_mis_health=0.0;
+            m_cur_cur_health=0.0;
         }
         else if(lvl <= m_max_lvl && lvl > 0){
             m_cur_lvl = lvl;
 
-            //TODO stuff
+            if(m_raw_ad.empty())
+                m_cur_ad = 0.0;
+            else if(m_raw_ad.size() == 1)
+                m_cur_ad = m_raw_ad[0];
+            else
+                m_cur_ad = m_raw_ad[lvl - 1];
+
+            if(m_raw_ap.empty())
+                m_cur_ap = 0.0;
+            else if(m_raw_ap.size() == 1)
+                m_cur_ap = m_raw_ap[0];
+            else
+                m_cur_ap = m_raw_ap[lvl - 1];
+
+            if(m_raw_base_dmg.empty())
+                m_cur_base_dmg = 0;
+            else if(m_raw_base_dmg.size() == 1)
+                m_cur_base_dmg = m_raw_base_dmg[0];
+            else
+                m_cur_base_dmg = m_raw_base_dmg[lvl - 1];
+
+            if(m_raw_spell_cost.empty())
+                m_cur_spell_cost = 0;
+            else if(m_raw_spell_cost.size() == 1)
+                m_cur_spell_cost = m_raw_spell_cost[0];
+            else
+                m_cur_spell_cost = m_raw_spell_cost[lvl - 1];
+
+            if(m_raw_cd.empty())
+                m_cur_cd = 0.0;
+            else if(m_raw_cd.size() == 1)
+                m_cur_cd = m_raw_cd[0];
+            else
+                m_cur_cd = m_raw_cd[lvl - 1];
+
+            if(m_raw_mis_health.empty())
+                m_cur_mis_health = 0.0;
+            else if(m_raw_mis_health.size() == 1)
+                m_cur_mis_health = m_raw_mis_health[0];
+            else
+                m_cur_mis_health = m_raw_mis_health[lvl - 1];
+
+            if(m_raw_cur_health.empty())
+                m_cur_cur_health = 0.0;
+            else if(m_raw_cur_health.size() == 1)
+                m_cur_cur_health = m_raw_cur_health[0];
+            else
+                m_cur_cur_health = m_raw_cur_health[lvl - 1];
+
+            if(m_raw_max_health.empty())
+                m_cur_max_health = 0.0;
+            else if(m_raw_max_health.size() == 1)
+                m_cur_max_health = m_raw_max_health[0];
+            else
+                m_cur_max_health = m_raw_max_health[lvl - 1];
         }
         else{
             std::cerr << "passed level is not in the valid range for this spell" << std::endl;
@@ -117,11 +180,11 @@ namespace LDC::champions {
     }
 
     bool Generic_Damage_Spell::read_stat(const nlohmann::json &setup_json, const std::string &attribute,
-                                        std::list<int> *raw_data) {
+                                        std::vector<int> *raw_data) {
         if(!setup_json.contains(attribute))
             std::cout << "not specified: " << attribute << std::endl;
         else if(setup_json[attribute].is_number_integer() || setup_json[attribute].is_number_unsigned())
-            raw_data = new std::list<int>{setup_json[attribute]};
+            raw_data = new std::vector<int>{setup_json[attribute]};
         else if(setup_json[attribute].is_array()){
             if(setup_json[attribute].empty()) {
                 std::cerr << attribute << " was empty" << std::endl;
@@ -130,7 +193,7 @@ namespace LDC::champions {
             else if(setup_json[attribute].size() == 1) {
                 delete raw_data;
                 if (setup_json[attribute].is_number_integer())
-                    raw_data = new std::list<int>{setup_json[attribute][0]};
+                    raw_data = new std::vector<int>{setup_json[attribute][0]};
                 else {
                     std::cerr << "single entry of " << attribute << " is not an integer" << std::endl;
                     return false;
@@ -156,11 +219,11 @@ namespace LDC::champions {
     }
 
     bool Generic_Damage_Spell::read_stat(const nlohmann::json &setup_json, const std::string &attribute,
-                                        std::list<double> *raw_data) {
+                                        std::vector<double> *raw_data) {
         if(!setup_json.contains(attribute))
             std::cout << "not specified: " << attribute << std::endl;
         else if(setup_json[attribute].is_number_integer() || setup_json[attribute].is_number_float())
-            raw_data = new std::list<double>{setup_json[attribute]};
+            raw_data = new std::vector<double>{setup_json[attribute]};
         else if(setup_json[attribute].is_array()){
             if(setup_json[attribute].empty()) {
                 std::cerr << attribute << " was empty" << std::endl;
@@ -169,7 +232,7 @@ namespace LDC::champions {
             else if(setup_json[attribute].size() == 1) {
                 delete raw_data;
                 if (setup_json[attribute].is_number_integer() || setup_json[attribute].is_number_float() )
-                    raw_data = new std::list<double>{setup_json[attribute][0]};
+                    raw_data = new std::vector<double>{setup_json[attribute][0]};
                 else {
                     std::cerr << "single entry of " << attribute << " is not an integer" << std::endl;
                     return false;
@@ -220,8 +283,14 @@ namespace LDC::champions {
     }
 
     void Generic_Damage_Spell::execute_spell(const bool &crit, const bool &enhanced, const int &instance) {
+        if(m_cur_lvl == 0){
+            std::cerr << m_spell_name << " is not leveled" << std::endl;
+            return;
+        }
         std::cout << "spell pressed: " << m_spell_name << std::endl;
         //TODO spellcost, cd, evtl healing etc
-        m_ess->attacker.deal_damage(calculate_damage(crit, enhanced, instance), LDC::DamageAtributes());
+        Damage d = calculate_damage(crit, enhanced, instance);
+        DamageAtributes a = DamageAtributes();
+        m_ess->attacker.deal_damage(d, a);
     }
 }

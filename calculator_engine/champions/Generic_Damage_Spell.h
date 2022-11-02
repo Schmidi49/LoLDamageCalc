@@ -10,7 +10,7 @@
 
 #include <cstring>
 #include <json.hpp>
-#include <list>
+#include <vector>
 
 #include <Base_Champion.h>
 #include <Attacker_Champion.h>
@@ -30,6 +30,8 @@ namespace LDC::champions {
 
         bool set_lvl(const int& lvl);
 
+        int get_lvl() const {return m_cur_lvl;};
+
         //pre mitigation!!!!!!
         Damage calculate_damage(const bool &crit, const bool &enhanced, const int &instance);
 
@@ -37,8 +39,8 @@ namespace LDC::champions {
 
     private:
         bool read_json(const nlohmann::json& setup_json);
-        bool read_stat(const nlohmann::json& setup_json, const std::string& attribute, std::list<int>* raw_data);
-        bool read_stat(const nlohmann::json& setup_json, const std::string& attribute, std::list<double>* raw_data);
+        bool read_stat(const nlohmann::json& setup_json, const std::string& attribute, std::vector<int>* raw_data);
+        bool read_stat(const nlohmann::json& setup_json, const std::string& attribute, std::vector<double>* raw_data);
 
     private:
         engine_signal_system* m_ess{nullptr};
@@ -46,14 +48,15 @@ namespace LDC::champions {
         Attacker_Champion* m_attacker{nullptr};
         std::string m_spell_name;
 
-        unsigned int m_max_lvl{5};
-        unsigned int m_cur_lvl{1};
+        int m_max_lvl{5};
+        int m_cur_lvl{1};
 
         DamageType m_dmg_type{DamageType::magic};
         bool m_can_crit{false};
         bool m_applys_onhit{false};
         bool m_aoe{false};
 
+        //TODO maybe rework structure of cur/raw stats into a combined dict
         double m_cur_ad{0.0};
         double m_cur_ap{0.0};
         int m_cur_base_dmg{0};
@@ -63,14 +66,14 @@ namespace LDC::champions {
         double m_cur_mis_health{0.0};
         double m_cur_cur_health{0.0};
 
-        std::list<double> m_raw_ad{};
-        std::list<double> m_raw_ap{};
-        std::list<int> m_raw_base_dmg{};
-        std::list<int> m_raw_spell_cost{};
-        std::list<double> m_raw_cd{};
-        std::list<double> m_raw_max_health{};
-        std::list<double> m_raw_mis_health{};
-        std::list<double> m_raw_cur_health{};
+        std::vector<double> m_raw_ad{};
+        std::vector<double> m_raw_ap{};
+        std::vector<int> m_raw_base_dmg{};
+        std::vector<int> m_raw_spell_cost{};
+        std::vector<double> m_raw_cd{};
+        std::vector<double> m_raw_max_health{};
+        std::vector<double> m_raw_mis_health{};
+        std::vector<double> m_raw_cur_health{};
     };
 }
 

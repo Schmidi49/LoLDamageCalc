@@ -45,6 +45,7 @@ namespace LDC {
 
     struct DamageAtributes{
         bool basicAttack{false};
+        bool aoe{false};
     };
 
     class Environment {

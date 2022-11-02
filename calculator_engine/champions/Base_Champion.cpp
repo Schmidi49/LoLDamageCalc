@@ -20,7 +20,7 @@ constexpr char json_dir[] = "/calculator_engine/champions/stat_json/";
 namespace LDC::champions {
     Base_Champion::Base_Champion(engine_signal_system* ess, const std::string &name, const int &lvl) {
         m_name = name;
-        m_level = lvl;
+        m_champ_lvl = lvl;
 
         read_champion_base_stats();
         calc_current_stats();
@@ -40,16 +40,99 @@ namespace LDC::champions {
         //IMOPRTANT!!!!! care for attackspeed, its base+(bonus*ratio)
         for(const auto& it : *m_current_stats) {
             if(it.first != "as")
-                m_current_stats->set(it.first, new double(m_base_stats->at(it.first)->at_level(m_level)));
+                m_current_stats->set(it.first, new double(m_base_stats->at(it.first)->at_level(m_champ_lvl)));
             else {
                 m_current_stats->set(it.first, new double(m_base_stats->at(it.first)->get_base()
-                                                          + (m_base_stats->at(it.first)->growth_at_level(m_level) *
+                                                          + (m_base_stats->at(it.first)->growth_at_level(m_champ_lvl) *
                                                              m_base_stats->as_ratio)));
                 if(*m_current_stats->as() > 2.5)
                     m_current_stats->set("as", new double(2.5));
             }
         }
         return m_current_stats;
+    }
+
+    bool Base_Champion::level_check(const int &champ_lvl, const int &q_lvl, const int &w_lvl, const int &e_lvl,
+                                    const int &r_lvl) {
+        if(champ_lvl < (q_lvl + w_lvl + e_lvl + r_lvl)){
+            std::cerr << "combined spell levels too high" << std::endl;
+            return false;
+        }
+        switch(r_lvl){
+            case 0: break;
+            case 1:
+                if(champ_lvl < 6){
+                    std::cerr << "r_lvl too high" << std::endl;
+                    return false;
+                }
+                break;
+            case 2:
+                if(champ_lvl < 11){
+                    std::cerr << "r_lvl too high" << std::endl;
+                    return false;
+                }
+                break;
+            case 3:
+                if(champ_lvl < 16){
+                    std::cerr << "r_lvl too high" << std::endl;
+                    return false;
+                }
+                break;
+            default: std::cerr << "illegal r_lvl specified" << std::endl; return false;
+        }
+
+        if((champ_lvl/2) + 1 < q_lvl){
+            std::cerr << "q_lvl too high" << std::endl;
+            return false;
+        }
+        if((champ_lvl/2) + 1 < w_lvl){
+            std::cerr << "w_lvl too high" << std::endl;
+            return false;
+        }
+        if((champ_lvl/2) + 1 < e_lvl){
+            std::cerr << "e_lvl too high" << std::endl;
+            return false;
+        }
+
+        std::cout << "levels specified are legal" << std::endl;
+        return true;
+    }
+
+    bool Base_Champion::reset_levels() {
+        m_champ_lvl = 18; //for safety, so there is no random fail when resetting the spell levels
+        if(set_spell_lvl_q(0) ||
+           set_spell_lvl_w(0) ||
+           set_spell_lvl_e(0) ||
+           set_spell_lvl_r(0)){
+            std::cerr << "unexpected failure when resetting levels" << std::endl;
+            m_champ_lvl = 1;
+            return false;
+        }
+        m_champ_lvl = 1;
+        return true;
+    }
+
+    bool Base_Champion::set_lvl(const int &lvl) {
+        if (lvl < 0 || lvl > 18){
+            std::cerr << "illegal level: " << lvl << std::endl;
+            return false;
+        }
+        if(!level_check(lvl,
+                        get_spell_lvl_q(),
+                        get_spell_lvl_w(),
+                        get_spell_lvl_e(),
+                        get_spell_lvl_r())){
+            std::cerr << "selected champion level is not compatible with the current spell levels" << std::endl;
+            return false;
+        }
+
+        m_champ_lvl = lvl;
+        calc_current_stats();
+        return true;
+    }
+
+    int Base_Champion::get_lvl() const {
+        return m_champ_lvl;
     }
 
     void Base_Champion::read_champion_base_stats() {
@@ -113,5 +196,45 @@ namespace LDC::champions {
         }else{
             std::cerr << "json File:\"" << jsonFile << "\" bad" << std::endl;
         }
+    }
+
+    bool Base_Champion::set_spell_lvl_q(const int &lvl) {
+        std::cerr << "set_spell_lvl_q is not implemented" << std::endl;
+        return false;
+    }
+
+    bool Base_Champion::set_spell_lvl_w(const int &lvl) {
+        std::cerr << "set_spell_lvl_w is not implemented" << std::endl;
+        return false;
+    }
+
+    bool Base_Champion::set_spell_lvl_e(const int &lvl) {
+        std::cerr << "set_spell_lvl_e is not implemented" << std::endl;
+        return false;
+    }
+
+    bool Base_Champion::set_spell_lvl_r(const int &lvl) {
+        std::cerr << "set_spell_lvl_r is not implemented" << std::endl;
+        return false;
+    }
+
+    int Base_Champion::get_spell_lvl_q() {
+        std::cout << "get_spell_lvl_q is not implemented" << std::endl;
+        return 0;
+    }
+
+    int Base_Champion::get_spell_lvl_w() {
+        std::cout << "get_spell_lvl_w is not implemented" << std::endl;
+        return 0;
+    }
+
+    int Base_Champion::get_spell_lvl_e() {
+        std::cout << "get_spell_lvl_e is not implemented" << std::endl;
+        return 0;
+    }
+
+    int Base_Champion::get_spell_lvl_r() {
+        std::cout << "get_spell_lvl_r is not implemented" << std::endl;
+        return 0;
     }
 }

@@ -3,7 +3,9 @@
 [x] Create a generic Spell class
 [x] advance Defender(missing HP)
 [x] implement generic spell: do calc damage and execute spell
-[o] add set level functions for champion and spell levels
+[x] add set level functions for champion and spell levels
+[o] disconnect in Destructors of Attackers and Defenders
+[o] add flag for adding defender/attacker
 [o] add Damage attributes
 [o] add Damage reduction
 [o] advance environment (Damage, return Damage, other stats)
@@ -12,4 +14,4 @@
 [o] Add Rammus (as example Defender Champion)
 [o] rewrite testtool to be genric with user inputs test tool
 [o] doxygen docu for all header, optional for bigger function comments
-[0] code cleanup (go over clang warnings)
+[o] code cleanup (go over clang warnings)

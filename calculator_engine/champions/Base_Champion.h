@@ -28,21 +28,31 @@ namespace LDC::champions {
 
         Stats<double>* get_current_stats(){return m_current_stats;};
 
-        //TODO rm test
-        double test(int lvl){return m_base_stats->hp()->at_level(lvl);};
+        bool set_lvl(const int&lvl);
+        virtual bool set_spell_lvl_q(const int&lvl);
+        virtual bool set_spell_lvl_w(const int&lvl);
+        virtual bool set_spell_lvl_e(const int&lvl);
+        virtual bool set_spell_lvl_r(const int&lvl);
+        bool reset_levels();
 
+        int get_lvl() const;
+        virtual int get_spell_lvl_q();
+        virtual int get_spell_lvl_w();
+        virtual int get_spell_lvl_e();
+        virtual int get_spell_lvl_r();
 
     private:
         void read_champion_base_stats();
 
     protected:
-        bool set_lvl(const int&lvl);
-
         Stats<double>* calc_current_stats();
+
+        static bool level_check(const int& champ_lvl, const int&q_lvl, const int&w_lvl, const int&e_lvl, const int&r_lvl);
+
 
     protected:
         std::string m_name;
-        int m_level;
+        int m_champ_lvl;
         nlohmann::json m_champion_data;
 
         bool m_read_json_good{false};

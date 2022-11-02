@@ -42,7 +42,7 @@ namespace LDC::champions {
         double get_cur_health(){return (*m_current_stats->hp() - m_missing_health);};
 
     protected:
-        virtual void slot_take_damage(const LDC::Damage& dmg);
+        virtual void slot_take_damage(const LDC::Damage& dmg, const LDC::DamageAtributes& atrb);
 
     protected:
         Attacker_Champion* m_Attacker{nullptr};
