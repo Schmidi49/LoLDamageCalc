@@ -43,6 +43,7 @@
   "spell_w": {
     "max_lvl": 5,
     "damage_type": "physical",
+    "projectile": true,
     "cost": [50, 60, 70, 80, 90],
     "cd": [8, 7, 6, 5, 4],
     "base_damage": [10, 60, 440, 160, 210],
@@ -51,6 +52,8 @@
   "spell_e": {
     "max_lvl": 5,
     "damage_type": "magic",
+    "aoe": true,
+    "projectile": true,
     "cost": 90,
     "cd": [24, 20.5, 17, 13.5, 10],
     "base_damage": [70, 120, 170, 220, 270],
@@ -60,6 +63,7 @@
     "max_lvl": 3,
     "damage_type": "physical",
     "aoe": true,
+    "projectile": true,
     "cost": 100,
     "cd": [75, 65, 55],
     "range": [10, 100],

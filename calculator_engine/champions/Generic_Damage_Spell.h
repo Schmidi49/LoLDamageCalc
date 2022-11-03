@@ -55,6 +55,8 @@ namespace LDC::champions {
         bool m_can_crit{false};
         bool m_applys_onhit{false};
         bool m_aoe{false};
+        bool m_projectile{false};
+        bool m_spellshieldAffected{true};
 
         //TODO maybe rework structure of cur/raw stats into a combined dict
         double m_cur_ad{0.0};

@@ -6,12 +6,14 @@
 [x] add set level functions for champion and spell levels
 [x] disconnect in Destructors of Attackers and Defenders
 [x] add flag for adding defender/attacker
-[o] add Damage attributes
+[x] add Damage attributes
+[o] add generic auto attack
 [o] add Damage reduction
 [o] advance environment (Damage, return Damage, other stats)
 [o] Finish Jinx-Attacker
 [o] Finish Jinx Defender
 [o] Add Rammus (as example Defender Champion)
+[o] Add Shielding
 [o] rewrite testtool to be genric with user inputs test tool
 [o] doxygen docu for all header, optional for bigger function comments
 [o] code cleanup (go over clang warnings)

@@ -45,7 +45,16 @@ namespace LDC {
 
     struct DamageAtributes{
         bool basicAttack{false};
+        bool onhit{false};
+        bool crit{false};
+        bool ActiveSpell{false};
         bool aoe{false};
+        double periodic{0.0};
+        bool item{false};
+        bool lifesteal{false};
+        bool omnivamp{false};
+        bool projectile{false};
+        bool spellshieldAffected{false};
     };
 
     class Environment {

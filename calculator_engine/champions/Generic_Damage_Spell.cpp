@@ -148,7 +148,7 @@ namespace LDC::champions {
         else
             std::cout << "can_crit not specified, default false" << std::endl;
 
-        //read can crit, if not specified default value false is used
+        //read aoe, if not specified default value false is used
         if(setup_json.contains("aoe")){
             if(setup_json["aoe"].is_boolean())
                 m_aoe = setup_json["aoe"];
@@ -157,6 +157,26 @@ namespace LDC::champions {
         }
         else
             std::cout << "aoe not specified, default false" << std::endl;
+
+        //read aoe, if not specified default value false is used
+        if(setup_json.contains("projectile")){
+            if(setup_json["projectile"].is_boolean())
+                m_projectile = setup_json["projectile"];
+            else
+                std::cerr << "projectile is not a boolean" << std::endl;
+        }
+        else
+            std::cout << "projectile not specified, default false" << std::endl;
+
+        //read aoe, if not specified default value false is used
+        if(setup_json.contains("spellshieldAffected")){
+            if(setup_json["spellshieldAffected"].is_boolean())
+                m_spellshieldAffected = setup_json["spellshieldAffected"];
+            else
+                std::cerr << "spellshieldAffected is not a boolean" << std::endl;
+        }
+        else
+            std::cout << "spellshieldAffected not specified, default true" << std::endl;
 
         //read apply onhit, if not specified default value false is used
         if(setup_json.contains("applys_onhit")){
@@ -272,8 +292,9 @@ namespace LDC::champions {
             own_damage += m_cur_max_health * m_defender->get_max_health();
 
         //TODO crit multiplier/rate yet to be implemented, mode of operation!!
-        if(m_can_crit)
+        if(m_can_crit && crit)
             own_damage *= 1.75;
+
         dmg.set(m_dmg_type, own_damage);
 
         if(m_applys_onhit)
@@ -289,8 +310,14 @@ namespace LDC::champions {
         }
         std::cout << "spell pressed: " << m_spell_name << std::endl;
         //TODO spellcost, cd, evtl healing etc
-        Damage d = calculate_damage(crit, enhanced, instance);
-        DamageAtributes a = DamageAtributes();
-        m_ess->attacker.deal_damage(d, a);
+        DamageAtributes da = DamageAtributes();
+        da.crit = crit && m_can_crit;
+        da.onhit = m_applys_onhit;
+        da.ActiveSpell = true;
+        da.omnivamp = true;
+        da.aoe = m_aoe;
+        da.projectile = m_projectile;
+        da.spellshieldAffected = m_spellshieldAffected;
+        m_ess->attacker.deal_damage(calculate_damage(crit, enhanced, instance), da);
     }
 }
