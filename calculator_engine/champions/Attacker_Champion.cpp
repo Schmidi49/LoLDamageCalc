@@ -45,12 +45,12 @@ namespace LDC::champions{
 
 
 
-        m_ess->attacker.auto_attack.connect(std::bind(&Attacker_Champion::execute_auto_attack, this, std::placeholders::_1));
-        m_ess->attacker.passive.connect(std::bind(&Attacker_Champion::execute_passive, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
-        m_ess->attacker.spell_q.connect(std::bind(&Attacker_Champion::execute_spell_q, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
-        m_ess->attacker.spell_w.connect(std::bind(&Attacker_Champion::execute_spell_w, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
-        m_ess->attacker.spell_e.connect(std::bind(&Attacker_Champion::execute_spell_e, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
-        m_ess->attacker.spell_r.connect(std::bind(&Attacker_Champion::execute_spell_r, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+        m_connections.push_back(m_ess->attacker.auto_attack.connect(std::bind(&Attacker_Champion::execute_auto_attack, this, std::placeholders::_1)));
+        m_connections.push_back(m_ess->attacker.passive.connect(std::bind(&Attacker_Champion::execute_passive, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
+        m_connections.push_back(m_ess->attacker.spell_q.connect(std::bind(&Attacker_Champion::execute_spell_q, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
+        m_connections.push_back(m_ess->attacker.spell_w.connect(std::bind(&Attacker_Champion::execute_spell_w, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
+        m_connections.push_back(m_ess->attacker.spell_e.connect(std::bind(&Attacker_Champion::execute_spell_e, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
+        m_connections.push_back(m_ess->attacker.spell_r.connect(std::bind(&Attacker_Champion::execute_spell_r, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
     }
 
     Attacker_Champion::~Attacker_Champion() {

@@ -4,7 +4,7 @@
 [x] advance Defender(missing HP)
 [x] implement generic spell: do calc damage and execute spell
 [x] add set level functions for champion and spell levels
-[o] disconnect in Destructors of Attackers and Defenders
+[x] disconnect in Destructors of Attackers and Defenders
 [o] add flag for adding defender/attacker
 [o] add Damage attributes
 [o] add Damage reduction

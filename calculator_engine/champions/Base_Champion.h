@@ -54,6 +54,7 @@ namespace LDC::champions {
         std::string m_name;
         int m_champ_lvl;
         nlohmann::json m_champion_data;
+        std::vector<boost::signals2::connection> m_connections;
 
         bool m_read_json_good{false};
 

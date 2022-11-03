@@ -13,8 +13,9 @@ namespace LDC::champions {
 
     Defender_Champion::Defender_Champion(engine_signal_system *ess, const std::string &name, const int &lvl) :
         Base_Champion(ess, name, lvl){
-        m_ess->attacker.deal_damage.connect(
-                std::bind(&Defender_Champion::slot_take_damage, this, std::placeholders::_1, std::placeholders::_2));
+        m_connections.push_back(
+                m_ess->attacker.deal_damage.connect(
+                std::bind(&Defender_Champion::slot_take_damage, this, std::placeholders::_1, std::placeholders::_2)));
 
         func_auto_attack = [](const bool &crit){
             std::cout << "Auto attack: " << (crit ? "did crit" : "did not crit") << std::endl;
@@ -45,12 +46,12 @@ namespace LDC::champions {
             std::cout << "Instance: " << instance << std::endl;
         };
 
-        m_ess->defender.auto_attack.connect(std::bind(&Defender_Champion::execute_auto_attack, this, std::placeholders::_1));
-        m_ess->defender.passive.connect(std::bind(&Defender_Champion::execute_passive, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
-        m_ess->defender.spell_q.connect(std::bind(&Defender_Champion::execute_spell_q, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
-        m_ess->defender.spell_w.connect(std::bind(&Defender_Champion::execute_spell_w, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
-        m_ess->defender.spell_e.connect(std::bind(&Defender_Champion::execute_spell_e, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
-        m_ess->defender.spell_r.connect(std::bind(&Defender_Champion::execute_spell_r, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+        m_connections.push_back(m_ess->defender.auto_attack.connect(std::bind(&Defender_Champion::execute_auto_attack, this, std::placeholders::_1)));
+        m_connections.push_back(m_ess->defender.passive.connect(std::bind(&Defender_Champion::execute_passive, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
+        m_connections.push_back(m_ess->defender.spell_q.connect(std::bind(&Defender_Champion::execute_spell_q, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
+        m_connections.push_back(m_ess->defender.spell_w.connect(std::bind(&Defender_Champion::execute_spell_w, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
+        m_connections.push_back(m_ess->defender.spell_e.connect(std::bind(&Defender_Champion::execute_spell_e, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
+        m_connections.push_back(m_ess->defender.spell_r.connect(std::bind(&Defender_Champion::execute_spell_r, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
     }
 
     Defender_Champion::~Defender_Champion() {

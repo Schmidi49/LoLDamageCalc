@@ -22,7 +22,7 @@ int main(int argc, char* argv[]){
     std::cout << "set e lvl: "<< std::endl;
     jinx.set_spell_lvl_e(0);
 
-    LDC::champions::Defender_Champion b(&ess, "GenericChamp");
+    LDC::champions::Defender_Champion d(&ess, "GenericChamp");
     std::cout << "Defender created" << std::endl;
 
     std::cout << "Doing spells/attacks: " << std::endl;

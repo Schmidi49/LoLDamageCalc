@@ -34,6 +34,8 @@ namespace LDC::champions {
 
     Base_Champion::~Base_Champion() {
         m_ess = nullptr;
+        for(auto it: m_connections)
+            it.disconnect();
     }
 
     Stats<double> *Base_Champion::calc_current_stats() {
