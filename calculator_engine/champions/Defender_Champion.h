@@ -46,6 +46,7 @@ namespace LDC::champions {
 
     protected:
         Attacker_Champion* m_Attacker{nullptr};
+        volatile bool m_Attacker_set{false};
 
         double m_missing_health{0.0};
     };

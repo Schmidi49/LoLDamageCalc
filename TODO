@@ -5,7 +5,7 @@
 [x] implement generic spell: do calc damage and execute spell
 [x] add set level functions for champion and spell levels
 [x] disconnect in Destructors of Attackers and Defenders
-[o] add flag for adding defender/attacker
+[x] add flag for adding defender/attacker
 [o] add Damage attributes
 [o] add Damage reduction
 [o] advance environment (Damage, return Damage, other stats)

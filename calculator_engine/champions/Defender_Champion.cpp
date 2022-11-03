@@ -59,33 +59,62 @@ namespace LDC::champions {
     }
 
     void Defender_Champion::set_Attacker(Attacker_Champion *attacker) {
-        if(attacker)
+        if(attacker) {
             m_Attacker = attacker;
-        else
+            m_Attacker_set = true;
+        }
+        else {
+            m_Attacker_set = false;
             throw std::invalid_argument("Pointer towards attacker is invalid");
+        }
+
     }
 
     void Defender_Champion::execute_auto_attack(const bool & crit) {
+        if(!m_Attacker_set){
+            std::cerr << "no attacker specified" << std::endl;
+            return;
+        }
         func_auto_attack(crit);
     }
 
     void Defender_Champion::execute_passive(const bool &crit, const bool &enhanced, const int &instance) {
+        if(!m_Attacker_set){
+            std::cerr << "no attacker specified" << std::endl;
+            return;
+        }
         func_passive(crit, enhanced, instance);
     }
 
     void Defender_Champion::execute_spell_q(const bool &crit, const bool &enhanced, const int &instance) {
+        if(!m_Attacker_set){
+            std::cerr << "no attacker specified" << std::endl;
+            return;
+        }
         func_spell_q(crit, enhanced, instance);
     }
 
     void Defender_Champion::execute_spell_w(const bool &crit, const bool &enhanced, const int &instance) {
+        if(!m_Attacker_set){
+            std::cerr << "no attacker specified" << std::endl;
+            return;
+        }
         func_spell_w(crit, enhanced, instance);
     }
 
     void Defender_Champion::execute_spell_e(const bool &crit, const bool &enhanced, const int &instance) {
+        if(!m_Attacker_set){
+            std::cerr << "no attacker specified" << std::endl;
+            return;
+        }
         func_spell_e(crit, enhanced, instance);
     }
 
     void Defender_Champion::execute_spell_r(const bool &crit, const bool &enhanced, const int &instance) {
+        if(!m_Attacker_set){
+            std::cerr << "no attacker specified" << std::endl;
+            return;
+        }
         func_spell_r(crit, enhanced, instance);
     }
 

@@ -25,6 +25,9 @@ int main(int argc, char* argv[]){
     LDC::champions::Defender_Champion d(&ess, "GenericChamp");
     std::cout << "Defender created" << std::endl;
 
+    jinx.set_Defender(&d);
+    d.set_Attacker(&jinx);
+
     std::cout << "Doing spells/attacks: " << std::endl;
     ess.attacker.auto_attack(true);
     ess.attacker.auto_attack(false);

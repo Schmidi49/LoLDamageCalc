@@ -41,6 +41,7 @@ namespace LDC::champions {
 
     protected:
         Defender_Champion* m_Defender{nullptr};
+        volatile bool m_Defender_set{false};
     };
 }
 
