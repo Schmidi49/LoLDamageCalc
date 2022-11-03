@@ -21,6 +21,7 @@ namespace LDC {
                 return "trueDmg";
                 break;
         }
+        return "undefined";
     }
 
     DamageType to_DamageType(const std::string& str){
@@ -59,6 +60,7 @@ namespace LDC {
             case DamageType::trueDmg:
                 return trueDmg;
         }
+        throw std::runtime_error("undefined DamageType recieved");
     }
 
     void Damage::set(const DamageType &dt, const double &dmg) {
