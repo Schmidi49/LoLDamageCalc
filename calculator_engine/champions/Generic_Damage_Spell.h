@@ -35,7 +35,7 @@ namespace LDC::champions {
         //pre mitigation!!!!!!
         Damage calculate_damage(const bool &crit, const bool &enhanced, const int &instance);
 
-        void execute_spell(const bool &crit, const bool &enhanced, const int &instance);
+        bool execute_spell(const bool &crit, const bool &enhanced, const int &instance);
 
     private:
         bool read_json(const nlohmann::json& setup_json);

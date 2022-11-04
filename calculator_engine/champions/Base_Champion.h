@@ -41,6 +41,20 @@ namespace LDC::champions {
         virtual int get_spell_lvl_e();
         virtual int get_spell_lvl_r();
 
+        void set_health(double& new_hp){m_missing_health = *m_current_stats->hp() - new_hp;};
+        void set_health_percent(double& new_hp_p){m_missing_health = *m_current_stats->hp() + new_hp_p;};
+        double get_max_health(){return *m_current_stats->hp();};
+        double get_mis_health() const{return m_missing_health;};
+        double get_cur_health(){return (*m_current_stats->hp() - m_missing_health);};
+
+        void set_mana(double& new_hp){m_missing_mana = *m_current_stats->hp() - new_hp;};
+        void set_mana_percent(double& new_hp_p){m_missing_mana = *m_current_stats->hp() + new_hp_p;};
+        //allows you to get mana if value is negative
+        bool use_mana(int mana_to_use);
+        double get_max_mana(){return *m_current_stats->hp();};
+        double get_mis_mana() const{return m_missing_mana;};
+        double get_cur_mana(){return (*m_current_stats->hp() - m_missing_mana);};
+
     private:
         void read_champion_base_stats();
 
@@ -60,6 +74,8 @@ namespace LDC::champions {
 
         Stats<ChampionBaseStat>* m_base_stats{new Stats<ChampionBaseStat>};
         Stats<double>* m_current_stats{new Stats<double>};
+        double m_missing_health{0.0};
+        double m_missing_mana{0.0};
 
         bool m_uses_mana{false};
         DamageType m_adaptive_type{physical};

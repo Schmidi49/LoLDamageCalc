@@ -303,10 +303,16 @@ namespace LDC::champions {
         return dmg;
     }
 
-    void Generic_Damage_Spell::execute_spell(const bool &crit, const bool &enhanced, const int &instance) {
+    bool Generic_Damage_Spell::execute_spell(const bool &crit, const bool &enhanced, const int &instance) {
         if(m_cur_lvl == 0){
             std::cerr << m_spell_name << " is not leveled" << std::endl;
-            return;
+            return false;
+        }
+        if(m_cur_spell_cost > 0){
+            if(!m_attacker->use_mana(m_cur_spell_cost)) {
+                std::cerr << "spell could not be executed due to mana cost" << std::endl;
+                return false;
+            }
         }
         std::cout << "spell pressed: " << m_spell_name << std::endl;
         //TODO spellcost, cd, evtl healing etc
@@ -319,5 +325,6 @@ namespace LDC::champions {
         da.projectile = m_projectile;
         da.spellshieldAffected = m_spellshieldAffected;
         m_ess->attacker.deal_damage(calculate_damage(crit, enhanced, instance), da);
+        return true;
     }
 }

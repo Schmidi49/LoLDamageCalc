@@ -239,4 +239,25 @@ namespace LDC::champions {
         std::cout << "get_spell_lvl_r is not implemented" << std::endl;
         return 0;
     }
+
+    bool Base_Champion::use_mana(int mana_to_use) {
+        if(!m_uses_mana){
+            std::cerr << "manaless champion can not consume mana" << std::endl;
+            return false;
+        }
+        if(mana_to_use > (*m_current_stats->mana() - m_missing_mana)){
+            std::cout << "not enough mana" << std::endl;
+            return false;
+        }
+        else if(mana_to_use < 0){
+            m_missing_mana -= mana_to_use;
+            if(m_missing_mana < 0)
+                m_missing_mana = 0;
+            return true;
+        }
+        else{
+            m_missing_mana += mana_to_use;
+            return true;
+        }
+    }
 }

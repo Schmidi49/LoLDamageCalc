@@ -7,13 +7,17 @@
 [x] disconnect in Destructors of Attackers and Defenders
 [x] add flag for adding defender/attacker
 [x] add Damage attributes
-[o] add generic auto attack
+[x] add Mana
 [o] add Damage reduction
-[o] advance environment (Damage, return Damage, other stats)
 [o] Finish Jinx-Attacker
 [o] Finish Jinx Defender
 [o] Add Rammus (as example Defender Champion)
-[o] Add Shielding
-[o] rewrite testtool to be genric with user inputs test tool
+[o] advance environment (Damage, return Damage, healing(from lifesteal, spell, item effects, other stats)
+[o] add champion factory
+[o] rewrite testtool to be generic with user inputs test tool
 [o] doxygen docu for all header, optional for bigger function comments
 [o] code cleanup (go over clang warnings)
+
+Optional (not in this branch)
+[o] add generic auto attack
+[o] Add Shielding
