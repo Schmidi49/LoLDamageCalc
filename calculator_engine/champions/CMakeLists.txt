@@ -6,7 +6,7 @@ add_library (champions Stats.hpp Generic_Damage_Spell.cpp Base_Champion.cpp Atta
 
 target_link_libraries(champions PRIVATE lib_json)
 target_link_libraries(champions PRIVATE engine_signal_system)
-target_link_libraries(champions PUBLIC environment)
+target_link_libraries(champions PUBLIC damage)
 
 target_include_directories (champions PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 

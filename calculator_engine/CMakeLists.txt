@@ -5,6 +5,10 @@ add_library (environment environment.cpp)
 target_include_directories (environment PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 target_include_directories(environment PUBLIC ${Boost_INCLUDE_DIR})
 
+add_library (damage damage.cpp)
+target_include_directories (damage PUBLIC ${CMAKE_CURRENT_LIST_DIR})
+target_include_directories(damage PUBLIC ${Boost_INCLUDE_DIR})
+
 add_subdirectory(champions)
 add_subdirectory(engine_signal_system)
 

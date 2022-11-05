@@ -12,7 +12,7 @@
 
 #include <Stats.hpp>
 #include <engine_signal_system.hpp>
-#include <environment.h>
+#include <damage.h>
 
 #include <json.hpp>
 

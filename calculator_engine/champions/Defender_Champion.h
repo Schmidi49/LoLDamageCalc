@@ -39,7 +39,7 @@ namespace LDC::champions {
 
 
     protected:
-        virtual void slot_take_damage(const LDC::Damage& dmg, const LDC::DamageAtributes& atrb);
+        virtual void slot_take_damage(const LDC::Damage& dmg);
 
     protected:
         Attacker_Champion* m_Attacker{nullptr};

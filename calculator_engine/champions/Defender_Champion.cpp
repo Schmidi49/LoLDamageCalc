@@ -15,7 +15,7 @@ namespace LDC::champions {
         Base_Champion(ess, name, lvl){
         m_connections.push_back(
                 m_ess->attacker.deal_damage.connect(
-                std::bind(&Defender_Champion::slot_take_damage, this, std::placeholders::_1, std::placeholders::_2)));
+                std::bind(&Defender_Champion::slot_take_damage, this, std::placeholders::_1)));
 
         func_auto_attack = [](const bool &crit){
             std::cout << "Auto attack: " << (crit ? "did crit" : "did not crit") << std::endl;
@@ -118,10 +118,9 @@ namespace LDC::champions {
         func_spell_r(crit, enhanced, instance);
     }
 
-    void Defender_Champion::slot_take_damage(const LDC::Damage& dmg, const LDC::DamageAtributes& atrb) {
+    void Defender_Champion::slot_take_damage(const LDC::Damage& dmg) {
         std::cout << "Damage taken: " << dmg << std::endl;
-        //do stuff ex: dmg reduction
-        m_missing_health += dmg.physical + dmg.magic + dmg.trueDmg;
+        m_missing_health += dmg.dmg;
         if(m_missing_health > *m_current_stats->hp()){
             m_missing_health = *m_current_stats->hp();
             m_ess->defender.death();
