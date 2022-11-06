@@ -9,6 +9,7 @@
 #define LOLDAMAGECALC_STATS_HPP
 
 #include <map>
+#include <stdexcept>
 
 namespace LDC::champions{
     class ChampionBaseStat{
@@ -35,7 +36,15 @@ namespace LDC::champions{
         }
 
         auto find(const std::string& id){return m_stats.find(id);};
-        T* at(const std::string& id){return m_stats.at(id);};
+        T* at(const std::string& id){
+            try{
+                return m_stats.at(id);
+            }catch(std::out_of_range &e){
+                //TODO find fix for awkward implementation
+                //return &T{};
+                return m_pointer_to_null;
+            }
+        };
         void set(const std::string& id, T* newT){delete m_stats[id]; m_stats[id] = newT;};
         void clear(){for(auto it : m_stats) {delete it.second;it.second = new T;}};
         bool check(){return m_stats.count() == CURRENTLY_IMPLEMENTED_STATS;};
@@ -54,6 +63,7 @@ namespace LDC::champions{
                 {"as", new T()},
                 {"mr", new T()}
         };
+        T* m_pointer_to_null = new T{};
 
     public:
         T* hp() {return m_stats.at("hp");};

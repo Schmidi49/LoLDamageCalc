@@ -39,7 +39,7 @@ namespace LDC::champions {
     }
 
     Stats<double> *Base_Champion::calc_current_stats() {
-        //IMOPRTANT!!!!! care for attackspeed, its base+(bonus*ratio)
+        //IMPORTANT!!!!! care for attackspeed, its base+(bonus*ratio)
         for(const auto& it : *m_current_stats) {
             if(it.first != "as")
                 m_current_stats->set(it.first, new double(m_base_stats->at(it.first)->at_level(m_champ_lvl)));
@@ -51,6 +51,7 @@ namespace LDC::champions {
                     m_current_stats->set("as", new double(2.5));
             }
         }
+        m_current_stats->set("b_ad", new double(*m_current_stats->ad() - m_base_stats->ad()->at_level(m_champ_lvl)));
         return m_current_stats;
     }
 

@@ -103,27 +103,6 @@ namespace LDC::champions {
         };
 
         Scalings m_scalings;
-
-        //TODO maybe rework structure of cur/raw stats into a combined dict
-        /*
-        double m_cur_ad{0.0};
-        double m_cur_ap{0.0};
-        int m_cur_base_dmg{0};
-        int m_cur_spell_cost{0};
-        double m_cur_cd{0.0};
-        double m_cur_max_health{0.0};
-        double m_cur_mis_health{0.0};
-        double m_cur_cur_health{0.0};
-
-        std::vector<double> m_raw_ad{};
-        std::vector<double> m_raw_ap{};
-        std::vector<int> m_raw_base_dmg{};
-        std::vector<int> m_raw_spell_cost{};
-        std::vector<double> m_raw_cd{};
-        std::vector<double> m_raw_max_health{};
-        std::vector<double> m_raw_mis_health{};
-        std::vector<double> m_raw_cur_health{};
-         */
     };
 }
 
