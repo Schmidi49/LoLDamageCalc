@@ -236,6 +236,7 @@ namespace LDC::champions {
             }
         }
         std::cout << "spell pressed: " << m_spell_name << std::endl;
+
         Damage dmg{calculate_damage(crit, enhanced, instance)};
         dmg.type = m_dmg_type;
         dmg.tag = m_dmg_tag;
@@ -243,6 +244,11 @@ namespace LDC::champions {
         dmg.projectile = m_projectile;
         dmg.spellshieldAffected = m_spellshieldAffected;
         dmg.cc = m_applies_cc;
+
+        dmg += -(m_ess->defender.get_premit_dmg_red(dmg));
+        dmg *= m_ess->defender.get_dmg_mod(dmg);
+        dmg += -(m_ess->defender.get_postmit_dmg_red(dmg));
+
         m_ess->attacker.deal_damage(dmg);
         if(m_applies_onhit)
             m_ess->attacker.execute_onhit();

@@ -94,14 +94,48 @@ namespace LDC {
                ",true:" + std::to_string(dmg.trueDmg);
     }
 
-    DamageDealt::DamageDealt(const double &p, const double &m, const double &t) {
-        if(p >= 0.0 && m >= 0.0 && t >= 0.0) {
-            physical = p;
-            magic = m;
-            trueDmg = t;
-        }
-        else
-            throw std::invalid_argument("any damage can not be negative");
+
+    Damage &Damage::operator+=(const double &add){
+        dmg += add;
+        return *this;
+    }
+    Damage &Damage::operator+=(double &&add) {
+        dmg += add;
+        return *this;
+    }
+    Damage Damage::operator+(const double &add) {
+        Damage result(*this);
+        result += dmg;
+        return result;
+    }
+    Damage Damage::operator+(double &&add) {
+        Damage result(*this);
+        result += dmg;
+        return result;
+    }
+    Damage &Damage::operator*=(const double &mult){
+        dmg *= mult;
+        return *this;
+    }
+    Damage &Damage::operator*=(double &&mult) {
+        dmg *= mult;
+        return *this;
+    }
+    Damage Damage::operator*(const double &mult) {
+        Damage result(*this);
+        result *= dmg;
+        return result;
+    }
+    Damage Damage::operator*(double &&mult) {
+        Damage result(*this);
+        result *= dmg;
+        return result;
+    }
+
+    DamageDealt::DamageDealt(const double& p, const double& m, const double& t){
+        physical = p;
+        magic = m;
+        trueDmg = t;
     }
 
     double DamageDealt::get(const DamageType &dt) const {
@@ -158,4 +192,5 @@ namespace LDC {
     }
 
 
-} // LDC
+}
+// LDC

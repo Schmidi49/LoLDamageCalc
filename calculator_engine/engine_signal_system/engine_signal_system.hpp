@@ -14,50 +14,69 @@
 namespace LDC{
     class engine_signal_system{
     private:
-        template <typename funcsig>
-        using signal = boost::signals2::signal<funcsig>;
+        template<typename T>
+        struct add_dmg_reduction{
+            typedef T result_type;
+
+            template<typename InputIterator>
+            T operator()(InputIterator first, InputIterator last) const
+            {
+                if(first == last ) return T();
+                T sum = *first++;
+                while (first != last) {
+                    sum += *first++;
+                }
+
+                return sum;
+            }
+        };
+
+        template<typename T>
+        struct mult_dmg_mod{
+            typedef T result_type;
+
+            template<typename InputIterator>
+            T operator()(InputIterator first, InputIterator last) const
+            {
+                if(first == last ) return T{1};
+                T sum = *first++;
+                while (first != last) {
+                    sum *= *first++;
+                }
+
+                return sum;
+            }
+        };
 
         struct champ_active_struct{
-            signal<void(const bool &crit)> auto_attack;
+            boost::signals2::signal<void(const bool &crit)> auto_attack;
 
-            signal<void(const bool &crit, const bool &enhanced, const int &instance)> passive;
+            boost::signals2::signal<void(const bool &crit, const bool &enhanced, const int &instance)> passive;
 
-            signal<void(const bool &crit, const bool &enhanced, const int &instance)> spell_q;
-            signal<void(const bool &crit, const bool &enhanced, const int &instance)> spell_w;
-            signal<void(const bool &crit, const bool &enhanced, const int &instance)> spell_e;
-            signal<void(const bool &crit, const bool &enhanced, const int &instance)> spell_r;
+            boost::signals2::signal<void(const bool &crit, const bool &enhanced, const int &instance)> spell_q;
+            boost::signals2::signal<void(const bool &crit, const bool &enhanced, const int &instance)> spell_w;
+            boost::signals2::signal<void(const bool &crit, const bool &enhanced, const int &instance)> spell_e;
+            boost::signals2::signal<void(const bool &crit, const bool &enhanced, const int &instance)> spell_r;
         };
 
         struct attacker_struct : public champ_active_struct{
-            signal<void()> execute_onhit;
-            signal<void(const LDC::Damage& dmg)> deal_damage;
+            boost::signals2::signal<void()> execute_onhit;
+            boost::signals2::signal<void(const LDC::Damage& dmg)> deal_damage;
         };
 
         struct defender_struct : public champ_active_struct{
-            signal<void()> death;
+            boost::signals2::signal<double (LDC::Damage& dmg), add_dmg_reduction<double>> get_premit_dmg_red;
+            boost::signals2::signal<double (LDC::Damage& dmg), add_dmg_reduction<double>> get_postmit_dmg_red;
+            boost::signals2::signal<double (LDC::Damage& dmg), mult_dmg_mod<double>> get_dmg_mod;
+            boost::signals2::signal<void()> death;
         };
     public:
         attacker_struct attacker;
         defender_struct defender;
     };
 
-    /*
-    template<typename T>
-    struct add_onhits{
-        typedef T result_type;
 
-        template<typename InputIterator>
-        T operator()(InputIterator first, InputIterator last) const
-        {
-            if(first == last ) return T();
-            T sum = *first++;
-            while (first != last) {
-                sum += first++;
-            }
 
-            return sum;
-        }
-    };*/
 }
 
 

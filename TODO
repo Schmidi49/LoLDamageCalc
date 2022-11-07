@@ -9,7 +9,7 @@
 [x] add Damage attributes
 [x] add Mana
 [x] add bonus AD
-[o] add Damage reduction (mind Amumu + Wardens mail interactions)
+[x] add Damage reduction (mind Amumu + Wardens mail interactions)
 [o] Finish Jinx-Attacker
 [o] Finish Jinx Defender
 [o] Add Rammus (as example Defender Champion)
@@ -22,3 +22,4 @@
 Optional (not in this branch)
 [o] add generic auto attack
 [o] Add Shielding
+[o] Ordering Slot Call Groups

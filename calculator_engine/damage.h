@@ -40,9 +40,20 @@ namespace LDC {
 
     DamageTag to_DamageTag(const std::string& str);
 
-    struct Damage{
+    class Damage{
+    public:
         Damage() = default;
         Damage(double d){dmg = d;};
+
+        Damage & operator+=(double const & dmg);
+        Damage & operator+=(double && dmg);
+        Damage operator+(double const & dmg);
+        Damage operator+(double && dmg);
+
+        Damage & operator*=(double const & mult);
+        Damage & operator*=(double && mult);
+        Damage operator*(double const & mult);
+        Damage operator*(double && mult);
 
         double dmg{0.0};
         DamageType type;
