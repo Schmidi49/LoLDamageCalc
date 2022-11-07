@@ -155,6 +155,7 @@ namespace LDC::champions {
         return
         read_stat(setup_json, "ad_scale", &m_scalings.ad()->raw) &&
         read_stat(setup_json, "ap_scale", &m_scalings.ap()->raw) &&
+        read_stat(setup_json, "base_ad_scale", &m_scalings.b_ad()->raw) &&
         read_stat(setup_json, "base_damage", &m_scalings.base_dmg()->raw) &&
         read_stat(setup_json, "cost", &m_scalings.spell_cost()->raw) &&
         read_stat(setup_json, "cd", &m_scalings.cd()->raw) &&
@@ -207,6 +208,7 @@ namespace LDC::champions {
         const auto& stats_attacker = m_attacker->get_current_stats();
         dmg += m_scalings.ad()->cur * *stats_attacker->ad();
         dmg += m_scalings.ap()->cur * *stats_attacker->ap();
+        dmg += m_scalings.b_ad()->cur * *stats_attacker->at("b_ad");
 
         if(m_scalings.cur_health()->cur != 0.0 )
             dmg += m_scalings.cur_health()->cur * m_defender->get_cur_health();

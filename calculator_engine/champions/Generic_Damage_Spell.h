@@ -83,6 +83,7 @@ namespace LDC::champions {
             std::map<std::string, single_scaling*> m_scalings{
                     {"ad", new single_scaling()},
                     {"ap", new single_scaling()},
+                    {"b_ad", new single_scaling()},
                     {"base_dmg", new single_scaling()},
                     {"spell_cost", new single_scaling()},
                     {"cd", new single_scaling()},
@@ -94,6 +95,7 @@ namespace LDC::champions {
         public:
             single_scaling* ad() {return m_scalings.at("ad");};
             single_scaling* ap() {return m_scalings.at("ap");};
+            single_scaling* b_ad () {return m_scalings.at("b_ad");};
             single_scaling* base_dmg () {return m_scalings.at("base_dmg");};
             single_scaling* spell_cost () {return m_scalings.at("spell_cost");};
             single_scaling* cd () {return m_scalings.at("cd");};
