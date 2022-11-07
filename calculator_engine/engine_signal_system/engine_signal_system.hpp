@@ -68,6 +68,7 @@ namespace LDC{
             boost::signals2::signal<double (LDC::Damage& dmg), add_dmg_reduction<double>> get_premit_dmg_red;
             boost::signals2::signal<double (LDC::Damage& dmg), add_dmg_reduction<double>> get_postmit_dmg_red;
             boost::signals2::signal<double (LDC::Damage& dmg), mult_dmg_mod<double>> get_dmg_mod;
+            boost::signals2::signal<void ()> apply_cc;
             boost::signals2::signal<void()> death;
         };
     public:
