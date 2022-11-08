@@ -68,15 +68,17 @@ namespace LDC::champions {
     }
 
     Stats<double> *Base_Champion::calc_current_stats() {
-        //IMPORTANT!!!!! care for attackspeed, its base+(bonus*ratio)
         for(const auto& it : *m_current_stats) {
             if(it.first != "as")
-                m_current_stats->set(it.first, new double(m_base_stats->at(it.first)->at_level(m_champ_lvl)));
+                m_current_stats->set(it.first, new double(m_base_stats->at(it.first)->at_level(m_champ_lvl)
+                                                            + *m_bonus_stats_flat->at(it.first)));
             else {
+                //attackspeed has its own formula: base+(bonus*ratio)
                 m_current_stats->set(it.first, new double(m_base_stats->at(it.first)->get_base()
-                                                          + (m_base_stats->at(it.first)->growth_at_level(m_champ_lvl) *
-                                                             m_base_stats->as_ratio)));
-                if(*m_current_stats->as() > 2.5)
+                                                          + ((m_base_stats->at(it.first)->growth_at_level(m_champ_lvl)
+                                                          + *m_bonus_stats_flat->at(it.first))
+                                                          * m_base_stats->as_ratio)));
+                if(*m_current_stats->as() > 2.5 && m_attack_speed_cap_disables == 0)
                     m_current_stats->set("as", new double(2.5));
             }
         }
@@ -288,6 +290,18 @@ namespace LDC::champions {
         else{
             m_missing_mana += mana_to_use;
             return true;
+        }
+    }
+
+    void Base_Champion::add_attackspeed_cap_disable() {
+        m_attack_speed_cap_disables++;
+    }
+
+    void Base_Champion::remove_attackspeed_cap_disable() {
+        m_attack_speed_cap_disables--;
+        if(m_attack_speed_cap_disables < 0){
+            std::cerr << "m_attack_speed_cap_disables fell below 0" << std::endl;
+            m_attack_speed_cap_disables = 0;
         }
     }
 }

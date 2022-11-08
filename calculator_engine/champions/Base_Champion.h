@@ -26,7 +26,9 @@ namespace LDC::champions {
 
         ~Base_Champion();
 
-        Stats<double>* get_current_stats(){return m_current_stats;};
+        Stats<double>* get_ptr_current_stats(){return m_current_stats;};
+        Stats<double>* get_ptr_bonus_stats_flat(){return m_bonus_stats_flat;};
+        Stats<double>* calc_current_stats();
 
         bool set_lvl(const int&lvl);
         virtual bool set_spell_lvl_q(const int&lvl);
@@ -55,6 +57,9 @@ namespace LDC::champions {
         double get_mis_mana() const{return m_missing_mana;};
         double get_cur_mana(){return (*m_current_stats->hp() - m_missing_mana);};
 
+        void add_attackspeed_cap_disable();
+        void remove_attackspeed_cap_disable();
+
     protected:
         std::function<void(const bool &crit, const bool &enhanced, const int &instance)> func_auto_attack;
         std::function<void(const bool &crit, const bool &enhanced, const int &instance)> func_passive;
@@ -67,8 +72,6 @@ namespace LDC::champions {
         void read_champion_base_stats();
 
     protected:
-        Stats<double>* calc_current_stats();
-
         static bool level_check(const int& champ_lvl, const int&q_lvl, const int&w_lvl, const int&e_lvl, const int&r_lvl);
 
 
@@ -81,6 +84,7 @@ namespace LDC::champions {
         bool m_read_json_good{false};
 
         Stats<ChampionBaseStat>* m_base_stats{new Stats<ChampionBaseStat>};
+        Stats<double>* m_bonus_stats_flat{new Stats<double>};
         Stats<double>* m_current_stats{new Stats<double>};
         double m_missing_health{0.0};
         double m_missing_mana{0.0};
@@ -89,7 +93,7 @@ namespace LDC::champions {
         DamageType m_adaptive_type{physical};
         bool m_ranged_champion{false};
 
-        bool m_attack_speed_cap{true};
+        int m_attack_speed_cap_disables{0};
 
         engine_signal_system* m_ess;
     };

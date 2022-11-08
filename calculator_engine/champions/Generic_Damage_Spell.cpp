@@ -205,7 +205,7 @@ namespace LDC::champions {
 
     Damage Generic_Damage_Spell::calculate_damage(const bool &crit, const bool &enhanced, const int &instance) {
         Damage dmg{m_scalings.base_dmg()->cur};
-        const auto& stats_attacker = m_attacker->get_current_stats();
+        const auto& stats_attacker = m_attacker->get_ptr_current_stats();
         dmg += m_scalings.ad()->cur * *stats_attacker->ad();
         dmg += m_scalings.ap()->cur * *stats_attacker->ap();
         dmg += m_scalings.b_ad()->cur * *stats_attacker->at("b_ad");
