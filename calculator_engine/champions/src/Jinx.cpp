@@ -72,6 +72,10 @@ namespace LDC::champions{
                 }
             }
 
+            func_auto_attack = [&](const bool &crit, const bool &enhanced, const int &instance){
+                execute_auto_attack(crit, enhanced, instance);
+            };
+
             func_passive = [&](const bool &crit, const bool &enhanced, const int &instance){
                 execute_passive(crit, enhanced, instance);
             };
@@ -160,7 +164,7 @@ namespace LDC::champions{
         }
 
         double rocket_dmg;
-        if(enhanced && instance == 0){
+        if(instance == 0){
             rocket_dmg = m_r_range_max;
         }
         else if(instance >= m_r_range_min && instance <= m_r_range_max){
