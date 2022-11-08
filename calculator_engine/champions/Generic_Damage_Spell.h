@@ -32,8 +32,10 @@ namespace LDC::champions {
 
         int get_lvl() const {return m_cur_lvl;};
 
+        double get_spell_cost(){return m_scalings.spell_cost()->cur;};
+
         //pre mitigation!!!!!!
-        double calculate_damage(const bool &crit, const bool &enhanced, const int &instance);
+        Damage calculate_damage(const bool &crit, const bool &enhanced, const int &instance);
 
         bool execute_spell(const bool &crit, const bool &enhanced, const int &instance);
 

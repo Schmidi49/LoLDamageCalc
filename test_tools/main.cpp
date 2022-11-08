@@ -16,11 +16,13 @@ int main(int argc, char* argv[]){
 
     LDC::champions::Attacker_Jinx jinx(&ess, "Jinx");
     std::cout << "Jinx created" << std::endl;
-    std::cout << "set champ lvl: " << jinx.set_lvl(5) << std::endl;
+    std::cout << "set champ lvl: " << jinx.set_lvl(7) << std::endl;
     std::cout << "set w lvl: "<< std::endl;
     jinx.set_spell_lvl_w(3);
     std::cout << "set e lvl: "<< std::endl;
-    jinx.set_spell_lvl_e(0);
+    jinx.set_spell_lvl_e(1);
+    std::cout << "set r lvl: "<< std::endl;
+    jinx.set_spell_lvl_r(1);
 
     LDC::champions::Defender_Champion d(&ess, "GenericChamp");
     std::cout << "Defender created" << std::endl;
@@ -33,6 +35,6 @@ int main(int argc, char* argv[]){
     ess.attacker.auto_attack(false, false, 0);
     ess.attacker.spell_q(true, false, 0);
     ess.attacker.spell_w(false, true, 0);
-    ess.attacker.spell_e(false, true, 76);
-    ess.attacker.spell_r(false, false, 0);
+    ess.attacker.spell_e(false, true, 0);
+    ess.attacker.spell_r(false, false, 76);
 }

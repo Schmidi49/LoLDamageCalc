@@ -64,6 +64,7 @@
   "spell_r": {
     "max_lvl": 3,
     "damage_type": "physical",
+    "damage_tag": "area",
     "aoe": true,
     "projectile": true,
     "cost": 100,

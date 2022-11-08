@@ -18,7 +18,7 @@ namespace LDC::champions {
         Attacker_Champion(engine_signal_system* ess, const std::string &name, const int &lvl = 1);
         ~Attacker_Champion();
 
-        void set_Defender(Defender_Champion* defender);
+        virtual void set_Defender(Defender_Champion* defender);
 
     protected:
         Defender_Champion* m_Defender{nullptr};

@@ -203,8 +203,8 @@ namespace LDC::champions {
         return true;
     }
 
-    double Generic_Damage_Spell::calculate_damage(const bool &crit, const bool &enhanced, const int &instance) {
-        double dmg = m_scalings.base_dmg()->cur;
+    Damage Generic_Damage_Spell::calculate_damage(const bool &crit, const bool &enhanced, const int &instance) {
+        Damage dmg{m_scalings.base_dmg()->cur};
         const auto& stats_attacker = m_attacker->get_current_stats();
         dmg += m_scalings.ad()->cur * *stats_attacker->ad();
         dmg += m_scalings.ap()->cur * *stats_attacker->ap();
@@ -220,6 +220,13 @@ namespace LDC::champions {
         //TODO crit multiplier/rate yet to be implemented, mode of operation!!
         if(m_can_crit && crit)
             dmg *= 1.75;
+
+        dmg.type = m_dmg_type;
+        dmg.tag = m_dmg_tag;
+        dmg.crit = crit && m_can_crit;
+        dmg.projectile = m_projectile;
+        dmg.spellshieldAffected = m_spellshieldAffected;
+        dmg.cc = m_applies_cc;
 
         return dmg;
     }
@@ -238,12 +245,6 @@ namespace LDC::champions {
         std::cout << "spell pressed: " << m_spell_name << std::endl;
 
         Damage dmg{calculate_damage(crit, enhanced, instance)};
-        dmg.type = m_dmg_type;
-        dmg.tag = m_dmg_tag;
-        dmg.crit = crit && m_can_crit;
-        dmg.projectile = m_projectile;
-        dmg.spellshieldAffected = m_spellshieldAffected;
-        dmg.cc = m_applies_cc;
 
         dmg += -(m_ess->defender.get_premit_dmg_red(dmg));
         dmg *= m_ess->defender.get_dmg_mod(dmg);

@@ -23,18 +23,26 @@ namespace LDC::champions{
         int get_spell_lvl_q() override{return m_q_lvl;};
         int get_spell_lvl_w() override{return m_jinx_spell_w->get_lvl();};
         int get_spell_lvl_e() override{return m_jinx_spell_e->get_lvl();};
-        //TODO add r as spell
-        //int get_spell_lvl_r() override{return m_jinx_spell_r->get_lvl();};
+        int get_spell_lvl_r() override{return m_jinx_spell_r->get_lvl();};
 
         bool set_spell_lvl_q(const int&lvl) override;
         bool set_spell_lvl_w(const int&lvl) override;
         bool set_spell_lvl_e(const int&lvl) override;
         bool set_spell_lvl_r(const int&lvl) override;
 
+        void set_Defender(Defender_Champion* defender) override;
+
+    private:
+        void execute_passive(const bool &crit, const bool &enhanced, const int &instance);
+        void execute_spell_q(const bool &crit, const bool &enhanced, const int &instance);
+        void execute_spell_r(const bool &crit, const bool &enhanced, const int &instance);
+
     private:
         bool m_q_stance{false};
-
         int m_q_lvl{0};
+
+        double m_r_range_max{100.0};
+        double m_r_range_min{10.0};
 
         Generic_Damage_Spell* m_jinx_spell_w{nullptr};
         Generic_Damage_Spell* m_jinx_spell_e{nullptr};

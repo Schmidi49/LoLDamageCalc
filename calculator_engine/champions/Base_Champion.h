@@ -50,7 +50,7 @@ namespace LDC::champions {
         void set_mana(double& new_hp){m_missing_mana = *m_current_stats->hp() - new_hp;};
         void set_mana_percent(double& new_hp_p){m_missing_mana = *m_current_stats->hp() + new_hp_p;};
         //allows you to get mana if value is negative
-        bool use_mana(int mana_to_use);
+        bool use_mana(double mana_to_use);
         double get_max_mana(){return *m_current_stats->hp();};
         double get_mis_mana() const{return m_missing_mana;};
         double get_cur_mana(){return (*m_current_stats->hp() - m_missing_mana);};
