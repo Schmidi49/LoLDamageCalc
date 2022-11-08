@@ -17,41 +17,48 @@ namespace LDC::champions {
                 m_ess->attacker.deal_damage.connect(
                 std::bind(&Defender_Champion::slot_take_damage, this, std::placeholders::_1)));
 
-        func_auto_attack = [](const bool &crit){
-            std::cout << "Auto attack: " << (crit ? "did crit" : "did not crit") << std::endl;
-        };
-        func_passive = [](const bool &crit, const bool &enhanced, const int &instance){
-            std::cout << "Passive: " << (crit ? "did crit, " : "did not crit, ") ;
-            std::cout << (enhanced ? "is enhanced, " : "is not enhanced, ");
-            std::cout << "Instance: " << instance << std::endl;
-        };
-        func_spell_q = [](const bool &crit, const bool &enhanced, const int &instance){
-            std::cout << "Q: " << (crit ? "did crit, " : "did not crit, ") ;
-            std::cout << (enhanced ? "is enhanced, " : "is not enhanced, ");
-            std::cout << "Instance: " << instance << std::endl;
-        };
-        func_spell_w = [](const bool &crit, const bool &enhanced, const int &instance){
-            std::cout << "W: " << (crit ? "did crit, " : "did not crit, ") ;
-            std::cout << (enhanced ? "is enhanced, " : "is not enhanced, ");
-            std::cout << "Instance: " << instance << std::endl;
-        };
-        func_spell_e = [](const bool &crit, const bool &enhanced, const int &instance){
-            std::cout << "E: " << (crit ? "did crit, " : "did not crit, ") ;
-            std::cout << (enhanced ? "is enhanced, " : "is not enhanced, ");
-            std::cout << "Instance: " << instance << std::endl;
-        };
-        func_spell_r = [](const bool &crit, const bool &enhanced, const int &instance){
-            std::cout << "R: " << (crit ? "did crit, " : "did not crit, ") ;
-            std::cout << (enhanced ? "is enhanced, " : "is not enhanced, ");
-            std::cout << "Instance: " << instance << std::endl;
-        };
-
-        m_connections.push_back(m_ess->defender.auto_attack.connect(std::bind(&Defender_Champion::execute_auto_attack, this, std::placeholders::_1)));
-        m_connections.push_back(m_ess->defender.passive.connect(std::bind(&Defender_Champion::execute_passive, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
-        m_connections.push_back(m_ess->defender.spell_q.connect(std::bind(&Defender_Champion::execute_spell_q, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
-        m_connections.push_back(m_ess->defender.spell_w.connect(std::bind(&Defender_Champion::execute_spell_w, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
-        m_connections.push_back(m_ess->defender.spell_e.connect(std::bind(&Defender_Champion::execute_spell_e, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
-        m_connections.push_back(m_ess->defender.spell_r.connect(std::bind(&Defender_Champion::execute_spell_r, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
+        m_connections.push_back(m_ess->defender.auto_attack.connect([&](const bool &crit, const bool &enhanced, const int &instance){
+            if(!m_Attacker_set){
+                std::cerr << "no attacker specified" << std::endl;
+                return;
+            }
+            func_auto_attack(crit, enhanced, instance);
+        }));
+        m_connections.push_back(m_ess->defender.passive.connect([&](const bool &crit, const bool &enhanced, const int &instance){
+            if(!m_Attacker_set){
+                std::cerr << "no attacker specified" << std::endl;
+                return;
+            }
+            func_passive(crit, enhanced, instance);
+        }));
+        m_connections.push_back(m_ess->defender.spell_q.connect([&](const bool &crit, const bool &enhanced, const int &instance){
+            if(!m_Attacker_set){
+                std::cerr << "no attacker specified" << std::endl;
+                return;
+            }
+            func_spell_q(crit, enhanced, instance);
+        }));
+        m_connections.push_back(m_ess->defender.spell_w.connect([&](const bool &crit, const bool &enhanced, const int &instance){
+            if(!m_Attacker_set){
+                std::cerr << "no attacker specified" << std::endl;
+                return;
+            }
+            func_spell_w(crit, enhanced, instance);
+        }));
+        m_connections.push_back(m_ess->defender.spell_e.connect([&](const bool &crit, const bool &enhanced, const int &instance){
+            if(!m_Attacker_set){
+                std::cerr << "no attacker specified" << std::endl;
+                return;
+            }
+            func_spell_e(crit, enhanced, instance);
+        }));
+        m_connections.push_back(m_ess->defender.spell_r.connect([&](const bool &crit, const bool &enhanced, const int &instance){
+            if(!m_Attacker_set){
+                std::cerr << "no attacker specified" << std::endl;
+                return;
+            }
+            func_spell_r(crit, enhanced, instance);
+        }));
     }
 
     Defender_Champion::~Defender_Champion() {
@@ -68,54 +75,6 @@ namespace LDC::champions {
             throw std::invalid_argument("Pointer towards attacker is invalid");
         }
 
-    }
-
-    void Defender_Champion::execute_auto_attack(const bool & crit) {
-        if(!m_Attacker_set){
-            std::cerr << "no attacker specified" << std::endl;
-            return;
-        }
-        func_auto_attack(crit);
-    }
-
-    void Defender_Champion::execute_passive(const bool &crit, const bool &enhanced, const int &instance) {
-        if(!m_Attacker_set){
-            std::cerr << "no attacker specified" << std::endl;
-            return;
-        }
-        func_passive(crit, enhanced, instance);
-    }
-
-    void Defender_Champion::execute_spell_q(const bool &crit, const bool &enhanced, const int &instance) {
-        if(!m_Attacker_set){
-            std::cerr << "no attacker specified" << std::endl;
-            return;
-        }
-        func_spell_q(crit, enhanced, instance);
-    }
-
-    void Defender_Champion::execute_spell_w(const bool &crit, const bool &enhanced, const int &instance) {
-        if(!m_Attacker_set){
-            std::cerr << "no attacker specified" << std::endl;
-            return;
-        }
-        func_spell_w(crit, enhanced, instance);
-    }
-
-    void Defender_Champion::execute_spell_e(const bool &crit, const bool &enhanced, const int &instance) {
-        if(!m_Attacker_set){
-            std::cerr << "no attacker specified" << std::endl;
-            return;
-        }
-        func_spell_e(crit, enhanced, instance);
-    }
-
-    void Defender_Champion::execute_spell_r(const bool &crit, const bool &enhanced, const int &instance) {
-        if(!m_Attacker_set){
-            std::cerr << "no attacker specified" << std::endl;
-            return;
-        }
-        func_spell_r(crit, enhanced, instance);
     }
 
     void Defender_Champion::slot_take_damage(const LDC::Damage& dmg) {

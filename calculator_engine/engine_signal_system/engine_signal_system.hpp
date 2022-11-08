@@ -49,7 +49,7 @@ namespace LDC{
         };
 
         struct champ_active_struct{
-            boost::signals2::signal<void(const bool &crit)> auto_attack;
+            boost::signals2::signal<void(const bool &crit, const bool &enhanced, const int &instance)> auto_attack;
 
             boost::signals2::signal<void(const bool &crit, const bool &enhanced, const int &instance)> passive;
 

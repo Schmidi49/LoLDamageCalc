@@ -29,8 +29,8 @@ int main(int argc, char* argv[]){
     d.set_Attacker(&jinx);
 
     std::cout << "Doing spells/attacks: " << std::endl;
-    ess.attacker.auto_attack(true);
-    ess.attacker.auto_attack(false);
+    ess.attacker.auto_attack(true, false, 0);
+    ess.attacker.auto_attack(false, false, 0);
     ess.attacker.spell_q(true, false, 0);
     ess.attacker.spell_w(false, true, 0);
     ess.attacker.spell_e(false, true, 76);

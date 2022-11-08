@@ -29,6 +29,35 @@ namespace LDC::champions {
             m_ess = ess;
         else
             throw std::invalid_argument("Pointer towards engine signal system is invalid");
+
+        func_auto_attack = [](const bool &crit, const bool &enhanced, const int &instance){
+            std::cout << "Auto attack: " << (crit ? "did crit" : "did not crit") << std::endl;
+        };
+        func_passive = [](const bool &crit, const bool &enhanced, const int &instance){
+            std::cout << "Passive: " << (crit ? "did crit, " : "did not crit, ") ;
+            std::cout << (enhanced ? "is enhanced, " : "is not enhanced, ");
+            std::cout << "Instance: " << instance << std::endl;
+        };
+        func_spell_q = [](const bool &crit, const bool &enhanced, const int &instance){
+            std::cout << "Q: " << (crit ? "did crit, " : "did not crit, ") ;
+            std::cout << (enhanced ? "is enhanced, " : "is not enhanced, ");
+            std::cout << "Instance: " << instance << std::endl;
+        };
+        func_spell_w = [](const bool &crit, const bool &enhanced, const int &instance){
+            std::cout << "W: " << (crit ? "did crit, " : "did not crit, ") ;
+            std::cout << (enhanced ? "is enhanced, " : "is not enhanced, ");
+            std::cout << "Instance: " << instance << std::endl;
+        };
+        func_spell_e = [](const bool &crit, const bool &enhanced, const int &instance){
+            std::cout << "E: " << (crit ? "did crit, " : "did not crit, ") ;
+            std::cout << (enhanced ? "is enhanced, " : "is not enhanced, ");
+            std::cout << "Instance: " << instance << std::endl;
+        };
+        func_spell_r = [](const bool &crit, const bool &enhanced, const int &instance){
+            std::cout << "R: " << (crit ? "did crit, " : "did not crit, ") ;
+            std::cout << (enhanced ? "is enhanced, " : "is not enhanced, ");
+            std::cout << "Instance: " << instance << std::endl;
+        };
     }
 
 

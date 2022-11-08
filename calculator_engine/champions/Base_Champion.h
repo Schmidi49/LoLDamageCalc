@@ -55,6 +55,14 @@ namespace LDC::champions {
         double get_mis_mana() const{return m_missing_mana;};
         double get_cur_mana(){return (*m_current_stats->hp() - m_missing_mana);};
 
+    protected:
+        std::function<void(const bool &crit, const bool &enhanced, const int &instance)> func_auto_attack;
+        std::function<void(const bool &crit, const bool &enhanced, const int &instance)> func_passive;
+        std::function<void(const bool &crit, const bool &enhanced, const int &instance)> func_spell_q;
+        std::function<void(const bool &crit, const bool &enhanced, const int &instance)> func_spell_w;
+        std::function<void(const bool &crit, const bool &enhanced, const int &instance)> func_spell_e;
+        std::function<void(const bool &crit, const bool &enhanced, const int &instance)> func_spell_r;
+
     private:
         void read_champion_base_stats();
 
