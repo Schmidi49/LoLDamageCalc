@@ -48,8 +48,9 @@ namespace LDC::champions{
 
         double m_advanced_aa_cost{0.0};
         double m_advanced_aa_ad_modify{1.0};
-        double m_advanced_aa_as_malus{0.0};
-        double m_aa_as_stacks[5]{0.0,0.0,0.0,0.0,0.0};
+        double m_advanced_aa_as_bonus{0.0};
+        int m_aa_cur_as_stacks{0};
+        double m_aa_raw_as_stacks[5]{0.0,0.0,0.0,0.0,0.0};
 
         const int m_q_max_level{5};
         double m_q_cd{0.0};

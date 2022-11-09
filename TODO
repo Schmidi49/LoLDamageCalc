@@ -10,7 +10,8 @@
 [x] add Mana
 [x] add bonus AD
 [x] add Damage reduction (mind Amumu + Wardens mail interactions)
-[o] Finish Jinx-Attacker
+[x] Finish Jinx-Attacker
+[o] add armor/magic resist to dmg_mod for defenders
 [o] include Flag for incomplete setup (+ get methode for that, maybe block some functions when its not set)
 [o] Finish Jinx Defender
 [o] Add Rammus (as example Defender Champion)

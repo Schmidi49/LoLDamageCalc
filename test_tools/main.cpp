@@ -16,9 +16,12 @@ int main(int argc, char* argv[]){
 
     LDC::champions::Attacker_Jinx jinx(&ess, "Jinx");
     std::cout << "Jinx created" << std::endl;
-    std::cout << "set champ lvl: " << jinx.set_lvl(7) << std::endl;
+    std::cout << "set champ lvl: " << std::endl;
+    jinx.set_lvl(7);
+    std::cout << "set q lvl: "<< std::endl;
+    jinx.set_spell_lvl_q(4);
     std::cout << "set w lvl: "<< std::endl;
-    jinx.set_spell_lvl_w(3);
+    jinx.set_spell_lvl_w(1);
     std::cout << "set e lvl: "<< std::endl;
     jinx.set_spell_lvl_e(1);
     std::cout << "set r lvl: "<< std::endl;
@@ -30,11 +33,39 @@ int main(int argc, char* argv[]){
     jinx.set_Defender(&d);
     d.set_Attacker(&jinx);
 
-    std::cout << "Doing spells/attacks: " << std::endl;
+    //test routine for jinx
+    ess.attacker.auto_attack.connect([&](const bool &crit, const bool &enhanced, const int &instance){
+        std::cout << "as: " << *jinx.get_ptr_current_stats()->as() << std::endl;
+    });
+    ess.attacker.spell_q.connect([&](const bool &crit, const bool &enhanced, const int &instance){
+        std::cout << "as: " << *jinx.get_ptr_current_stats()->as() << std::endl;
+    });
+    ess.attacker.passive.connect([&](const bool &crit, const bool &enhanced, const int &instance){
+        std::cout << "as: " << *jinx.get_ptr_current_stats()->as() << std::endl;
+    });
+
+    std::cout << "initial as: " << *jinx.get_ptr_current_stats()->as() << std::endl;
+    std::cout << "Doing attacks: " << std::endl;
+    ess.attacker.auto_attack(false, false, 0);
+    ess.attacker.auto_attack(false, false, 0);
     ess.attacker.auto_attack(true, false, 0);
     ess.attacker.auto_attack(false, false, 0);
-    ess.attacker.spell_q(true, false, 0);
-    ess.attacker.spell_w(false, true, 0);
-    ess.attacker.spell_e(false, true, 0);
-    ess.attacker.spell_r(false, false, 76);
+    ess.attacker.spell_q(false, false, 0);
+    ess.attacker.auto_attack(true, false, 0);
+    ess.attacker.auto_attack(false, false, 0);
+    ess.attacker.spell_q(false, false, 0);
+    ess.attacker.auto_attack(false, false, 0);
+    ess.attacker.passive(false, false, 0);
+    ess.attacker.auto_attack(false, false, 0);
+    ess.attacker.spell_q(false, false, 0);
+    ess.attacker.auto_attack(true, false, 0);
+    ess.attacker.passive(false, true, 0);
+
+    std::cout << "Doing spells: " << std::endl;
+    ess.attacker.spell_w(false, false, 0);
+    ess.attacker.spell_e(false, false, 0);
+    ess.attacker.spell_r(false, false, 0);
+    ess.attacker.spell_r(false, false, 50);
+    ess.attacker.spell_r(false, false, 100);
+
 }

@@ -166,19 +166,22 @@ namespace LDC::champions {
 
     bool Generic_Damage_Spell::read_stat(const nlohmann::json &setup_json, const std::string &attribute,
                                         std::vector<double> *raw_data) {
+        //TODO cleanup type check (no need to check if number_int && number:float)
         if(!setup_json.contains(attribute))
             std::cout << "not specified: " << attribute << std::endl;
-        else if(setup_json[attribute].is_number_integer() || setup_json[attribute].is_number_float())
-            raw_data = new std::vector<double>{setup_json[attribute]};
+        else if(setup_json[attribute].is_number_integer() || setup_json[attribute].is_number_float()) {
+            raw_data->clear();
+            raw_data->push_back(setup_json[attribute]);
+        }
         else if(setup_json[attribute].is_array()){
             if(setup_json[attribute].empty()) {
                 std::cerr << attribute << " was empty" << std::endl;
                 return false;
             }
             else if(setup_json[attribute].size() == 1) {
-                delete raw_data;
+                raw_data->clear();
                 if (setup_json[attribute].is_number_integer() || setup_json[attribute].is_number_float() )
-                    raw_data = new std::vector<double>{setup_json[attribute][0]};
+                    raw_data->push_back(setup_json[attribute][0]);
                 else {
                     std::cerr << "single entry of " << attribute << " is not an integer" << std::endl;
                     return false;

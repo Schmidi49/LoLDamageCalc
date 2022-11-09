@@ -83,8 +83,8 @@ namespace LDC::champions {
                 m_stats_current->set(it.first, new double(m_stats_base->at(it.first)->get_base()
                                                           + ((m_stats_base->at(it.first)->growth_at_level(m_champ_lvl)
                                                               + *m_stats_bonus_flat->at(it.first))
-                                                             * m_stats_base->as_ratio)));
-                if(*m_stats_bonus_percentage->as() != 0)//warning
+                                                             * m_as_ratio)));
+                if(*m_stats_bonus_percentage->as() != 1.0)//warning
                     std::cout << "percentage bonus attackspeed does not exist and is therefore ignored" << std::endl;
                 if(*m_stats_current->as() > 2.5 && m_attack_speed_cap_disables == 0)
                     m_stats_current->set("as", new double(2.5));
@@ -178,6 +178,7 @@ namespace LDC::champions {
     }
 
     void Base_Champion::read_champion_base_stats() {
+        //TODO cleanup type check (no need to check if number_int && number:float)
         const std::string jsonFile = std::string(REPO_DIR) + std::string(json_dir) + m_name + ".json";
         std::ifstream f(jsonFile);
         if(f.good()){
@@ -198,13 +199,13 @@ namespace LDC::champions {
                     tempStat->set_growth(newGrowth);
 
                 if(it.key() == "as"){
-                    const auto& asRatio = m_champion_data["stats"][it.key()]["ratio"];
+                    const auto& asRatio = m_champion_data["stats"]["as"]["ratio"];
                     if (asRatio.is_null())
-                        m_stats_base->as_ratio = tempStat->get_growth();
+                        m_as_ratio = tempStat->get_base();
                     else if (!asRatio.is_number_unsigned() && !asRatio.is_number_float())
-                        std::cerr << "Data From json invalid: [\"stats\"][" << it.key() << "][\"growth\"]" << std::endl;
+                        std::cerr << "Data From json invalid: [\"stats\"][\"as\"][\"growth\"]" << std::endl;
                     else
-                        m_stats_base->as_ratio = asRatio;
+                        m_as_ratio = asRatio;
                 }
 
                 m_stats_base->set(it.key(), tempStat);

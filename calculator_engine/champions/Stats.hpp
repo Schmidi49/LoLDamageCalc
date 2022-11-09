@@ -77,7 +77,6 @@ namespace LDC::champions{
         T* as () {return m_stats.at("as");};
         T* mr () {return m_stats.at("mr");};
         T* ms () {return m_stats.at("mr");};
-        double as_ratio{1.0};
     };
 }
 

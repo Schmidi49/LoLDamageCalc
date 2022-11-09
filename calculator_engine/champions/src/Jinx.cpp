@@ -41,13 +41,13 @@ namespace LDC::champions{
             //---------------- read spell q ----------------
             if (!m_champion_data.contains("spell_q")) {
                 std::cerr << "no \"spell_q\" specified" << std::endl;
-                throw std::runtime_error("no jinx_q specified in jinx json data!");
+                throw std::runtime_error("no attacker_jinx_q specified in jinx json data!");
             } else {
                 if(m_champion_data["spell_q"].contains("max_lvl")){
                     if(m_champion_data["spell_q"]["max_lvl"].is_number_integer()) {
                         if (m_q_max_level != m_champion_data["spell_q"]["max_lvl"]) {
                             std::cerr << "spell_q can not be a other level than 5" << std::endl;
-                            throw std::range_error("jinx_q max_level in jinx json data can not be a other level than 5");
+                            throw std::range_error("attacker_jinx_q max_level in jinx json data can not be a other level than 5");
                         }
                     }
                     else
@@ -85,7 +85,7 @@ namespace LDC::champions{
 
                 if(m_champion_data["spell_q"].contains("as_modify")){
                     if(m_champion_data["spell_q"]["as_modify"].is_number())
-                        m_advanced_aa_as_malus = m_champion_data["spell_q"]["as_modify"];
+                        m_advanced_aa_as_bonus = m_champion_data["spell_q"]["as_modify"];
                     else
                         std::cerr << "advanced_aa as_modify is not a number, using default of 0" << std::endl;
                 }
@@ -99,7 +99,7 @@ namespace LDC::champions{
                     if(m_champion_data["spell_q"]["bonus_as_stacks"].size() == m_q_max_level) {
                         for (int i = 0; i < m_q_max_level; i++) {
                             if (m_champion_data["spell_q"]["bonus_as_stacks"][i].is_number()) {
-                                m_aa_as_stacks[i] = m_champion_data["spell_q"]["bonus_as_stacks"][i];
+                                m_aa_raw_as_stacks[i] = m_champion_data["spell_q"]["bonus_as_stacks"][i];
                             } else {
                                 std::cerr << "entry " << i << " of spell_q bonus_as_stacks is not an integer" << std::endl;
                             }
@@ -217,7 +217,33 @@ namespace LDC::champions{
             return false;
         }
 
+        //reset as modifiers from q stances
+        if(!m_q_stance && m_q_lvl > 0){
+            double reduced_as = 0.0;
+            if(m_aa_cur_as_stacks > 0){
+                reduced_as -= m_aa_raw_as_stacks[m_q_lvl - 1];
+            }
+            if(m_aa_cur_as_stacks > 1){
+                reduced_as -= m_aa_raw_as_stacks[m_q_lvl - 1] * 0.5 * (m_aa_cur_as_stacks - 1);
+            }
+            m_stats_bonus_flat->add("as", reduced_as);
+        }
+
         m_q_lvl = lvl;
+
+        //reapply as modifiers from q stances
+        if(!m_q_stance && m_q_lvl > 0){
+            double enhanced_as = 0.0;
+            if(m_aa_cur_as_stacks > 0){
+                enhanced_as += m_aa_raw_as_stacks[m_q_lvl - 1];
+            }
+            if(m_aa_cur_as_stacks > 1){
+                enhanced_as += m_aa_raw_as_stacks[m_q_lvl - 1] * 0.5 * (m_aa_cur_as_stacks - 1);
+            }
+            m_stats_bonus_flat->add("as", enhanced_as);
+        }
+
+        calc_current_stats();
         return true;
     }
 
@@ -261,15 +287,119 @@ namespace LDC::champions{
     }
 
     void Attacker_Jinx::execute_auto_attack(const bool &crit, const bool &enhanced, const int &instance) {
+        if(m_q_stance){
+            Damage dmg(*m_stats_current->ad() * m_advanced_aa_ad_modify);
+            dmg.type = DamageType::physical;
+            dmg.tag = DamageTag::basic;
+            dmg.projectile = true;
+            dmg.spellshieldAffected = false;
+            dmg.cc = false;
 
+            if(crit){
+                dmg.crit = true;
+                dmg.dmg *= 1.75;
+            }
+
+            dmg += -(m_ess->defender.get_premit_dmg_red(dmg));
+            dmg *= m_ess->defender.get_dmg_mod(dmg);
+            dmg += -(m_ess->defender.get_postmit_dmg_red(dmg));
+
+            m_ess->attacker.deal_damage(dmg);
+            m_ess->attacker.execute_onhit();
+        }
+        // if(!m_q_stance)
+        else {
+            Damage dmg(*m_stats_current->ad());
+            dmg.type = DamageType::physical;
+            dmg.tag = DamageTag::basic;
+            dmg.projectile = true;
+            dmg.spellshieldAffected = false;
+            dmg.cc = false;
+
+            if(crit){
+                dmg.crit = true;
+                dmg.dmg *= 1.75;
+            }
+
+            dmg += -(m_ess->defender.get_premit_dmg_red(dmg));
+            dmg *= m_ess->defender.get_dmg_mod(dmg);
+            dmg += -(m_ess->defender.get_postmit_dmg_red(dmg));
+
+            m_ess->attacker.deal_damage(dmg);
+            m_ess->attacker.execute_onhit();
+
+            if(m_q_lvl > 0) {
+                if (m_aa_cur_as_stacks < 3) {
+                    if(m_aa_cur_as_stacks == 0){
+                        m_stats_bonus_flat->add("as", m_aa_raw_as_stacks[m_q_lvl-1]);
+                    }
+                    else{
+                        double temp_as = m_aa_raw_as_stacks[m_q_lvl-1] * 0.5;
+                        m_stats_bonus_flat->add("as", temp_as);
+                    }
+                    calc_current_stats();
+                    m_aa_cur_as_stacks++;
+                }
+            }
+        }
     }
 
     void Attacker_Jinx::execute_passive(const bool &crit, const bool &enhanced, const int &instance) {
+        //illegal input
+        if(enhanced && (instance < 0 || instance > 100)){
+            std::cerr << "illegal instance " << instance << " for passive selected" << std::endl;
+            return;
+        }
+        //reset old bonus
+        m_passive_cur_as = -m_passive_cur_as;
+        m_passive_cur_ms = 1.0 / m_passive_cur_ms;
+        m_stats_bonus_flat->add("as", m_passive_cur_as);
+        m_stats_bonus_percentage->mult("ms",m_passive_cur_ms);
 
+        //save new bonus
+        //use passive at max when not enhanced
+        if(!enhanced){
+            m_passive_cur_as = m_passive_raw_as;
+            m_passive_cur_ms = m_passive_raw_ms;
+        }
+        //use passive at a certain percentage
+        else {
+            //save new bonus
+            m_passive_cur_as = m_passive_raw_as * instance / 100.0;
+            m_passive_cur_ms = m_passive_raw_ms * instance / 100.0;
+        }
+        //set new bonus
+        m_stats_bonus_flat->add("as", m_passive_cur_as);
+        m_stats_bonus_percentage->mult("ms", m_passive_cur_ms);
+        calc_current_stats();
     }
 
     void Attacker_Jinx::execute_spell_q(const bool &crit, const bool &enhanced, const int &instance) {
-        m_q_stance ^= true;
+        if(m_q_lvl > 0) {
+            //reset as modifiers from q stances
+            if(m_q_stance){
+                double temp_as = -m_advanced_aa_as_bonus;
+                m_stats_bonus_flat->add("as", temp_as);
+            }
+            else{
+                double temp_as = 0.0;
+                if(m_aa_cur_as_stacks > 0){
+                    temp_as -= m_aa_raw_as_stacks[m_q_lvl - 1];
+                }
+                if(m_aa_cur_as_stacks > 1){
+                    temp_as -= m_aa_raw_as_stacks[m_q_lvl - 1] * 0.5 * (m_aa_cur_as_stacks - 1);
+                }
+                temp_as += m_advanced_aa_as_bonus;
+
+                m_stats_bonus_flat->add("as", temp_as);
+                m_aa_cur_as_stacks = 0;
+            }
+            calc_current_stats();
+            m_q_stance ^= true;
+        }
+        else{
+            std::cerr << "attacker_jinx_r is not leveled" << std::endl;
+        }
     }
 
     void Attacker_Jinx::execute_spell_r(const bool &crit, const bool &enhanced, const int &instance) {
