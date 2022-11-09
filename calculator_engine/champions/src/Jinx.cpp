@@ -14,9 +14,110 @@ namespace LDC::champions{
         Attacker_Champion(ess, name, lvl){
         if(!m_champion_data.empty()) {
             std::cout << "reading Jinx champion specifics" << std::endl;
+
+            //---------------- read passive ----------------
+            if (!m_champion_data.contains("passive")) {
+                std::cerr << "no \"passive\" specified" << std::endl;
+                throw std::runtime_error("no passive specified in jinx json data!");
+            }
+            else if (!m_champion_data["passive"].contains("as") || !m_champion_data["passive"].contains("ms")) {
+                std::cerr << "\"passive\" has missing information" << std::endl;
+                throw std::runtime_error("missing information for passive specified in jinx json data!");
+            } else {
+                if(m_champion_data["passive"]["as"].is_number()){
+                    m_passive_raw_as = m_champion_data["passive"]["as"];
+                }
+                else{
+                    std::cerr << "passive as is not a number, default to 0" << std::endl;
+                }
+                if(m_champion_data["passive"]["ms"].is_number()){
+                    m_passive_raw_ms = m_champion_data["passive"]["ms"];
+                }
+                else{
+                    std::cerr << "passive ms is not a number, default to 1" << std::endl;
+                }
+            }
+
+            //---------------- read spell q ----------------
+            if (!m_champion_data.contains("spell_q")) {
+                std::cerr << "no \"spell_q\" specified" << std::endl;
+                throw std::runtime_error("no jinx_q specified in jinx json data!");
+            } else {
+                if(m_champion_data["spell_q"].contains("max_lvl")){
+                    if(m_champion_data["spell_q"]["max_lvl"].is_number_integer()) {
+                        if (m_q_max_level != m_champion_data["spell_q"]["max_lvl"]) {
+                            std::cerr << "spell_q can not be a other level than 5" << std::endl;
+                            throw std::range_error("jinx_q max_level in jinx json data can not be a other level than 5");
+                        }
+                    }
+                    else
+                        std::cerr << "spell_q max_lvl is not a integer, using default of 5" << std::endl;
+                }
+                else
+                    std::cerr << "spell_q max_lvl not specified, using default of 5" << std::endl;
+
+                if(m_champion_data["spell_q"].contains("cost")){
+                    if(m_champion_data["spell_q"]["cost"].is_number())
+                        m_advanced_aa_cost = m_champion_data["spell_q"]["cost"];
+                    else
+                        std::cerr << "spell_q cost is not a number, using default of 0" << std::endl;
+                }
+                else
+                    std::cerr << "spell_q cost not specified, using default of 0" << std::endl;
+
+                if(m_champion_data["spell_q"].contains("cd")){
+                    if(m_champion_data["spell_q"]["cd"].is_number())
+                        m_q_cd = m_champion_data["spell_q"]["cd"];
+                    else
+                        std::cerr << "spell_q cd is not a number, using default of 0" << std::endl;
+                }
+                else
+                    std::cerr << "spell_q cd not specified, using default of 0" << std::endl;
+
+                if(m_champion_data["spell_q"].contains("ad_modify")){
+                    if(m_champion_data["spell_q"]["ad_modify"].is_number())
+                        m_advanced_aa_ad_modify = m_champion_data["spell_q"]["ad_modify"];
+                    else
+                        std::cerr << "advanced_aa ad_modify is not a number, using default of 1.0" << std::endl;
+                }
+                else
+                    std::cerr << "advanced_aa ad_modify not specified, using default of 1.0" << std::endl;
+
+                if(m_champion_data["spell_q"].contains("as_modify")){
+                    if(m_champion_data["spell_q"]["as_modify"].is_number())
+                        m_advanced_aa_as_malus = m_champion_data["spell_q"]["as_modify"];
+                    else
+                        std::cerr << "advanced_aa as_modify is not a number, using default of 0" << std::endl;
+                }
+                else
+                    std::cerr << "advanced_aa as_modify not specified, using default of 0" << std::endl;
+
+
+                if(!m_champion_data["spell_q"].contains("bonus_as_stacks"))
+                    std::cerr << "spell_q bonus_as_stacks not specified, using default of 0 for each level" << std::endl;
+                else if(m_champion_data["spell_q"]["bonus_as_stacks"].is_array()){
+                    if(m_champion_data["spell_q"]["bonus_as_stacks"].size() == m_q_max_level) {
+                        for (int i = 0; i < m_q_max_level; i++) {
+                            if (m_champion_data["spell_q"]["bonus_as_stacks"][i].is_number()) {
+                                m_aa_as_stacks[i] = m_champion_data["spell_q"]["bonus_as_stacks"][i];
+                            } else {
+                                std::cerr << "entry " << i << " of spell_q bonus_as_stacks is not an integer" << std::endl;
+                            }
+                        }
+                    }
+                    else {
+                        std::cerr << "spell_q bonus_as_stacks has the wrong size" << std::endl;
+                    }
+                }
+                else{
+                    std::cerr << "spell_q bonus_as_stacks is not an array" << std::endl;
+                }
+            }
+
+            //---------------- read spell w ----------------
             if (!m_champion_data.contains("spell_w")) {
                 std::cerr << "no \"spell_w\" specified" << std::endl;
-                throw std::runtime_error("no spell_w specified in json data!");
+                throw std::runtime_error("no spell_w specified in jinx json data!");
             } else {
                 delete m_jinx_spell_w;
                 m_jinx_spell_w = new Generic_Damage_Spell("attacker_jinx_w", m_champion_data["spell_w"], this,
@@ -28,9 +129,10 @@ namespace LDC::champions{
                 SpellPtr->execute_spell(crit, enhanced, instance);
             };
 
+            //---------------- read spell e ----------------
             if (!m_champion_data.contains("spell_e")) {
                 std::cerr << "no \"spell_e\" specified" << std::endl;
-                throw std::runtime_error("no spell_e specified in json data!");
+                throw std::runtime_error("no spell_e specified in jinx json data!");
             } else {
                 delete m_jinx_spell_e;
                 m_jinx_spell_e = new Generic_Damage_Spell("attacker_jinx_e", m_champion_data["spell_e"], this,
@@ -42,29 +144,30 @@ namespace LDC::champions{
                 SpellPtr->execute_spell(crit, enhanced, instance);
             };
 
+            //---------------- read spell r ----------------
             if (!m_champion_data.contains("spell_r")) {
                 std::cerr << "no \"spell_r\" specified" << std::endl;
-                throw std::runtime_error("no spell_r specified in json data!");
+                throw std::runtime_error("no spell_r specified in jinx json data!");
             } else {
                 delete m_jinx_spell_r;
                 m_jinx_spell_r = new Generic_Damage_Spell("attacker_jinx_r", m_champion_data["spell_r"], this,
                                                           m_Defender, m_ess);
                 if(!m_champion_data["spell_r"].contains("range")){
-                    std::cerr << "did not find a range, aborting" << std::endl;
-                    throw std::runtime_error("reading json data failed critically!");
+                    std::cerr << "did not find a range for jinx r, aborting" << std::endl;
+                    throw std::runtime_error("no spell_r range in jinx json data!");
                 }
                 else if(!m_champion_data["spell_r"]["range"].is_array()){
-                    std::cerr << "damage type was not a string" << std::endl;
-                    throw std::runtime_error("reading json data failed critically!");
+                    std::cerr << "range is not a filed" << std::endl;
+                    throw std::runtime_error("spell_r range in jinx json data is not a field!");
                 }
                 else if(m_champion_data["spell_r"]["range"].size() != 2){
                     std::cerr << "field range has the wrong size" << std::endl;
-                    throw std::runtime_error("reading json data failed critically!");
+                    throw std::runtime_error("spell_r range in jinx json data has the wrong size!");
                 }
                 else if(!m_champion_data["spell_r"]["range"][0].is_number() ||
                         !m_champion_data["spell_r"]["range"][1].is_number()){
                     std::cerr << " range has the wrong type" << std::endl;
-                    throw std::runtime_error("reading json data failed critically!");
+                    throw std::runtime_error("spell_r range in jinx json includes no numbers!");
                 }
                 else{
                     m_r_range_min = m_champion_data["spell_r"]["range"][0];
@@ -72,6 +175,7 @@ namespace LDC::champions{
                 }
             }
 
+            //---------------- defining none generic damage functions ----------------
             func_auto_attack = [&](const bool &crit, const bool &enhanced, const int &instance){
                 execute_auto_attack(crit, enhanced, instance);
             };
@@ -87,6 +191,9 @@ namespace LDC::champions{
             func_spell_r = [&](const bool &crit, const bool &enhanced, const int &instance){
                 execute_spell_r(crit, enhanced, instance);
             };
+        }
+        else{
+            std::cerr << "creating jinx failed due to missing champion data" << std::endl;
         }
     }
 
@@ -151,6 +258,10 @@ namespace LDC::champions{
         }
 
         return m_jinx_spell_r->set_lvl(lvl);
+    }
+
+    void Attacker_Jinx::execute_auto_attack(const bool &crit, const bool &enhanced, const int &instance) {
+
     }
 
     void Attacker_Jinx::execute_spell_q(const bool &crit, const bool &enhanced, const int &instance) {

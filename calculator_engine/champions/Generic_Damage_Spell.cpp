@@ -96,7 +96,7 @@ namespace LDC::champions {
             if(setup_json["max_lvl"].is_number_integer())
                 m_max_lvl = setup_json["max_lvl"];
             else
-                std::cerr << "max_lvl is not a integer" << std::endl;
+                std::cerr << "max_lvl is not a integer, using default of 5" << std::endl;
         }
         else
             std::cout << "max_lvl not specified, using default of 5" << std::endl;
@@ -107,7 +107,7 @@ namespace LDC::champions {
             if(setup_json["can_crit"].is_boolean())
                 m_can_crit = setup_json["can_crit"];
             else
-                std::cerr << "can_crit is not a boolean" << std::endl;
+                std::cerr << "can_crit is not a boolean, default false" << std::endl;
         }
         else
             std::cout << "can_crit not specified, default false" << std::endl;
@@ -117,7 +117,7 @@ namespace LDC::champions {
             if(setup_json["projectile"].is_boolean())
                 m_projectile = setup_json["projectile"];
             else
-                std::cerr << "projectile is not a boolean" << std::endl;
+                std::cerr << "projectile is not a boolean, default false" << std::endl;
         }
         else
             std::cout << "projectile not specified, default false" << std::endl;
@@ -127,7 +127,7 @@ namespace LDC::champions {
             if(setup_json["spellshieldAffected"].is_boolean())
                 m_spellshieldAffected = setup_json["spellshieldAffected"];
             else
-                std::cerr << "spellshieldAffected is not a boolean" << std::endl;
+                std::cerr << "spellshieldAffected is not a boolean, default true" << std::endl;
         }
         else
             std::cout << "spellshieldAffected not specified, default true" << std::endl;
@@ -137,7 +137,7 @@ namespace LDC::champions {
             if(setup_json["applies_onhit"].is_boolean())
                 m_applies_onhit = setup_json["applies_onhit"];
             else
-                std::cerr << "applies_onhit is not a boolean" << std::endl;
+                std::cerr << "applies_onhit is not a boolean, default false" << std::endl;
         }
         else
             std::cout << "applies_onhit not specified, default false" << std::endl;
@@ -147,7 +147,7 @@ namespace LDC::champions {
             if(setup_json["applies_cc"].is_boolean())
                 m_applies_cc = setup_json["applies_cc"];
             else
-                std::cerr << "applies_cc is not a boolean" << std::endl;
+                std::cerr << "applies_cc is not a boolean, default false" << std::endl;
         }
         else
             std::cout << "applies_cc not specified, default false" << std::endl;

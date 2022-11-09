@@ -11,9 +11,9 @@
 [x] add bonus AD
 [x] add Damage reduction (mind Amumu + Wardens mail interactions)
 [o] Finish Jinx-Attacker
+[o] include Flag for incomplete setup (+ get methode for that, maybe block some functions when its not set)
 [o] Finish Jinx Defender
 [o] Add Rammus (as example Defender Champion)
-[o] advance environment (Damage, return Damage, healing(from lifesteal, spell, item effects, other stats)
 [o] add champion factory
 [o] rewrite testtool to be generic with user inputs test tool
 [o] doxygen docu for all header, optional for bigger function comments
@@ -21,5 +21,6 @@
 
 Optional (not in this branch)
 [o] add generic auto attack
+[o] advance environment (Damage, return Damage, healing(from lifesteal, spell, item effects, other stats)
 [o] Add Shielding
 [o] Ordering Slot Call Groups

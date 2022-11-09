@@ -8,6 +8,8 @@
 #ifndef LOLDAMAGECALC_JINX_H
 #define LOLDAMAGECALC_JINX_H
 
+#include <vector>
+
 #include <Attacker_Champion.h>
 #include <Defender_Champion.h>
 #include <Generic_Damage_Spell.h>
@@ -33,14 +35,24 @@ namespace LDC::champions{
         void set_Defender(Defender_Champion* defender) override;
 
     private:
-        bool read_json();
-
         void execute_auto_attack(const bool &crit, const bool &enhanced, const int &instance);
         void execute_passive(const bool &crit, const bool &enhanced, const int &instance);
         void execute_spell_q(const bool &crit, const bool &enhanced, const int &instance);
         void execute_spell_r(const bool &crit, const bool &enhanced, const int &instance);
 
     private:
+        double m_passive_raw_as{0.0};
+        double m_passive_raw_ms{1.0};
+        double m_passive_cur_as{0.0};
+        double m_passive_cur_ms{0.0};
+
+        double m_advanced_aa_cost{0.0};
+        double m_advanced_aa_ad_modify{1.0};
+        double m_advanced_aa_as_malus{0.0};
+        double m_aa_as_stacks[5]{0.0,0.0,0.0,0.0,0.0};
+
+        const int m_q_max_level{5};
+        double m_q_cd{0.0};
         bool m_q_stance{false};
         int m_q_lvl{0};
 
