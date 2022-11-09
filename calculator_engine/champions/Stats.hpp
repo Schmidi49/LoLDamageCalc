@@ -46,6 +46,8 @@ namespace LDC::champions{
             }
         };
         void set(const std::string& id, T* newT){delete m_stats[id]; m_stats[id] = newT;};
+        void add(const std::string& id, T &newT){*m_stats[id] += newT;};
+        void mult(const std::string& id, T &newT){*m_stats[id] *= newT;}
         void clear(){for(auto it : m_stats) {delete it.second;it.second = new T;}};
         bool check(){return m_stats.count() == CURRENTLY_IMPLEMENTED_STATS;};
 
