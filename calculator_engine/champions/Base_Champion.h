@@ -26,8 +26,8 @@ namespace LDC::champions {
 
         ~Base_Champion();
 
-        Stats<double>* get_ptr_current_stats(){return m_current_stats;};
-        Stats<double>* get_ptr_bonus_stats_flat(){return m_bonus_stats_flat;};
+        Stats<double>* get_ptr_current_stats(){return m_stats_current;};
+        Stats<double>* get_ptr_bonus_stats_flat(){return m_stats_bonus_flat;};
         Stats<double>* calc_current_stats();
 
         bool set_lvl(const int&lvl);
@@ -43,19 +43,19 @@ namespace LDC::champions {
         virtual int get_spell_lvl_e();
         virtual int get_spell_lvl_r();
 
-        void set_health(double& new_hp){m_missing_health = *m_current_stats->hp() - new_hp;};
-        void set_health_percent(double& new_hp_p){m_missing_health = *m_current_stats->hp() + new_hp_p;};
-        double get_max_health(){return *m_current_stats->hp();};
+        void set_health(double& new_hp){m_missing_health = *m_stats_current->hp() - new_hp;};
+        void set_health_percent(double& new_hp_p){m_missing_health = *m_stats_current->hp() + new_hp_p;};
+        double get_max_health(){return *m_stats_current->hp();};
         double get_mis_health() const{return m_missing_health;};
-        double get_cur_health(){return (*m_current_stats->hp() - m_missing_health);};
+        double get_cur_health(){return (*m_stats_current->hp() - m_missing_health);};
 
-        void set_mana(double& new_hp){m_missing_mana = *m_current_stats->hp() - new_hp;};
-        void set_mana_percent(double& new_hp_p){m_missing_mana = *m_current_stats->hp() + new_hp_p;};
+        void set_mana(double& new_hp){m_missing_mana = *m_stats_current->hp() - new_hp;};
+        void set_mana_percent(double& new_hp_p){m_missing_mana = *m_stats_current->hp() + new_hp_p;};
         //allows you to get mana if value is negative
         bool use_mana(double mana_to_use);
-        double get_max_mana(){return *m_current_stats->hp();};
+        double get_max_mana(){return *m_stats_current->hp();};
         double get_mis_mana() const{return m_missing_mana;};
-        double get_cur_mana(){return (*m_current_stats->hp() - m_missing_mana);};
+        double get_cur_mana(){return (*m_stats_current->hp() - m_missing_mana);};
 
         void add_attackspeed_cap_disable();
         void remove_attackspeed_cap_disable();
@@ -83,10 +83,10 @@ namespace LDC::champions {
 
         bool m_read_json_good{false};
 
-        Stats<ChampionBaseStat>* m_base_stats{new Stats<ChampionBaseStat>};
-        Stats<double>* m_bonus_stats_flat{new Stats<double>};
-        Stats<double>* m_bonus_stats_percentage{new Stats<double>};
-        Stats<double>* m_current_stats{new Stats<double>};
+        Stats<ChampionBaseStat>* m_stats_base{new Stats<ChampionBaseStat>};
+        Stats<double>* m_stats_bonus_flat{new Stats<double>};
+        Stats<double>* m_stats_bonus_percentage{new Stats<double>};
+        Stats<double>* m_stats_current{new Stats<double>};
         double m_missing_health{0.0};
         double m_missing_mana{0.0};
 

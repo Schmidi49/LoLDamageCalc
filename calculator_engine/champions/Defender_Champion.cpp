@@ -80,8 +80,8 @@ namespace LDC::champions {
     void Defender_Champion::slot_take_damage(const LDC::Damage& dmg) {
         std::cout << "Damage taken: " << dmg << std::endl;
         m_missing_health += dmg.dmg;
-        if(m_missing_health > *m_current_stats->hp()){
-            m_missing_health = *m_current_stats->hp();
+        if(m_missing_health > *m_stats_current->hp()){
+            m_missing_health = *m_stats_current->hp();
             m_ess->defender.death();
         }
     }

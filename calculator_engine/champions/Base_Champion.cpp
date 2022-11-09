@@ -24,8 +24,8 @@ namespace LDC::champions {
 
         read_champion_base_stats();
         //write multiplication of 1.0 into the percentage bonus stats, or else every stat will be 0
-        for(const auto &it : *m_bonus_stats_percentage){
-            m_bonus_stats_percentage->set(it.first, new double(1.0));
+        for(const auto &it : *m_stats_bonus_percentage){
+            m_stats_bonus_percentage->set(it.first, new double(1.0));
         }
         calc_current_stats();
 
@@ -72,26 +72,26 @@ namespace LDC::champions {
     }
 
     Stats<double> *Base_Champion::calc_current_stats() {
-        for(const auto& it : *m_current_stats) {
+        for(const auto& it : *m_stats_current) {
             if(it.first != "as")
-                m_current_stats->set(it.first, new double((m_base_stats->at(it.first)->at_level(m_champ_lvl)
-                                                                + *m_bonus_stats_flat->at(it.first))
-                                                                * *m_bonus_stats_percentage->at(it.first)));
+                m_stats_current->set(it.first, new double((m_stats_base->at(it.first)->at_level(m_champ_lvl)
+                                                           + *m_stats_bonus_flat->at(it.first))
+                                                          * *m_stats_bonus_percentage->at(it.first)));
             else {
                 //attackspeed has its own formula: base+(bonus*ratio)
                 //note that there is no percentage bonus attack speed
-                m_current_stats->set(it.first, new double(m_base_stats->at(it.first)->get_base()
-                                                                  + ((m_base_stats->at(it.first)->growth_at_level(m_champ_lvl)
-                                                                  + *m_bonus_stats_flat->at(it.first))
-                                                                  * m_base_stats->as_ratio)));
-                if(*m_bonus_stats_percentage->as() != 0)//warning
+                m_stats_current->set(it.first, new double(m_stats_base->at(it.first)->get_base()
+                                                          + ((m_stats_base->at(it.first)->growth_at_level(m_champ_lvl)
+                                                              + *m_stats_bonus_flat->at(it.first))
+                                                             * m_stats_base->as_ratio)));
+                if(*m_stats_bonus_percentage->as() != 0)//warning
                     std::cout << "percentage bonus attackspeed does not exist and is therefore ignored" << std::endl;
-                if(*m_current_stats->as() > 2.5 && m_attack_speed_cap_disables == 0)
-                    m_current_stats->set("as", new double(2.5));
+                if(*m_stats_current->as() > 2.5 && m_attack_speed_cap_disables == 0)
+                    m_stats_current->set("as", new double(2.5));
             }
         }
-        m_current_stats->set("b_ad", new double(*m_current_stats->ad() - m_base_stats->ad()->at_level(m_champ_lvl)));
-        return m_current_stats;
+        m_stats_current->set("b_ad", new double(*m_stats_current->ad() - m_stats_base->ad()->at_level(m_champ_lvl)));
+        return m_stats_current;
     }
 
     bool Base_Champion::level_check(const int &champ_lvl, const int &q_lvl, const int &w_lvl, const int &e_lvl,
@@ -200,14 +200,14 @@ namespace LDC::champions {
                 if(it.key() == "as"){
                     const auto& asRatio = m_champion_data["stats"][it.key()]["ratio"];
                     if (asRatio.is_null())
-                        m_base_stats->as_ratio = tempStat->get_growth();
+                        m_stats_base->as_ratio = tempStat->get_growth();
                     else if (!asRatio.is_number_unsigned() && !asRatio.is_number_float())
                         std::cerr << "Data From json invalid: [\"stats\"][" << it.key() << "][\"growth\"]" << std::endl;
                     else
-                        m_base_stats->as_ratio = asRatio;
+                        m_stats_base->as_ratio = asRatio;
                 }
 
-                m_base_stats->set(it.key(), tempStat);
+                m_stats_base->set(it.key(), tempStat);
                 m_read_json_good = true;
             }
 
@@ -285,7 +285,7 @@ namespace LDC::champions {
             std::cerr << "manaless champion can not consume mana" << std::endl;
             return false;
         }
-        if(mana_to_use > (*m_current_stats->mana() - m_missing_mana)){
+        if(mana_to_use > (*m_stats_current->mana() - m_missing_mana)){
             std::cout << "not enough mana" << std::endl;
             return false;
         }

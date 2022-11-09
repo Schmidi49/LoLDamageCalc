@@ -264,6 +264,10 @@ namespace LDC::champions{
 
     }
 
+    void Attacker_Jinx::execute_passive(const bool &crit, const bool &enhanced, const int &instance) {
+
+    }
+
     void Attacker_Jinx::execute_spell_q(const bool &crit, const bool &enhanced, const int &instance) {
         m_q_stance ^= true;
     }
@@ -303,10 +307,6 @@ namespace LDC::champions{
         dmg += -(m_ess->defender.get_postmit_dmg_red(dmg));
 
         m_ess->attacker.deal_damage(dmg);
-    }
-
-    void Attacker_Jinx::execute_passive(const bool &crit, const bool &enhanced, const int &instance) {
-
     }
 
     void Attacker_Jinx::set_Defender(Defender_Champion *defender) {
