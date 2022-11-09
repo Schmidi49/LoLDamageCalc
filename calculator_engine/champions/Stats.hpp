@@ -61,7 +61,8 @@ namespace LDC::champions{
                 {"ad", new T()},
                 {"ap", new T()},
                 {"as", new T()},
-                {"mr", new T()}
+                {"mr", new T()},
+                {"ms", new T()}
         };
         T* m_pointer_to_null = new T{};
 
@@ -73,6 +74,7 @@ namespace LDC::champions{
         T* ap () {return m_stats.at("ap");};
         T* as () {return m_stats.at("as");};
         T* mr () {return m_stats.at("mr");};
+        T* ms () {return m_stats.at("mr");};
         double as_ratio{1.0};
     };
 }

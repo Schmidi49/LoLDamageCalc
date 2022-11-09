@@ -23,6 +23,10 @@ namespace LDC::champions {
         m_champ_lvl = lvl;
 
         read_champion_base_stats();
+        //write multiplication of 1.0 into the percentage bonus stats, or else every stat will be 0
+        for(const auto &it : *m_bonus_stats_percentage){
+            m_bonus_stats_percentage->set(it.first, new double(1.0));
+        }
         calc_current_stats();
 
         if(ess)
@@ -70,14 +74,18 @@ namespace LDC::champions {
     Stats<double> *Base_Champion::calc_current_stats() {
         for(const auto& it : *m_current_stats) {
             if(it.first != "as")
-                m_current_stats->set(it.first, new double(m_base_stats->at(it.first)->at_level(m_champ_lvl)
-                                                            + *m_bonus_stats_flat->at(it.first)));
+                m_current_stats->set(it.first, new double((m_base_stats->at(it.first)->at_level(m_champ_lvl)
+                                                                + *m_bonus_stats_flat->at(it.first))
+                                                                * *m_bonus_stats_percentage->at(it.first)));
             else {
                 //attackspeed has its own formula: base+(bonus*ratio)
+                //note that there is no percentage bonus attack speed
                 m_current_stats->set(it.first, new double(m_base_stats->at(it.first)->get_base()
-                                                          + ((m_base_stats->at(it.first)->growth_at_level(m_champ_lvl)
-                                                          + *m_bonus_stats_flat->at(it.first))
-                                                          * m_base_stats->as_ratio)));
+                                                                  + ((m_base_stats->at(it.first)->growth_at_level(m_champ_lvl)
+                                                                  + *m_bonus_stats_flat->at(it.first))
+                                                                  * m_base_stats->as_ratio)));
+                if(*m_bonus_stats_percentage->as() != 0)//warning
+                    std::cout << "percentage bonus attackspeed does not exist and is therefore ignored" << std::endl;
                 if(*m_current_stats->as() > 2.5 && m_attack_speed_cap_disables == 0)
                     m_current_stats->set("as", new double(2.5));
             }

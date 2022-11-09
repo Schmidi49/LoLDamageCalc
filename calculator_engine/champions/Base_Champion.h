@@ -85,6 +85,7 @@ namespace LDC::champions {
 
         Stats<ChampionBaseStat>* m_base_stats{new Stats<ChampionBaseStat>};
         Stats<double>* m_bonus_stats_flat{new Stats<double>};
+        Stats<double>* m_bonus_stats_percentage{new Stats<double>};
         Stats<double>* m_current_stats{new Stats<double>};
         double m_missing_health{0.0};
         double m_missing_mana{0.0};

@@ -23,6 +23,10 @@
     "mr": {
       "base": 30,
       "growth": 1.3
+    },
+    "ms": {
+      "base": 325,
+      "growth": 0
     }
   },
   "adaptive_type": "physical",
