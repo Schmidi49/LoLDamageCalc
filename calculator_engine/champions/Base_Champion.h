@@ -43,14 +43,14 @@ namespace LDC::champions {
         virtual int get_spell_lvl_e();
         virtual int get_spell_lvl_r();
 
-        void set_health(double& new_hp){m_missing_health = *m_stats_current->hp() - new_hp;};
-        void set_health_percent(double& new_hp_p){m_missing_health = *m_stats_current->hp() + new_hp_p;};
+        void set_health(double new_hp){m_missing_health = *m_stats_current->hp() - new_hp;};
+        void set_health_percent(double new_hp_p){m_missing_health = *m_stats_current->hp() * (1 - new_hp_p/ 100.0);};
         double get_max_health(){return *m_stats_current->hp();};
         double get_mis_health() const{return m_missing_health;};
         double get_cur_health(){return (*m_stats_current->hp() - m_missing_health);};
 
-        void set_mana(double& new_hp){m_missing_mana = *m_stats_current->hp() - new_hp;};
-        void set_mana_percent(double& new_hp_p){m_missing_mana = *m_stats_current->hp() + new_hp_p;};
+        void set_mana(double new_mana){ m_missing_mana = *m_stats_current->hp() - new_mana;};
+        void set_mana_percent(double new_mana_p){ m_missing_mana = *m_stats_current->hp() * (1 - new_mana_p / 100.0);};
         //allows you to get mana if value is negative
         bool use_mana(double mana_to_use);
         double get_max_mana(){return *m_stats_current->hp();};

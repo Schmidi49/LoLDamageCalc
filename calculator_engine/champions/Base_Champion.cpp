@@ -283,7 +283,7 @@ namespace LDC::champions {
 
     bool Base_Champion::use_mana(double mana_to_use) {
         if(!m_uses_mana){
-            std::cerr << "manaless champion can not consume mana" << std::endl;
+            std::cout << "manaless champion can not consume mana" << std::endl;
             return false;
         }
         if(mana_to_use > (*m_stats_current->mana() - m_missing_mana)){

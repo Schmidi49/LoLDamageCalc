@@ -2,7 +2,7 @@
   "stats":
   {
     "hp": {
-      "base": 560,
+      "base": 10560,
       "growth": 99
     },
     "mana": {

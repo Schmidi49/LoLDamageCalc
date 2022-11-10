@@ -288,6 +288,11 @@ namespace LDC::champions{
 
     void Attacker_Jinx::execute_auto_attack(const bool &crit, const bool &enhanced, const int &instance) {
         if(m_q_stance){
+            if(!use_mana(m_advanced_aa_cost)){
+                std::cerr << "not enough mana to use advanced auto attack" << std::endl;
+                return;
+            }
+
             Damage dmg(*m_stats_current->ad() * m_advanced_aa_ad_modify);
             dmg.type = DamageType::physical;
             dmg.tag = DamageTag::basic;
@@ -405,6 +410,10 @@ namespace LDC::champions{
     void Attacker_Jinx::execute_spell_r(const bool &crit, const bool &enhanced, const int &instance) {
         if(get_spell_lvl_r() == 0){
             std::cerr << "attacker_jinx_r is not leveled" << std::endl;
+            return;
+        }
+        if(!use_mana(m_jinx_spell_r->get_spell_cost())){
+            std::cerr << "not enough mana to use attacker_jinx_r" << std::endl;
             return;
         }
 

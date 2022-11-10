@@ -43,6 +43,9 @@ int main(int argc, char* argv[]){
     ess.attacker.passive.connect([&](const bool &crit, const bool &enhanced, const int &instance){
         std::cout << "as: " << *jinx.get_ptr_current_stats()->as() << std::endl;
     });
+    ess.defender.death.connect([](){
+        std::cout << "death" << std::endl;
+    });
 
     std::cout << "initial as: " << *jinx.get_ptr_current_stats()->as() << std::endl;
     std::cout << "Doing attacks: " << std::endl;
@@ -61,11 +64,19 @@ int main(int argc, char* argv[]){
     ess.attacker.auto_attack(true, false, 0);
     ess.attacker.passive(false, true, 0);
 
+    jinx.set_mana_percent(100);
     std::cout << "Doing spells: " << std::endl;
     ess.attacker.spell_w(false, false, 0);
     ess.attacker.spell_e(false, false, 0);
     ess.attacker.spell_r(false, false, 0);
+    jinx.set_mana_percent(100);
     ess.attacker.spell_r(false, false, 50);
     ess.attacker.spell_r(false, false, 100);
-
+    jinx.set_mana_percent(200);
+    d.set_health_percent(50.0);
+    ess.attacker.spell_r(false, false, 0);
+    d.set_health_percent(25.0);
+    ess.attacker.spell_r(false, false, 0);
+    d.set_health_percent(50.0);
+    ess.attacker.spell_r(false, false, 0);
 }

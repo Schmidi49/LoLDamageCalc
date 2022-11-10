@@ -20,11 +20,14 @@ namespace LDC::champions {
         virtual void set_Attacker(Attacker_Champion* attacker);
 
     protected:
+        double slot_res_dmg_mod(LDC::Damage& dmg);
         virtual void slot_take_damage(const LDC::Damage& dmg);
 
     protected:
         Attacker_Champion* m_Attacker{nullptr};
         volatile bool m_Attacker_set{false};
+
+        bool m_is_dead{false};
     };
 }
 
