@@ -69,7 +69,7 @@ namespace LDC::champions {
         std::function<void(const bool &crit, const bool &enhanced, const int &instance)> func_spell_r;
 
     private:
-        void read_champion_base_stats();
+        bool read_champion_base_stats();
 
     protected:
         static bool level_check(const int& champ_lvl, const int&q_lvl, const int&w_lvl, const int&e_lvl, const int&r_lvl);
@@ -81,7 +81,7 @@ namespace LDC::champions {
         nlohmann::json m_champion_data;
         std::vector<boost::signals2::connection> m_connections;
 
-        bool m_read_json_good{false};
+        bool m_setup_incomplete{false};
 
         Stats<ChampionBaseStat>* m_stats_base{new Stats<ChampionBaseStat>};
         Stats<double>* m_stats_bonus_flat{new Stats<double>};
