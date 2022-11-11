@@ -355,6 +355,7 @@ namespace LDC::champions{
             std::cerr << "illegal instance " << instance << " for passive selected" << std::endl;
             return;
         }
+
         //reset old bonus
         m_passive_cur_as = -m_passive_cur_as;
         m_passive_cur_ms = 1.0 / m_passive_cur_ms;
@@ -364,14 +365,24 @@ namespace LDC::champions{
         //save new bonus
         //use passive at max when not enhanced
         if(!enhanced){
+            if(m_passive_cur_as == 0.0){
+                add_attackspeed_cap_disable();
+            }
             m_passive_cur_as = m_passive_raw_as;
-            m_passive_cur_ms = m_passive_raw_ms;
+            m_passive_cur_ms = 1.0 + m_passive_raw_ms;
         }
         //use passive at a certain percentage
         else {
             //save new bonus
-            m_passive_cur_as = m_passive_raw_as * instance / 100.0;
-            m_passive_cur_ms = m_passive_raw_ms * instance / 100.0;
+            if(m_passive_cur_as != 0.0 && instance == 0){
+                remove_attackspeed_cap_disable();
+                m_passive_cur_as = 0.0;
+                m_passive_cur_ms = 1.0;
+            }
+            else {
+                m_passive_cur_as = m_passive_raw_as * instance / 100.0;
+                m_passive_cur_ms = 1.0 * (m_passive_raw_ms * instance / 100.0);
+            }
         }
         //set new bonus
         m_stats_bonus_flat->add("as", m_passive_cur_as);
