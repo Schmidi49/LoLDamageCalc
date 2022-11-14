@@ -179,7 +179,6 @@ namespace LDC::champions {
     }
 
     bool Base_Champion::read_champion_base_stats() {
-        //TODO cleanup type check (no need to check if number_int && number:float)
         const std::string jsonFile = std::string(REPO_DIR) + std::string(json_dir) + m_name + ".json";
         std::ifstream f(jsonFile);
         if(f.good()){
@@ -190,13 +189,13 @@ namespace LDC::champions {
                 const auto& newBase = m_champion_data["stats"][it.key()]["base"];
                 const auto& newGrowth = m_champion_data["stats"][it.key()]["growth"];
 
-                if (newBase.is_null() || (!newBase.is_number_unsigned() && !newBase.is_number_float())) {
+                if (newBase.is_null() || (!newBase.is_number())) {
                     std::cerr << "Data From json invalid: [\"stats\"][" << it.key() << "][\"base\"]" << std::endl;
                     return false;
                 }
                 else
                     tempStat->set_base(newBase);
-                if (newGrowth.is_null() || (!newGrowth.is_number_unsigned() && !newGrowth.is_number_float())) {
+                if (newGrowth.is_null() || (!newGrowth.is_number())) {
                     std::cerr << "Data From json invalid: [\"stats\"][" << it.key() << "][\"growth\"]" << std::endl;
                     return false;
                 }
@@ -207,7 +206,7 @@ namespace LDC::champions {
                     const auto& asRatio = m_champion_data["stats"]["as"]["ratio"];
                     if (asRatio.is_null())
                         m_as_ratio = tempStat->get_base();
-                    else if (!asRatio.is_number_unsigned() && !asRatio.is_number_float()) {
+                    else if (!asRatio.is_number()) {
                         std::cerr << "Data From json invalid: [\"stats\"][\"as\"][\"growth\"]" << std::endl;
                         return false;
                     }

@@ -168,10 +168,9 @@ namespace LDC::champions {
 
     bool Generic_Damage_Spell::read_stat(const nlohmann::json &setup_json, const std::string &attribute,
                                         std::vector<double> *raw_data) {
-        //TODO cleanup type check (no need to check if number_int && number:float)
         if(!setup_json.contains(attribute))
             std::cout << "not specified: " << attribute << std::endl;
-        else if(setup_json[attribute].is_number_integer() || setup_json[attribute].is_number_float()) {
+        else if(setup_json[attribute].is_number()) {
             raw_data->clear();
             raw_data->push_back(setup_json[attribute]);
         }
@@ -182,7 +181,7 @@ namespace LDC::champions {
             }
             else if(setup_json[attribute].size() == 1) {
                 raw_data->clear();
-                if (setup_json[attribute].is_number_integer() || setup_json[attribute].is_number_float() )
+                if (setup_json[attribute].is_number())
                     raw_data->push_back(setup_json[attribute][0]);
                 else {
                     std::cerr << "single entry of " << attribute << " is not an integer" << std::endl;
@@ -192,7 +191,7 @@ namespace LDC::champions {
             else if(setup_json[attribute].size() == m_max_lvl) {
                 raw_data->clear();
                 for (int i = 0; i < m_max_lvl; i++) {
-                    if (setup_json[attribute][i].is_number_integer() || setup_json[attribute][i].is_number_float()) {
+                    if (setup_json[attribute][i].is_number()) {
                         raw_data->push_back(setup_json[attribute][i]);
                     } else {
                         std::cerr << "entry " << i << " of " << attribute << " is not an integer" << std::endl;

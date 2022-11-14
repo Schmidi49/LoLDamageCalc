@@ -26,7 +26,6 @@ namespace LDC {
         defaultDmg,
         raw,
         proc,
-        //TODO tbd if reactive damage is needed
         reactive,
         basic,
         spell,

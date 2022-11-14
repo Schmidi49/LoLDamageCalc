@@ -55,7 +55,7 @@ namespace LDC::champions{
         auto end(){return m_stats.end();};
 
     private:
-        static constexpr int CURRENTLY_IMPLEMENTED_STATS = 6;
+        static constexpr int CURRENTLY_IMPLEMENTED_STATS = 8;
         std::map<std::string, T*> m_stats{
                 {"hp", new T()},
                 {"mana", new T()},
