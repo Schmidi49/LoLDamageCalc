@@ -18,11 +18,15 @@ namespace LDC::champions {
         Attacker_Champion(engine_signal_system* ess, const std::string &name, const int &lvl = 1);
         ~Attacker_Champion();
 
+        void slot_apply_slow(const double &slow);
+
         virtual void set_Defender(Defender_Champion* defender);
 
     protected:
         Defender_Champion* m_Defender{nullptr};
         volatile bool m_Defender_set{false};
+
+        double m_cur_slow{0.0};
     };
 }
 
