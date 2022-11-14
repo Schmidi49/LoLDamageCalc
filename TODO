@@ -12,7 +12,7 @@
 [x] add Damage reduction (mind Amumu + Wardens mail interactions)
 [x] Finish Jinx-Attacker
 [x] add armor/magic resist to dmg_mod for defenders
-[o] include Flag for incomplete setup (+ get methode for that, maybe block some functions when its not set)
+[x] include Flag for incomplete setup (+ get methode for that, maybe block some functions when it's not set)
 [o] Finish Jinx Defender
 [o] Add Rammus (as example Defender Champion)
 [o] add champion factory

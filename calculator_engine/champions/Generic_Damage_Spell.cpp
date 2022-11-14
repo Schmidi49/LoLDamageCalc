@@ -17,9 +17,7 @@ namespace LDC::champions {
         m_defender = defender;
         m_ess = ess;
 
-        if(!read_json(setup_json)){
-            throw std::runtime_error("reading json data failed critically!");
-        }
+        m_setup_incomplete = !read_json(setup_json);
 
         set_lvl(0);
     }
@@ -30,6 +28,10 @@ namespace LDC::champions {
     }
 
     bool Generic_Damage_Spell::set_lvl(const int &lvl) {
+        if(m_setup_incomplete){
+            std::cerr << "Spell is not set up correctly";
+            return false;
+        }
         if(lvl == 0){
             m_cur_lvl = 0;
 
@@ -207,6 +209,10 @@ namespace LDC::champions {
     }
 
     Damage Generic_Damage_Spell::calculate_damage(const bool &crit, const bool &enhanced, const int &instance) {
+        if(m_setup_incomplete){
+            std::cerr << "Spell is not set up correctly";
+            return {0};
+        }
         Damage dmg{m_scalings.base_dmg()->cur};
         const auto& stats_attacker = m_attacker->get_ptr_current_stats();
         dmg += m_scalings.ad()->cur * *stats_attacker->ad();
@@ -235,6 +241,10 @@ namespace LDC::champions {
     }
 
     bool Generic_Damage_Spell::execute_spell(const bool &crit, const bool &enhanced, const int &instance) {
+        if(m_setup_incomplete){
+            std::cerr << "Spell is not set up correctly";
+            return false;
+        }
         if(m_cur_lvl == 0){
             std::cerr << m_spell_name << " is not leveled" << std::endl;
             return false;

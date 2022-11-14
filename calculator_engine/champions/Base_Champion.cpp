@@ -260,6 +260,7 @@ namespace LDC::champions {
             std::cerr << "json File:\"" << jsonFile << "\" bad" << std::endl;
             return false;
         }
+        return true;
     }
 
     bool Base_Champion::set_spell_lvl_q(const int &lvl) {
