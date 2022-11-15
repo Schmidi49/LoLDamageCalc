@@ -32,9 +32,10 @@ namespace LDC::champions {
 
         if(ess)
             m_ess = ess;
-        else
+        else {
             m_setup_incomplete = true;
             std::cerr << "Pointer towards engine signal system is invalid" << std::endl;
+        }
 
         func_auto_attack = [](const bool &crit, const bool &enhanced, const int &instance){
             std::cout << "Auto attack: " << (crit ? "did crit" : "did not crit") << std::endl;

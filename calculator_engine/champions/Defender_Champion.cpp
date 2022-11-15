@@ -117,6 +117,7 @@ namespace LDC::champions {
             if (m_missing_health > *m_stats_current->hp()) {
                 m_missing_health = *m_stats_current->hp();
                 m_ess->defender.death();
+                m_is_dead = true;
             }
         }
     }

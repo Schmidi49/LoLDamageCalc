@@ -568,11 +568,11 @@ namespace LDC::champions{
         else if(m_champion_data["spell_w"]["slow"].is_array()){
             if(m_champion_data["spell_w"]["slow"].size() == m_w_max_lvl) {
                 for (int i = 0; i < m_w_max_lvl; i++) {
-                    if (m_champion_data["spell_q"]["slow"][i].is_number()) {
-                        m_spell_w_raw_slows[i] = m_champion_data["spell_q"]["slow"][i];
+                    if (m_champion_data["spell_w"]["slow"][i].is_number()) {
+                        m_spell_w_raw_slows[i] = m_champion_data["spell_w"]["slow"][i];
                     } else {
                         m_setup_incomplete = true;
-                        std::cerr << "entry " << i << " of spell_w slow is not an integer" << std::endl;
+                        std::cerr << "entry " << i << " of spell_w slow is not a number" << std::endl;
                     }
                 }
             }
