@@ -117,7 +117,7 @@ namespace LDC::champions{
 
                 if(!m_champion_data["spell_q"].contains("bonus_as_stacks")) {
                     m_setup_incomplete = true;
-                    std::cerr << "spell_q bonus_as_stacks not specified, using default of 0 for each level" << std::endl;
+                    std::cerr << "spell_q bonus_as_stacks not specified" << std::endl;
                 }
                 else if(m_champion_data["spell_q"]["bonus_as_stacks"].is_array()){
                     if(m_champion_data["spell_q"]["bonus_as_stacks"].size() == m_q_max_level) {
@@ -236,6 +236,10 @@ namespace LDC::champions{
     }
 
     bool Attacker_Jinx::set_spell_lvl_q(const int &lvl) {
+        if(m_setup_incomplete){
+            std::cerr << "champion not set up correctly" << std::endl;
+            return false;
+        }
         if (lvl < 0 || lvl > 5){
             std::cerr << "illegal level: " << lvl << std::endl;
             return false;
@@ -280,6 +284,10 @@ namespace LDC::champions{
     }
 
     bool Attacker_Jinx::set_spell_lvl_w(const int &lvl) {
+        if(m_setup_incomplete){
+            std::cerr << "champion not set up correctly" << std::endl;
+            return false;
+        }
         if(!level_check(m_champ_lvl,
                         m_q_lvl,
                         lvl,
@@ -293,6 +301,10 @@ namespace LDC::champions{
     }
 
     bool Attacker_Jinx::set_spell_lvl_e(const int &lvl) {
+        if(m_setup_incomplete){
+            std::cerr << "champion not set up correctly" << std::endl;
+            return false;
+        }
         if(!level_check(m_champ_lvl,
                         m_q_lvl,
                         get_spell_lvl_w(),
@@ -306,6 +318,10 @@ namespace LDC::champions{
     }
 
     bool Attacker_Jinx::set_spell_lvl_r(const int &lvl) {
+        if(m_setup_incomplete){
+            std::cerr << "champion not set up correctly" << std::endl;
+            return false;
+        }
         if(!level_check(m_champ_lvl,
                         m_q_lvl,
                         get_spell_lvl_w(),
@@ -319,6 +335,14 @@ namespace LDC::champions{
     }
 
     void Attacker_Jinx::execute_auto_attack(const bool &crit, const bool &enhanced, const int &instance) {
+        if(m_setup_incomplete){
+            std::cerr << "champion not set up correctly" << std::endl;
+            return;
+        }
+        if(!m_Defender_set){
+            std::cerr << "no defender specified" << std::endl;
+            return;
+        }
         if(m_q_stance){
             if(!use_mana(m_advanced_aa_cost)){
                 std::cerr << "not enough mana to use advanced auto attack" << std::endl;
@@ -382,6 +406,14 @@ namespace LDC::champions{
     }
 
     void Attacker_Jinx::execute_passive(const bool &crit, const bool &enhanced, const int &instance) {
+        if(m_setup_incomplete){
+            std::cerr << "champion not set up correctly" << std::endl;
+            return;
+        }
+        if(!m_Defender_set){
+            std::cerr << "no defender specified" << std::endl;
+            return;
+        }
         //TODO check stats of jinx passive ingame
         //illegal input
         if(enhanced && (instance < 0 || instance > 100)){
@@ -424,6 +456,14 @@ namespace LDC::champions{
     }
 
     void Attacker_Jinx::execute_spell_q(const bool &crit, const bool &enhanced, const int &instance) {
+        if(m_setup_incomplete){
+            std::cerr << "champion not set up correctly" << std::endl;
+            return;
+        }
+        if(!m_Defender_set){
+            std::cerr << "no defender specified" << std::endl;
+            return;
+        }
         if(m_q_lvl > 0) {
             //reset as modifiers from q stances
             if(m_q_stance){
@@ -452,6 +492,14 @@ namespace LDC::champions{
     }
 
     void Attacker_Jinx::execute_spell_r(const bool &crit, const bool &enhanced, const int &instance) {
+        if(m_setup_incomplete){
+            std::cerr << "champion not set up correctly" << std::endl;
+            return;
+        }
+        if(!m_Defender_set){
+            std::cerr << "no defender specified" << std::endl;
+            return;
+        }
         if(get_spell_lvl_r() == 0){
             std::cerr << "attacker_jinx_r is not leveled" << std::endl;
             return;
@@ -504,5 +552,172 @@ namespace LDC::champions{
             m_Defender_set = false;
             std::cerr << "Pointer towards defender is invalid" << std::endl;
         }
+    }
+
+    Defender_Jinx::Defender_Jinx(engine_signal_system *ess, const std::string &name, const int &lvl) :
+    Defender_Champion(ess, name, lvl) {
+        m_connections.push_back(m_ess->attacker.get_slows.connect(
+                std::bind(&Defender_Jinx::slot_spell_w_slow, this)));
+
+
+        //---------------- read w slow ----------------
+        if(!m_champion_data["spell_w"].contains("slow")) {
+            m_setup_incomplete = true;
+            std::cerr << "spell_q slow not specified" << std::endl;
+        }
+        else if(m_champion_data["spell_w"]["slow"].is_array()){
+            if(m_champion_data["spell_w"]["slow"].size() == m_w_max_lvl) {
+                for (int i = 0; i < m_w_max_lvl; i++) {
+                    if (m_champion_data["spell_q"]["slow"][i].is_number()) {
+                        m_spell_w_raw_slows[i] = m_champion_data["spell_q"]["slow"][i];
+                    } else {
+                        m_setup_incomplete = true;
+                        std::cerr << "entry " << i << " of spell_w slow is not an integer" << std::endl;
+                    }
+                }
+            }
+            else {
+                m_setup_incomplete = true;
+                std::cerr << "spell_w slow has the wrong size" << std::endl;
+            }
+        }
+        else{
+            m_setup_incomplete = true;
+            std::cerr << "spell_w slow is not an array" << std::endl;
+        }
+
+        //---------------- set functions ----------------
+        func_auto_attack = [&](const bool &crit, const bool &enhanced, const int &instance){
+            std::cout << "defender_jinx_auto_attack has no own effect" << std::endl;
+        };
+
+        func_passive = [&](const bool &crit, const bool &enhanced, const int &instance){
+            std::cout << "defender_jinx_passive has no own effect" << std::endl;
+        };
+
+        func_spell_q = [&](const bool &crit, const bool &enhanced, const int &instance){
+            std::cout << "defender_jinx_q has no own effect" << std::endl;
+        };
+
+        func_spell_w = [&](const bool &crit, const bool &enhanced, const int &instance){
+            execute_spell_w(crit, enhanced,instance);
+        };
+
+        func_spell_e = [&](const bool &crit, const bool &enhanced, const int &instance){
+            execute_spell_e(crit, enhanced,instance);
+        };
+
+        func_spell_r = [&](const bool &crit, const bool &enhanced, const int &instance){
+            std::cout << "defender_jinx_q has no own effect" << std::endl;
+        };
+
+
+
+    }
+
+    bool Defender_Jinx::set_spell_lvl_q(const int &lvl) {
+        if (lvl < 0 || lvl > 5){
+            std::cerr << "illegal level: " << lvl << std::endl;
+            return false;
+        }
+        if(!level_check(m_champ_lvl,
+                        lvl,
+                        get_spell_lvl_w(),
+                        get_spell_lvl_e(),
+                        get_spell_lvl_r())){
+            std::cerr << "selected champion level is not compatible with the current spell levels" << std::endl;
+            return false;
+        }
+
+        m_q_lvl = lvl;
+        return true;
+    }
+
+    bool Defender_Jinx::set_spell_lvl_w(const int &lvl) {
+        if(!level_check(m_champ_lvl,
+                        m_q_lvl,
+                        lvl,
+                        get_spell_lvl_e(),
+                        get_spell_lvl_r())){
+            std::cerr << "selected champion level is not compatible with the current spell levels" << std::endl;
+            return false;
+        }
+
+        m_w_lvl = lvl;
+        return true;
+    }
+
+    bool Defender_Jinx::set_spell_lvl_e(const int &lvl) {
+        if(!level_check(m_champ_lvl,
+                        m_q_lvl,
+                        get_spell_lvl_w(),
+                        lvl,
+                        get_spell_lvl_r())){
+            std::cerr << "selected champion level is not compatible with the current spell levels" << std::endl;
+            return false;
+        }
+
+        m_e_lvl = lvl;
+        return true;
+    }
+
+    bool Defender_Jinx::set_spell_lvl_r(const int &lvl) {
+        if(!level_check(m_champ_lvl,
+                        m_q_lvl,
+                        get_spell_lvl_w(),
+                        get_spell_lvl_e(),
+                        lvl)){
+            std::cerr << "selected champion level is not compatible with the current spell levels" << std::endl;
+            return false;
+        }
+
+        m_r_lvl = lvl;
+        return true;
+    }
+
+    double Defender_Jinx::slot_spell_w_slow() {
+        if(m_setup_incomplete){
+            std::cerr << "champion not set up correctly" << std::endl;
+            return 0.0;
+        }
+        if(!m_Attacker_set){
+            std::cerr << "no defender specified" << std::endl;
+            return 0.0;
+        }
+        return m_spell_w_cur_slow;
+    }
+
+    void Defender_Jinx::execute_spell_w(const bool &crit, const bool &enhanced, const int &instance) {
+        if(m_setup_incomplete){
+            std::cerr << "champion not set up correctly" << std::endl;
+            return;
+        }
+        if(!m_Attacker_set){
+            std::cerr << "no defender specified" << std::endl;
+            return;
+        }
+        if(enhanced){
+            m_spell_w_cur_slow = 0.0;
+        }
+        else if(m_w_lvl > 0 && m_w_lvl <= m_w_max_lvl){
+            m_spell_w_cur_slow = m_spell_w_raw_slows[m_w_lvl - 1];
+        }
+        else{
+            std::cerr << "internal error: defender_jinx m_w_lvl is not in the legal range!" << std::endl;
+            return;
+        }
+        m_ess->defender.apply_slow();
+    }
+
+    void Defender_Jinx::execute_spell_e(const bool &crit, const bool &enhanced, const int &instance) {
+        if(m_setup_incomplete){
+            std::cerr << "champion not set up correctly" << std::endl;
+            return;
+        }
+        if(!m_Attacker_set){
+            std::cerr << "no defender specified" << std::endl;
+            return;
+        }
+        m_ess->defender.apply_hard_cc();
     }
 }
