@@ -73,7 +73,10 @@ namespace LDC::champions {
 
     protected:
         static bool level_check(const int& champ_lvl, const int&q_lvl, const int&w_lvl, const int&e_lvl, const int&r_lvl);
-
+        bool read_single_int(const nlohmann::json_pointer<std::string> &jsonPointer, int &read_value);
+        bool read_single_float(const nlohmann::json_pointer<std::string> &jsonPointer, double &read_value);
+        bool read_array_int(const nlohmann::json_pointer<std::string> &jsonPointer, int read_array[], const size_t size);
+        bool read_array_float(const nlohmann::json_pointer<std::string> &jsonPointer, double read_array[], const size_t size);
 
     protected:
         std::string m_name;

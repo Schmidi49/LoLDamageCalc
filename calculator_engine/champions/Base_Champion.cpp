@@ -336,4 +336,18 @@ namespace LDC::champions {
             m_attack_speed_cap_disables = 0;
         }
     }
+
+    bool Base_Champion::read_single_int(const nlohmann::json_pointer<std::string>& jsonPointer, int &read_value) {
+        if(m_champion_data[jsonPointer].is_null()){
+            std::cerr << "no data at " << jsonPointer.to_string() << std::endl;
+            return false;
+        }
+        if(!m_champion_data[jsonPointer].is_number_integer()){
+            std::cerr << "data at " << jsonPointer.to_string() << " is not an integer" << std::endl;
+            return false;
+        }
+
+        read_value = m_champion_data[jsonPointer];
+        return true;
+    }
 }
