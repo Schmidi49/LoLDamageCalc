@@ -98,7 +98,7 @@ namespace LDC::champions {
         }
         else {
             m_Attacker_set = false;
-            throw std::invalid_argument("Pointer towards attacker is invalid");
+            std::cout << "Pointer towards attacker is invalid" << std::endl;
         }
 
     }
