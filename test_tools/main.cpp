@@ -27,7 +27,7 @@ int main(int argc, char* argv[]){
     std::cout << "set r lvl: "<< std::endl;
     jinx.set_spell_lvl_r(1);
 
-    LDC::champions::Defender_Jinx d(&ess, "Jinx");
+    LDC::champions::Defender_Champion d(&ess, "GenericChamp");
     std::cout << "Defender created" << std::endl;
 
     jinx.set_Defender(&d);

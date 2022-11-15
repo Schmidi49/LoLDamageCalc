@@ -16,135 +16,57 @@ namespace LDC::champions{
             std::cout << "reading Jinx champion specifics" << std::endl;
 
             //---------------- read passive ----------------
-            if (!m_champion_data.contains("passive")) {
+            if(!read_single_float("/passive/as", m_passive_raw_as) || !read_single_float("/passive/ms", m_passive_raw_ms)){
                 m_setup_incomplete = true;
-                std::cerr << "no \"passive\" specified" << std::endl;
-            }
-            else if (!m_champion_data["passive"].contains("as") || !m_champion_data["passive"].contains("ms")) {
-                m_setup_incomplete = true;
-                std::cerr << "\"passive\" has missing information" << std::endl;
-            } else {
-                if(m_champion_data["passive"]["as"].is_number()){
-                    m_passive_raw_as = m_champion_data["passive"]["as"];
-                }
-                else{
-                    m_setup_incomplete = true;
-                    std::cerr << "passive as is not a number" << std::endl;
-                }
-                if(m_champion_data["passive"]["ms"].is_number()){
-                    m_passive_raw_ms = m_champion_data["passive"]["ms"];
-                }
-                else{
-                    m_setup_incomplete = true;
-                    std::cerr << "passive ms is not a number" << std::endl;
-                }
+                std::cerr << "read passive failed" << std::endl;
             }
 
             //---------------- read spell q ----------------
             if (!m_champion_data.contains("spell_q")) {
                 m_setup_incomplete = true;
-                std::cerr << "no \"spell_q\" specified" << std::endl;
-            } else {
-                if(m_champion_data["spell_q"].contains("max_lvl")){
-                    if(m_champion_data["spell_q"]["max_lvl"].is_number_integer()) {
-                        if (m_q_max_level != m_champion_data["spell_q"]["max_lvl"]) {
-                            m_setup_incomplete = true;
-                            std::cerr << "spell_q can not be a other level than 5" << std::endl;
-                        }
-                    }
-                    else {
-                        m_setup_incomplete = true;
-                        std::cerr << "spell_q max_lvl is not a integer" << std::endl;
-                    }
-                }
-                else {
+                std::cerr << "no spell_q specified" << std::endl;
+            }
+            else {
+                int extracted_q_max_level;
+                if(!read_single_int("/spell_q/max_lvl", extracted_q_max_level)){
                     m_setup_incomplete = true;
-                    std::cerr << "spell_q max_lvl not specified" << std::endl;
+                    std::cerr << "read spell_q max_lvl failed" << std::endl;
+                }
+                else if (m_q_max_lvl != extracted_q_max_level) {
+                    m_setup_incomplete = true;
+                    std::cerr << "spell_q can not be a other level than 5" << std::endl;
                 }
 
-                if(m_champion_data["spell_q"].contains("cost")){
-                    if(m_champion_data["spell_q"]["cost"].is_number())
-                        m_advanced_aa_cost = m_champion_data["spell_q"]["cost"];
-                    else {
-                        m_setup_incomplete = true;
-                        std::cerr << "spell_q cost is not a number" << std::endl;
-                    }
-                }
-                else {
+                if(!read_single_float("/spell_q/cost", m_advanced_aa_cost)){
                     m_setup_incomplete = true;
-                    std::cerr << "spell_q cost not specified" << std::endl;
+                    std::cerr << "read spell_q cost failed" << std::endl;
                 }
-
-                if(m_champion_data["spell_q"].contains("cd")){
-                    if(m_champion_data["spell_q"]["cd"].is_number())
-                        m_q_cd = m_champion_data["spell_q"]["cd"];
-                    else {
-                        m_setup_incomplete = true;
-                        std::cerr << "spell_q cd is not a number" << std::endl;
-                    }
-                }
-                else {
+                if(!read_single_float("/spell_q/cd", m_q_cd)){
                     m_setup_incomplete = true;
-                    std::cerr << "spell_q cd not specified" << std::endl;
+                    std::cerr << "read spell_q cd failed" << std::endl;
                 }
-
-                if(m_champion_data["spell_q"].contains("ad_modify")){
-                    if(m_champion_data["spell_q"]["ad_modify"].is_number())
-                        m_advanced_aa_ad_modify = m_champion_data["spell_q"]["ad_modify"];
-                    else {
-                        m_setup_incomplete = true;
-                        std::cerr << "advanced_aa ad_modify is not a number" << std::endl;
-                    }
-                }
-                else {
+                if(!read_single_float("/spell_q/ad_modify", m_advanced_aa_ad_modify)){
                     m_setup_incomplete = true;
-                    std::cerr << "advanced_aa ad_modify not specified" << std::endl;
+                    std::cerr << "read spell_q ad_modify failed" << std::endl;
                 }
-
-                if(m_champion_data["spell_q"].contains("as_modify")){
-                    if(m_champion_data["spell_q"]["as_modify"].is_number())
-                        m_advanced_aa_as_bonus = m_champion_data["spell_q"]["as_modify"];
-                    else {
-                        m_setup_incomplete = true;
-                        std::cerr << "advanced_aa as_modify is not a number" << std::endl;
-                    }
-                }
-                else {
+                if(!read_single_float("/spell_q/ad_modify", m_advanced_aa_ad_modify)){
                     m_setup_incomplete = true;
-                    std::cerr << "advanced_aa as_modify not specified" << std::endl;
+                    std::cerr << "read spell_q ad_modify failed" << std::endl;
                 }
-
-
-                if(!m_champion_data["spell_q"].contains("bonus_as_stacks")) {
+                if(!read_single_float("/spell_q/as_modify", m_advanced_aa_as_bonus)){
                     m_setup_incomplete = true;
-                    std::cerr << "spell_q bonus_as_stacks not specified" << std::endl;
+                    std::cerr << "read spell_q as_modify failed" << std::endl;
                 }
-                else if(m_champion_data["spell_q"]["bonus_as_stacks"].is_array()){
-                    if(m_champion_data["spell_q"]["bonus_as_stacks"].size() == m_q_max_level) {
-                        for (int i = 0; i < m_q_max_level; i++) {
-                            if (m_champion_data["spell_q"]["bonus_as_stacks"][i].is_number()) {
-                                m_aa_raw_as_stacks[i] = m_champion_data["spell_q"]["bonus_as_stacks"][i];
-                            } else {
-                                m_setup_incomplete = true;
-                                std::cerr << "entry " << i << " of spell_q bonus_as_stacks is not an integer" << std::endl;
-                            }
-                        }
-                    }
-                    else {
-                        m_setup_incomplete = true;
-                        std::cerr << "spell_q bonus_as_stacks has the wrong size" << std::endl;
-                    }
-                }
-                else{
+                if(!read_array_float("/spell_q/bonus_as_stacks", m_aa_raw_as_stacks, m_q_max_lvl)){
                     m_setup_incomplete = true;
-                    std::cerr << "spell_q bonus_as_stacks is not an array" << std::endl;
+                    std::cerr << "read spell_q bonus_as_stacks failed" << std::endl;
                 }
             }
 
             //---------------- read spell w ----------------
             if (!m_champion_data.contains("spell_w")) {
                 m_setup_incomplete = true;
-                std::cerr << "no \"spell_w\" specified" << std::endl;
+                std::cerr << "no spell_w specified" << std::endl;
             } else {
                 delete m_jinx_spell_w;
                 m_jinx_spell_w = new Generic_Damage_Spell("attacker_jinx_w", m_champion_data["spell_w"], this,
@@ -183,26 +105,14 @@ namespace LDC::champions{
                                                           m_Defender, m_ess);
                 m_setup_incomplete |= m_jinx_spell_r->setup_incomplete();
 
-                if(!m_champion_data["spell_r"].contains("range")){
+                double raw_range[2];
+                if(!read_array_float("/spell_r/range", raw_range, 2)){
                     m_setup_incomplete = true;
-                    std::cerr << "did not find a range for jinx r, aborting" << std::endl;
-                }
-                else if(!m_champion_data["spell_r"]["range"].is_array()){
-                    m_setup_incomplete = true;
-                    std::cerr << "range is not a filed" << std::endl;
-                }
-                else if(m_champion_data["spell_r"]["range"].size() != 2){
-                    m_setup_incomplete = true;
-                    std::cerr << "field range has the wrong size" << std::endl;
-                }
-                else if(!m_champion_data["spell_r"]["range"][0].is_number() ||
-                        !m_champion_data["spell_r"]["range"][1].is_number()){
-                    m_setup_incomplete = true;
-                    std::cerr << " range has the wrong type" << std::endl;
+                    std::cerr << "read spell_r range failed" << std::endl;
                 }
                 else{
-                    m_r_range_min = m_champion_data["spell_r"]["range"][0];
-                    m_r_range_max = m_champion_data["spell_r"]["range"][1];
+                    m_r_range_min = raw_range[0];
+                    m_r_range_max = raw_range[1];
                 }
             }
 
@@ -560,30 +470,18 @@ namespace LDC::champions{
                 std::bind(&Defender_Jinx::slot_spell_w_slow, this)));
 
 
-        //---------------- read w slow ----------------
-        if(!m_champion_data["spell_w"].contains("slow")) {
+        //---------------- read spell stats ----------------
+        if(!read_array_float("/spell_w/slow", m_w_raw_slows, std::size(m_w_raw_slows))){
             m_setup_incomplete = true;
-            std::cerr << "spell_q slow not specified" << std::endl;
+            std::cerr << "read spell_w slow failed" << std::endl;
         }
-        else if(m_champion_data["spell_w"]["slow"].is_array()){
-            if(m_champion_data["spell_w"]["slow"].size() == m_w_max_lvl) {
-                for (int i = 0; i < m_w_max_lvl; i++) {
-                    if (m_champion_data["spell_w"]["slow"][i].is_number()) {
-                        m_spell_w_raw_slows[i] = m_champion_data["spell_w"]["slow"][i];
-                    } else {
-                        m_setup_incomplete = true;
-                        std::cerr << "entry " << i << " of spell_w slow is not a number" << std::endl;
-                    }
-                }
-            }
-            else {
-                m_setup_incomplete = true;
-                std::cerr << "spell_w slow has the wrong size" << std::endl;
-            }
-        }
-        else{
+        if(!read_single_float("/spell_w/cost", m_w_cost)){
             m_setup_incomplete = true;
-            std::cerr << "spell_w slow is not an array" << std::endl;
+            std::cerr << "read spell_w cost failed" << std::endl;
+        }
+        if(!read_single_float("/spell_e/cost", m_e_cost)){
+            m_setup_incomplete = true;
+            std::cerr << "read spell_e cost failed" << std::endl;
         }
 
         //---------------- set functions ----------------
@@ -608,11 +506,8 @@ namespace LDC::champions{
         };
 
         func_spell_r = [&](const bool &crit, const bool &enhanced, const int &instance){
-            std::cout << "defender_jinx_q has no own effect" << std::endl;
+            std::cout << "defender_jinx_r has no own effect" << std::endl;
         };
-
-
-
     }
 
     bool Defender_Jinx::set_spell_lvl_q(const int &lvl) {
@@ -684,7 +579,7 @@ namespace LDC::champions{
             std::cerr << "no defender specified" << std::endl;
             return 0.0;
         }
-        return m_spell_w_cur_slow;
+        return m_w_cur_slow;
     }
 
     void Defender_Jinx::execute_spell_w(const bool &crit, const bool &enhanced, const int &instance) {
@@ -696,11 +591,20 @@ namespace LDC::champions{
             std::cerr << "no defender specified" << std::endl;
             return;
         }
+        if(get_spell_lvl_w() == 0){
+            std::cerr << "attacker_jinx_w is not leveled" << std::endl;
+            return;
+        }
+        if(!use_mana(m_w_cost)){
+            std::cerr << "not enough mana to use attacker_jinx_w" << std::endl;
+            return;
+        }
+
         if(enhanced){
-            m_spell_w_cur_slow = 0.0;
+            m_w_cur_slow = 0.0;
         }
         else if(m_w_lvl > 0 && m_w_lvl <= m_w_max_lvl){
-            m_spell_w_cur_slow = m_spell_w_raw_slows[m_w_lvl - 1];
+            m_w_cur_slow = m_w_raw_slows[m_w_lvl - 1];
         }
         else{
             std::cerr << "internal error: defender_jinx m_w_lvl is not in the legal range!" << std::endl;
@@ -716,6 +620,14 @@ namespace LDC::champions{
         }
         if(!m_Attacker_set){
             std::cerr << "no defender specified" << std::endl;
+            return;
+        }
+        if(get_spell_lvl_e() == 0){
+            std::cerr << "attacker_jinx_e is not leveled" << std::endl;
+            return;
+        }
+        if(!use_mana(m_e_cost)){
+            std::cerr << "not enough mana to use attacker_jinx_e" << std::endl;
             return;
         }
         m_ess->defender.apply_hard_cc();

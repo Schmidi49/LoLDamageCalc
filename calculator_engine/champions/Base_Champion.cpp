@@ -37,30 +37,54 @@ namespace LDC::champions {
             std::cerr << "Pointer towards engine signal system is invalid" << std::endl;
         }
 
-        func_auto_attack = [](const bool &crit, const bool &enhanced, const int &instance){
+        func_auto_attack = [&](const bool &crit, const bool &enhanced, const int &instance){
+            if(m_setup_incomplete){
+                std::cerr << "champion not set up correctly" << std::endl;
+                return;
+            }
             std::cout << "Auto attack: " << (crit ? "did crit" : "did not crit") << std::endl;
         };
-        func_passive = [](const bool &crit, const bool &enhanced, const int &instance){
+        func_passive = [&](const bool &crit, const bool &enhanced, const int &instance){
+            if(m_setup_incomplete){
+                std::cerr << "champion not set up correctly" << std::endl;
+                return;
+            }
             std::cout << "Passive: " << (crit ? "did crit, " : "did not crit, ") ;
             std::cout << (enhanced ? "is enhanced, " : "is not enhanced, ");
             std::cout << "Instance: " << instance << std::endl;
         };
-        func_spell_q = [](const bool &crit, const bool &enhanced, const int &instance){
+        func_spell_q = [&](const bool &crit, const bool &enhanced, const int &instance){
+            if(m_setup_incomplete){
+                std::cerr << "champion not set up correctly" << std::endl;
+                return;
+            }
             std::cout << "Q: " << (crit ? "did crit, " : "did not crit, ") ;
             std::cout << (enhanced ? "is enhanced, " : "is not enhanced, ");
             std::cout << "Instance: " << instance << std::endl;
         };
-        func_spell_w = [](const bool &crit, const bool &enhanced, const int &instance){
+        func_spell_w = [&](const bool &crit, const bool &enhanced, const int &instance){
+            if(m_setup_incomplete){
+                std::cerr << "champion not set up correctly" << std::endl;
+                return;
+            }
             std::cout << "W: " << (crit ? "did crit, " : "did not crit, ") ;
             std::cout << (enhanced ? "is enhanced, " : "is not enhanced, ");
             std::cout << "Instance: " << instance << std::endl;
         };
-        func_spell_e = [](const bool &crit, const bool &enhanced, const int &instance){
+        func_spell_e = [&](const bool &crit, const bool &enhanced, const int &instance){
+            if(m_setup_incomplete){
+                std::cerr << "champion not set up correctly" << std::endl;
+                return;
+            }
             std::cout << "E: " << (crit ? "did crit, " : "did not crit, ") ;
             std::cout << (enhanced ? "is enhanced, " : "is not enhanced, ");
             std::cout << "Instance: " << instance << std::endl;
         };
-        func_spell_r = [](const bool &crit, const bool &enhanced, const int &instance){
+        func_spell_r = [&](const bool &crit, const bool &enhanced, const int &instance){
+            if(m_setup_incomplete){
+                std::cerr << "champion not set up correctly" << std::endl;
+                return;
+            }
             std::cout << "R: " << (crit ? "did crit, " : "did not crit, ") ;
             std::cout << (enhanced ? "is enhanced, " : "is not enhanced, ");
             std::cout << "Instance: " << instance << std::endl;
@@ -337,7 +361,8 @@ namespace LDC::champions {
         }
     }
 
-    bool Base_Champion::read_single_int(const nlohmann::json_pointer<std::string>& jsonPointer, int &read_value) {
+    bool Base_Champion::read_single_int(const std::string &jsonAdress, int &extracted_value) {
+        nlohmann::json_pointer<std::string> jsonPointer(jsonAdress);
         if(m_champion_data[jsonPointer].is_null()){
             std::cerr << "no data at " << jsonPointer.to_string() << std::endl;
             return false;
@@ -347,7 +372,72 @@ namespace LDC::champions {
             return false;
         }
 
-        read_value = m_champion_data[jsonPointer];
+        extracted_value = m_champion_data[jsonPointer];
+        return true;
+    }
+
+    bool Base_Champion::read_single_float(const std::string &jsonAdress, double &extracted_value) {
+        nlohmann::json_pointer<std::string> jsonPointer(jsonAdress);
+        if(m_champion_data[jsonPointer].is_null()){
+            std::cerr << "no data at " << jsonPointer.to_string() << std::endl;
+            return false;
+        }
+        if(!m_champion_data[jsonPointer].is_number()){
+            std::cerr << "data at " << jsonPointer.to_string() << " is not an integer" << std::endl;
+            return false;
+        }
+
+        extracted_value = m_champion_data[jsonPointer];
+        return true;
+    }
+
+    bool Base_Champion::read_array_int(const std::string &jsonAdress, int extracted_array[], const size_t size){
+        nlohmann::json_pointer<std::string> jsonPointer(jsonAdress);
+        if(m_champion_data[jsonPointer].is_null()){
+            std::cerr << "no data at " << jsonPointer.to_string() << std::endl;
+            return false;
+        }
+        if(!m_champion_data[jsonPointer].is_array()){
+            std::cerr << "data at " << jsonPointer.to_string() << " is not an array" << std::endl;
+            return false;
+        }
+        if(m_champion_data[jsonPointer].size() != size) {
+            std::cerr << "array at " << jsonPointer.to_string() << " has the wrong size" << std::endl;
+            return false;
+        }
+        for (int i = 0; i < size; i++) {
+            if (m_champion_data[jsonPointer][i].is_number_integer()) {
+                extracted_array[i] = m_champion_data[jsonPointer][i];
+            } else {
+                std::cerr << "entry " << i << " of " << jsonPointer.to_string() << " is not a integer" << std::endl;
+                return false;
+            }
+        }
+        return true;
+    }
+
+    bool Base_Champion::read_array_float(const std::string &jsonAdress, double extracted_array[], const size_t size){
+        nlohmann::json_pointer<std::string> jsonPointer(jsonAdress);
+        if(m_champion_data[jsonPointer].is_null()){
+            std::cerr << "no data at " << jsonPointer.to_string() << std::endl;
+            return false;
+        }
+        if(!m_champion_data[jsonPointer].is_array()){
+            std::cerr << "data at " << jsonPointer.to_string() << " is not an array" << std::endl;
+            return false;
+        }
+        if(m_champion_data[jsonPointer].size() != size) {
+            std::cerr << "array at " << jsonPointer.to_string() << " has the wrong size" << std::endl;
+            return false;
+        }
+        for (int i = 0; i < size; i++) {
+            if (m_champion_data[jsonPointer][i].is_number()) {
+                extracted_array[i] = m_champion_data[jsonPointer][i];
+            } else {
+                std::cerr << "entry " << i << " of " << jsonPointer.to_string() << " is not a number" << std::endl;
+                return false;
+            }
+        }
         return true;
     }
 }

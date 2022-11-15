@@ -46,16 +46,16 @@ namespace LDC::champions{
         double m_passive_cur_as{0.0};
         double m_passive_cur_ms{0.0};
 
+        const static int m_q_max_lvl{5};
+        double m_q_cd{0.0};
+        bool m_q_stance{false};
+        int m_q_lvl{0};
+
         double m_advanced_aa_cost{0.0};
         double m_advanced_aa_ad_modify{1.0};
         double m_advanced_aa_as_bonus{0.0};
         int m_aa_cur_as_stacks{0};
-        double m_aa_raw_as_stacks[5]{0.0,0.0,0.0,0.0,0.0};
-
-        const int m_q_max_level{5};
-        double m_q_cd{0.0};
-        bool m_q_stance{false};
-        int m_q_lvl{0};
+        double m_aa_raw_as_stacks[m_q_max_lvl]{0};
 
         double m_r_range_max{100.0};
         double m_r_range_min{10.0};
@@ -93,10 +93,13 @@ namespace LDC::champions{
         int m_e_lvl{0};
         int m_r_lvl{0};
 
-        const int m_w_max_lvl{5};
+        const static int m_w_max_lvl{5};
 
-        double m_spell_w_cur_slow={0.0};
-        double m_spell_w_raw_slows[5]{0.0, 0.0, 0.0, 0.0, 0.0};
+        double m_w_cur_slow={0.0};
+        double m_w_raw_slows[m_w_max_lvl]{0};
+
+        double m_w_cost{0.0};
+        double m_e_cost{0.0};
     };
 }
 
