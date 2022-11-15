@@ -14,8 +14,8 @@
 namespace LDC::champions{
     Attacker_Champion::Attacker_Champion(engine_signal_system* ess, const std::string &name, const int &lvl) :
         Base_Champion(ess, name, lvl){
-        m_connections.push_back(m_ess->attacker.deal_damage.connect(
-                std::bind(&Attacker_Champion::slot_apply_slow, this, std::placeholders::_1)));
+        m_connections.push_back(m_ess->defender.apply_slow.connect(
+                std::bind(&Attacker_Champion::slot_apply_slow, this)));
 
         m_connections.push_back(m_ess->attacker.auto_attack.connect([&](const bool &crit, const bool &enhanced, const int &instance){
             if(m_setup_incomplete){
@@ -100,14 +100,10 @@ namespace LDC::champions{
         }
     }
 
-    void Attacker_Champion::slot_apply_slow(const double &slow) {
-        if(slow >= 1.0 || slow < 0){
-            std::cerr << "slow i not in a valid range"<< std::endl;
-            return;
-        }
+    void Attacker_Champion::slot_apply_slow() {
         m_cur_slow = 1.0 / m_cur_slow;
         m_stats_bonus_percentage->mult("ms", m_cur_slow);
-        m_cur_slow = 1.0 - slow;
+        m_cur_slow = 1.0 - m_ess->attacker.get_slows();
         m_stats_bonus_percentage->mult("ms", m_cur_slow);
     }
 }

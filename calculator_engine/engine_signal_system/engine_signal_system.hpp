@@ -48,6 +48,29 @@ namespace LDC{
             }
         };
 
+        // combiner which returns the maximum value returned by all slots
+        template<typename T>
+        struct maximum_slow
+        {
+            typedef T result_type;
+
+            template<typename InputIterator>
+            T operator()(InputIterator first, InputIterator last) const
+            {
+                // If there are no slots to call, just return the
+                // default-constructed value
+                if(first == last ) return T();
+                T max_value = T();
+                while (first != last) {
+                    if (max_value < *first && *first >= 0 && *first < 1)
+                        max_value = *first;
+                    ++first;
+                }
+
+                return max_value;
+            }
+        };
+
         struct champ_active_struct{
             boost::signals2::signal<void(const bool &crit, const bool &enhanced, const int &instance)> auto_attack;
 
@@ -60,6 +83,7 @@ namespace LDC{
         };
 
         struct attacker_struct : public champ_active_struct{
+            boost::signals2::signal<double (), maximum_slow<double>> get_slows;
             boost::signals2::signal<void()> execute_onhit;
             boost::signals2::signal<void(const LDC::Damage& dmg)> deal_damage;
         };
@@ -69,7 +93,7 @@ namespace LDC{
             boost::signals2::signal<double (LDC::Damage& dmg), add_dmg_reduction<double>> get_postmit_dmg_red;
             boost::signals2::signal<double (LDC::Damage& dmg), mult_dmg_mod<double>> get_dmg_mod;
             boost::signals2::signal<void ()> apply_hard_cc;
-            boost::signals2::signal<void (const double &slow)> apply_slow;
+            boost::signals2::signal<void ()> apply_slow;
             boost::signals2::signal<void()> death;
         };
     public:
