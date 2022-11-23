@@ -475,7 +475,7 @@ namespace LDC::champions{
             m_setup_incomplete = true;
             std::cerr << "read spell_w slow failed" << std::endl;
         }
-        if(!read_single_float("/spell_w/cost", m_w_cost)){
+        if(!read_array_float("/spell_w/cost", m_w_raw_cost, m_w_max_lvl)){
             m_setup_incomplete = true;
             std::cerr << "read spell_w cost failed" << std::endl;
         }
@@ -592,11 +592,11 @@ namespace LDC::champions{
             return;
         }
         if(get_spell_lvl_w() == 0){
-            std::cerr << "attacker_jinx_w is not leveled" << std::endl;
+            std::cerr << "defender_jinx_w is not leveled" << std::endl;
             return;
         }
-        if(!use_mana(m_w_cost)){
-            std::cerr << "not enough mana to use attacker_jinx_w" << std::endl;
+        if(!use_mana(m_w_raw_cost[m_w_lvl])){
+            std::cerr << "not enough mana to use defender_jinx_w" << std::endl;
             return;
         }
 
@@ -623,11 +623,11 @@ namespace LDC::champions{
             return;
         }
         if(get_spell_lvl_e() == 0){
-            std::cerr << "attacker_jinx_e is not leveled" << std::endl;
+            std::cerr << "defender_jinx_e is not leveled" << std::endl;
             return;
         }
         if(!use_mana(m_e_cost)){
-            std::cerr << "not enough mana to use attacker_jinx_e" << std::endl;
+            std::cerr << "not enough mana to use defender_jinx_e" << std::endl;
             return;
         }
         m_ess->defender.apply_hard_cc();

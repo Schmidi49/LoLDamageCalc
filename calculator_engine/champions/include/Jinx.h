@@ -96,9 +96,9 @@ namespace LDC::champions{
         const static int m_w_max_lvl{5};
 
         double m_w_cur_slow={0.0};
-        double m_w_raw_slows[m_w_max_lvl]{0};
+        double m_w_raw_slows[m_w_max_lvl]{0.0};
 
-        double m_w_cost{0.0};
+        double m_w_raw_cost[m_w_max_lvl]{0.0};
         double m_e_cost{0.0};
     };
 }
