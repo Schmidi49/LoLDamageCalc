@@ -37,12 +37,16 @@ int main(int argc, char* argv[]){
     d.set_spell_lvl_w(1);
     d.set_spell_lvl_e(1);
 
+    //Test routine for Defender Jinx
     std::cout << "Test routine for Defender Jinx" << std::endl;
     ess.defender.apply_slow.connect([&](){
         std::cout << "slow applied" << std::endl;
     });
     ess.defender.apply_hard_cc.connect([&](){
         std::cout << "hard cc applied" << std::endl;
+    });
+    ess.defender.auto_attack.connect([&](const bool &crit, const bool &enhanced, const int &instance){
+        std::cout << "defender auto executed" << std::endl;
     });
 
     ess.defender.spell_q(false, false, 0);
@@ -53,9 +57,11 @@ int main(int argc, char* argv[]){
         return 0.99;
     });
     std::cout << ess.attacker.get_slows() << std::endl;
+    ess.defender.auto_attack(false, false, 0);
+    ess.defender.auto_attack(false, false, 0);
 
-    /*
-    //test routine for jinx
+
+    //test routine for attacker jinx
     std::cout << "Test routine for Attacker Jinx" << std::endl;
     ess.attacker.auto_attack.connect([&](const bool &crit, const bool &enhanced, const int &instance){
         std::cout << "as: " << *jinx.get_ptr_current_stats()->as() << std::endl;
@@ -102,5 +108,4 @@ int main(int argc, char* argv[]){
     ess.attacker.spell_r(false, false, 0);
     d.set_health_percent(50.0);
     ess.attacker.spell_r(false, false, 0);
-    */
 }

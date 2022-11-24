@@ -14,7 +14,7 @@
 [x] add armor/magic resist to dmg_mod for defenders
 [x] include Flag for incomplete setup (+ get methode for that, maybe block some functions when it's not set)
 [x] in Base_Champion: optional function get data (single entries, arrays, etc)
-[o] Finish Jinx Defender
+[x] Finish Jinx Defender
 [o] Add Rammus (as example Defender Champion)
 [o] add champion factory
 [o] rewrite testtool to be generic with user inputs test tool

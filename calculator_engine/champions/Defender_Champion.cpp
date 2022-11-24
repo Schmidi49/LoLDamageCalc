@@ -110,15 +110,14 @@ namespace LDC::champions {
         }
         if(m_is_dead){
             std::cout << "Defender already dead" << std::endl;
+            return;
         }
-        else {
-            std::cout << "Damage taken: " << dmg << std::endl;
-            m_missing_health += dmg.dmg;
-            if (m_missing_health > *m_stats_current->hp()) {
-                m_missing_health = *m_stats_current->hp();
-                m_ess->defender.death();
-                m_is_dead = true;
-            }
+        std::cout << "Damage taken: " << dmg << std::endl;
+        m_missing_health += dmg.dmg;
+        if (m_missing_health > *m_stats_current->hp()) {
+            m_missing_health = *m_stats_current->hp();
+            m_ess->defender.death();
+            m_is_dead = true;
         }
     }
 
@@ -147,5 +146,22 @@ namespace LDC::champions {
         }
         //in case of true dmg no damage modifier is applied
         return 1.0;
+    }
+
+    void Defender_Champion::execute_effectless_spell(const std::string &spell_name) {
+        if(m_setup_incomplete){
+            std::cerr << "champion not set up correctly" << std::endl;
+            return;
+        }
+        if(!m_Attacker_set){
+            std::cerr << "no attacker specified" << std::endl;
+            return;
+        }
+        if(m_is_dead){
+            std::cout << spell_name << " already dead" << std::endl;
+            return;
+        }
+
+        std::cout << spell_name << " has no own effect" << std::endl;
     }
 }

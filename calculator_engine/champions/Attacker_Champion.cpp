@@ -106,5 +106,18 @@ namespace LDC::champions{
         m_cur_slow = 1.0 - m_ess->attacker.get_slows();
         m_stats_bonus_percentage->mult("ms", m_cur_slow);
     }
+
+    void Attacker_Champion::execute_effectless_spell(const std::string &spell_name) {
+        if(m_setup_incomplete){
+            std::cerr << "champion not set up correctly" << std::endl;
+            return;
+        }
+        if(!m_Defender_set){
+            std::cerr << "no defender specified" << std::endl;
+            return;
+        }
+
+        std::cout << spell_name << " has no own effect" << std::endl;
+    }
 }
 

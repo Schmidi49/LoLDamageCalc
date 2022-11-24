@@ -22,6 +22,7 @@ namespace LDC::champions {
     protected:
         double slot_res_dmg_mod(LDC::Damage& dmg);
         virtual void slot_take_damage(const LDC::Damage& dmg);
+        void execute_effectless_spell(const std::string& spell_name);
 
     protected:
         Attacker_Champion* m_Attacker{nullptr};

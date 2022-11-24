@@ -486,15 +486,15 @@ namespace LDC::champions{
 
         //---------------- set functions ----------------
         func_auto_attack = [&](const bool &crit, const bool &enhanced, const int &instance){
-            std::cout << "defender_jinx_auto_attack has no own effect" << std::endl;
+            execute_effectless_spell("defender_jinx_auto_attack");
         };
 
         func_passive = [&](const bool &crit, const bool &enhanced, const int &instance){
-            std::cout << "defender_jinx_passive has no own effect" << std::endl;
+            execute_effectless_spell("defender_jinx_passive");
         };
 
         func_spell_q = [&](const bool &crit, const bool &enhanced, const int &instance){
-            std::cout << "defender_jinx_q has no own effect" << std::endl;
+            execute_effectless_spell("defender_jinx_q");
         };
 
         func_spell_w = [&](const bool &crit, const bool &enhanced, const int &instance){
@@ -506,7 +506,7 @@ namespace LDC::champions{
         };
 
         func_spell_r = [&](const bool &crit, const bool &enhanced, const int &instance){
-            std::cout << "defender_jinx_r has no own effect" << std::endl;
+            execute_effectless_spell("defender_jinx_r");
         };
     }
 
@@ -576,7 +576,7 @@ namespace LDC::champions{
             return 0.0;
         }
         if(!m_Attacker_set){
-            std::cerr << "no defender specified" << std::endl;
+            std::cerr << "no attacker specified" << std::endl;
             return 0.0;
         }
         return m_w_cur_slow;
@@ -588,9 +588,14 @@ namespace LDC::champions{
             return;
         }
         if(!m_Attacker_set){
-            std::cerr << "no defender specified" << std::endl;
+            std::cerr << "no attacker specified" << std::endl;
             return;
         }
+        if(m_is_dead){
+            std::cout << "Defender_Jinx already dead" << std::endl;
+            return;
+        }
+
         if(get_spell_lvl_w() == 0){
             std::cerr << "defender_jinx_w is not leveled" << std::endl;
             return;
@@ -619,9 +624,14 @@ namespace LDC::champions{
             return;
         }
         if(!m_Attacker_set){
-            std::cerr << "no defender specified" << std::endl;
+            std::cerr << "no attacker specified" << std::endl;
             return;
         }
+        if(m_is_dead){
+            std::cout << "Defender_Jinx already dead" << std::endl;
+            return;
+        }
+
         if(get_spell_lvl_e() == 0){
             std::cerr << "defender_jinx_e is not leveled" << std::endl;
             return;
