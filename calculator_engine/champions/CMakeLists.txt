@@ -15,4 +15,5 @@ set(CHAMP_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 message(${CHAMP_SRC_DIR})
 
 target_sources(champions
-        PUBLIC ${CHAMP_SRC_DIR}/Jinx.cpp)
+        PUBLIC ${CHAMP_SRC_DIR}/Jinx.cpp
+        PUBLIC ${CHAMP_SRC_DIR}/Rammus.cpp)
