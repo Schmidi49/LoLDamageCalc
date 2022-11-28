@@ -1,0 +1,81 @@
+{
+  "stats": {
+    "hp": {
+      "base": 634,
+      "growth": 94
+    },
+    "mana": {
+      "base": 310,
+      "growth": 33
+    },
+    "armor": {
+      "base": 36,
+      "growth": 5.5
+    },
+    "ad": {
+      "base": 56,
+      "growth": 3.5
+    },
+    "as": {
+      "base": 0.656,
+      "ratio": 0.625,
+      "growth": 0.02215
+    },
+    "mr": {
+      "base": 32,
+      "growth": 2.05
+    },
+    "ms": {
+      "base": 335,
+      "growth": 0
+    }
+  },
+  "adaptive_type": "physical",
+  "resource_mana": true,
+  "ranged": false,
+  "passive": {
+    "base_dmg": 10,
+    "base_scale": 0.1,
+    "enhanced_dmg": 15,
+    "enhanced_scale": 0.15
+  },
+  "spell_q": {
+    "ms_min_base": 0.25,
+    "ms_min_scale": 0.141666666666666,
+    "ms_max_base": 1.45,
+    "ms_max_scale": 0.05,
+    "max_lvl": 5,
+    "damage_type": "magic",
+    "cost": 60,
+    "cd": [16, 13.5, 11, 8.5, 6],
+    "base_damage": [100, 130, 160, 190, 220],
+    "ap_scale": 1.0,
+    "slow": [0.4, 0.5, 0.6, 0.7, 0.8]
+  },
+  "spell_w": {
+    "max_lvl": 5,
+    "cost": 40,
+    "cd": 6,
+    "bonus_armor_flat": 50,
+    "bonus_armor_percentage": [0.6, 0.7, 0.8, 0.9, 1.0],
+    "bonus_mr_flat": 15,
+    "bonus_mr_percentage": [0.3, 0.35, 0.4, 0.45, 0.5]
+  },
+  "spell_e": {
+    "max_lvl": 5,
+    "cost": 50,
+    "cd": 12,
+    "bonus_as": [0.2, 0.25, 0.3, 0.35, 0.4]
+    },
+  "spell_r": {
+    "max_lvl": 3,
+    "damage_type": "magic",
+    "cost": 100,
+    "cd": 90,
+    "base_damage": [100, 175, 250],
+    "ap_scale": 0.6,
+    "slow": [0.15, 0.175, 0,2],
+    "aftershock_base_damage": [20, 30, 40],
+    "aftershock_ap_scale": 0.1
+  }
+}
